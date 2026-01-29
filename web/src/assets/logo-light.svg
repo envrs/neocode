@@ -1,12 +1,42 @@
-<svg width="289" height="50" viewBox="0 0 289 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M264.5 0H288.5V8.5H272.5V16.5H288.5V25H272.5V33H288.5V41.5H264.5V0Z" fill="black"/>
-<path d="M248.5 0H224.5V41.5H248.5V33H232.5V8.5H248.5V0Z" fill="black"/>
-<path d="M256.5 8.5H248.5V33H256.5V8.5Z" fill="black"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M184.5 0H216.5V41.5H184.5V0ZM208.5 8.5H192.5V33H208.5V8.5Z" fill="black"/>
-<path d="M144.5 8.5H136.5V41.5H144.5V8.5Z" fill="black"/>
-<path d="M136.5 0H112.5V41.5H120.5V8.5H136.5V0Z" fill="black"/>
-<path d="M80.5 0H104.5V8.5H88.5V16.5H104.5V25H88.5V33H104.5V41.5H80.5V0Z" fill="black"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M40.5 0H72.5V41.5H48.5V49.5H40.5V0ZM64.5 8.5H48.5V33H64.5V8.5Z" fill="black"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0.5 0H32.5V41.5955H0.5V0ZM24.5 8.5H8.5V33H24.5V8.5Z" fill="black"/>
-<path d="M152.5 0H176.5V8.5H160.5V33H176.5V41.5H152.5V0Z" fill="black"/>
+<svg width="240" height="60" viewBox="0 0 240 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Terminal neon gradient -->
+    <linearGradient id="terminalNeon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00A86B"/>
+      <stop offset="50%" stop-color="#0099CC"/>
+      <stop offset="100%" stop-color="#6B46C1"/>
+    </linearGradient>
+
+    <!-- Subtle glow -->
+    <filter id="subtleGlow">
+      <feGaussianBlur stdDeviation="1" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Terminal icon -->
+  <rect x="8" y="12" width="36" height="36" rx="6"
+        fill="#F8FAFC" stroke="url(#terminalNeon)" stroke-width="1.5"/>
+
+  <!-- Prompt -->
+  <text x="16" y="34"
+        font-family="JetBrains Mono, Fira Code, monospace"
+        font-size="14"
+        font-weight="500"
+        fill="url(#terminalNeon)"
+        filter="url(#subtleGlow)">
+    &gt;_
+  </text>
+
+  <!-- Brand -->
+  <text x="52" y="38"
+        font-family="JetBrains Mono, Fira Code, system-ui, sans-serif"
+        font-size="20"
+        font-weight="600"
+        fill="#1F2937">
+    neocode
+  </text>
 </svg>

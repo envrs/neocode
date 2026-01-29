@@ -1,110 +1,121 @@
-<p align="center">
-  <a href="https://neo.khulnasoft.com">
-    <picture>
-      <source srcset="packages/web/src/assets/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="packages/web/src/assets/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
-      <img src="packages/web/src/assets/logo-ornate-light.svg" alt="neocode logo">
-    </picture>
-  </a>
-</p>
-<p align="center">AI coding agent, built for the terminal.</p>
-<p align="center">
-  <a href="https://neo.khulnasoft.com/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
-  <a href="https://www.npmjs.com/package/neocode-ai"><img alt="npm" src="https://img.shields.io/npm/v/neocode-ai?style=flat-square" /></a>
-  <a href="https://github.com/neopilot-ai/neocode/actions/workflows/publish.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/neopilot-ai/neocode/publish.yml?style=flat-square&branch=dev" /></a>
-</p>
+<div align="center">
 
-[![neocode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://neo.khulnasoft.com)
+![neocode logo](https://raw.githubusercontent.com/neopilot-ai/neocode/dev/packages/web/src/assets/logo-ornate-light.svg#gh-dark-mode-only)
+![neocode logo](https://raw.githubusercontent.com/neopilot-ai/neocode/dev/packages/web/src/assets/logo-ornate-dark.svg#gh-light-mode-only)
+
+# 🤖 neocode
+**AI coding agent, built for the terminal**
+
+[![npm version](https://img.shields.io/npm/v/neocode-ai?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/neocode-ai)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/neopilot-ai/neocode/publish.yml?style=for-the-badge&branch=dev&logo=github)](https://github.com/neopilot-ai/neocode/actions/workflows/publish.yml)
+
+
+</div>
 
 ---
 
-### Installation
+## 🚀 Quick Start
 
+### One-Command Installation
 ```bash
-# YOLO
 curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/dev/install | bash
-
-# Package managers
-npm i -g neocode-ai@latest        # or bun/pnpm/yarn
-brew install sst/tap/neocode      # macOS
-paru -S neocode-bin               # Arch Linux
 ```
 
-> [!TIP]
-> Remove versions older than 0.1.x before installing.
+### Package Managers
+| Package | Command |
+|---------|---------|
+| **npm** | `npm i -g neocode-ai@latest` |
+| **bun** | `bun add -g neocode-ai@latest` |
+| **pnpm** | `pnpm add -g neocode-ai@latest` |
+| **yarn** | `yarn global add neocode-ai@latest` |
+| **brew** (macOS) | `brew install sst/tap/neocode` |
+| **paru** (Arch) | `paru -S neocode-bin` |
 
-#### Installation Directory
+> 💡 **Tip**: Remove versions older than 0.1.x before installing
 
-The install script respects the following priority order for the installation path:
+---
 
-1. `$NEOCODE_INSTALL_DIR` - Custom installation directory
-2. `$XDG_BIN_DIR` - XDG Base Directory Specification compliant path
-3. `$HOME/bin` - Standard user binary directory (if exists or can be created)
-4. `$HOME/.neocode/bin` - Default fallback
+## 📁 Installation Directory
 
+The install script follows this priority order:
+
+| Priority | Environment Variable | Description |
+|----------|---------------------|-------------|
+| 1️⃣ | `NEOCODE_INSTALL_DIR` | Custom installation directory |
+| 2️⃣ | `XDG_BIN_DIR` | XDG Base Directory compliant path |
+| 3️⃣ | `HOME/bin` | Standard user binary directory |
+| 4️⃣ | `HOME/.neocode/bin` | Default fallback |
+
+### Examples
 ```bash
-# Examples
+# Custom directory
 NEOCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/dev/install | bash
+
+# XDG compliant
 XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/dev/install | bash
 ```
 
-### Documentation
+---
 
-For more info on how to configure neocode [**head over to our docs**](https://neo.khulnasoft.com/docs).
+## 📚 Documentation
 
-### Contributing
+👉 **[Complete Documentation](https://neo.khulnasoft.com/docs)**
 
-neocode is an opinionated tool so any fundamental feature needs to go through a
-design process with the core team.
+---
 
-> [!IMPORTANT]
-> We do not accept PRs for core features.
+## 🤝 Contributing
 
-However we still merge a ton of PRs - you can contribute:
+### 🎯 What We Accept
+- ✅ **Bug fixes**
+- ✅ **LLM performance improvements**
+- ✅ **New provider support**
+- ✅ **Environment-specific fixes**
+- ✅ **Standard behavior implementations**
+- ✅ **Documentation improvements**
 
-- Bug fixes
-- Improvements to LLM performance
-- Support for new providers
-- Fixes for env specific quirks
-- Missing standard behavior
-- Documentation
+### ⚠️ What We Don't Accept
+- ❌ **Core feature PRs** (requires design process with core team)
 
-Take a look at the git history to see what kind of PRs we end up merging.
+> 🚨 **Important**: We do not accept PRs for fundamental features. Please check our git history to see what kind of PRs we typically merge.
 
-> [!NOTE]
-> If you do not follow the above guidelines we might close your PR.
+### 🛠️ Local Development
 
-To run neocode locally you need.
+**Prerequisites:**
+- **Bun** (JavaScript runtime)
+- **Golang 1.24.x** (for the Go client)
 
-- Bun
-- Golang 1.24.x
-
-And run.
-
+**Setup:**
 ```bash
 $ bun install
 $ bun run packages/neocode/src/index.ts
 ```
 
-#### Development Notes
+#### 🔧 Development Notes
 
-**API Client**: After making changes to the TypeScript API endpoints in `packages/neocode/src/server/server.ts`, you will need the neocode team to generate a new stainless sdk for the clients.
-
-### FAQ
-
-#### How is this different than Claude Code?
-
-It's very similar to Claude Code in terms of capability. Here are the key differences:
-
-- 100% open source
-- Not coupled to any provider. Although Anthropic is recommended, neocode can be used with OpenAI, Google or even local models. As models evolve the gaps between them will close and pricing will drop so being provider-agnostic is important.
-- A focus on TUI. neocode is built by neovim users and the creators of [terminal.shop](https://terminal.shop); we are going to push the limits of what's possible in the terminal.
-- A client/server architecture. This for example can allow neocode to run on your computer, while you can drive it remotely from a mobile app. Meaning that the TUI frontend is just one of the possible clients.
-
-#### What's the other repo?
-
-The other confusingly named repo has no relation to this one. You can [read the story behind it here](https://x.com/thdxr/status/1933561254481666466).
+**API Client**: After modifying TypeScript API endpoints in `packages/neocode/src/server/server.ts`, the neocode team needs to generate a new stainless SDK for clients.
 
 ---
 
-**Join our community** [Discord](https://discord.gg/neocode) | [X.com](https://x.com/khulnasoft)
+## ❓ FAQ
+
+### 🆚 How is this different from Claude Code?
+
+| Feature | neocode | Claude Code |
+|---------|---------|-------------|
+| **Open Source** | ✅ 100% open source | ❌ Proprietary |
+| **Provider Support** | ✅ Anthropic, OpenAI, Google, Local | ❌ Anthropic only |
+| **Architecture** | ✅ Client/Server (multi-client) | ❌ Single client |
+| **Terminal Focus** | ✅ Built by terminal enthusiasts | ❌ General purpose |
+| **Mobile Support** | ✅ Via client/server architecture | ❌ No |
+
+### 📦 What's the other repo?
+
+The confusingly named repository has no relation to this one. [Read the story here](https://x.com/thdxr/status/1933561254481666466).
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the neopilot team**
+
+</div>

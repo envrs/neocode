@@ -1,18 +1,89 @@
-<svg width="288" height="50" viewBox="0 0 288 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8 16.5H24V33H8V16.5Z" fill="black" fill-opacity="0.15"/>
-<path d="M48 16.5H64V33H48V16.5Z" fill="black" fill-opacity="0.15"/>
-<path d="M120 16.5H136V33H120V16.5Z" fill="black" fill-opacity="0.15"/>
-<path d="M160 16.5H176V33H160V16.5Z" fill="black" fill-opacity="0.15"/>
-<path d="M192 16.5H208V33H192V16.5Z" fill="black" fill-opacity="0.15"/>
-<path d="M232 16.5H248V33H232V16.5Z" fill="black" fill-opacity="0.15"/>
-<path d="M264 0H288V8.5H272V16.5H288V25H272V33H288V41.5H264V0Z" fill="black" fill-opacity="0.95"/>
-<path d="M248 0H224V41.5H248V33H232V8.5H248V0Z" fill="black" fill-opacity="0.95"/>
-<path d="M256 8.5H248V33H256V8.5Z" fill="black" fill-opacity="0.95"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M184 0H216V41.5H184V0ZM208 8.5H192V33H208V8.5Z" fill="black" fill-opacity="0.95"/>
-<path d="M144 8.5H136V41.5H144V8.5Z" fill="black" fill-opacity="0.55"/>
-<path d="M136 0H112V41.5H120V8.5H136V0Z" fill="black" fill-opacity="0.55"/>
-<path d="M80 0H104V8.5H88V16.5H104V25H88V33H104V41.5H80V0Z" fill="black" fill-opacity="0.55"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M40 0H72V41.5H48V49.5H40V0ZM64 8.5H48V33H64V8.5Z" fill="black" fill-opacity="0.55"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H32V41.5955H0V0ZM24 8.5H8V33H24V8.5Z" fill="black" fill-opacity="0.55"/>
-<path d="M152 0H176V8.5H160V33H176V41.5H152V0Z" fill="black" fill-opacity="0.95"/>
+<svg width="720" height="220" viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Terminal neon gradient -->
+    <linearGradient id="terminalNeon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00A86B"/>
+      <stop offset="50%" stop-color="#0099CC"/>
+      <stop offset="100%" stop-color="#6B46C1"/>
+    </linearGradient>
+
+    <!-- Neon glow -->
+    <filter id="neonGlow">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Subtle scanline -->
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="rgba(0,0,0,0.02)"/>
+    </pattern>
+
+    <!-- Background gradient -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="220" fill="url(#bgGradient)"/>
+
+  <!-- Terminal window -->
+  <rect x="16" y="26" width="188" height="168" rx="20"
+        fill="#FFFFFF" stroke="url(#terminalNeon)" stroke-width="2"/>
+
+  <!-- Scanline overlay -->
+  <rect x="16" y="26" width="188" height="168" rx="20"
+        fill="url(#scanlines)"/>
+
+  <!-- Terminal header dots -->
+  <circle cx="32" cy="46" r="4" fill="#FF5F57"/>
+  <circle cx="46" cy="46" r="4" fill="#FFBD2E"/>
+  <circle cx="60" cy="46" r="4" fill="#28CA42"/>
+
+  <!-- Prompt -->
+  <text x="48" y="108"
+        font-family="JetBrains Mono, Fira Code, monospace"
+        font-size="36"
+        fill="url(#terminalNeon)"
+        filter="url(#neonGlow)">
+    &gt;_
+  </text>
+
+  <!-- Blinking cursor (static frame) -->
+  <rect x="102" y="84" width="6" height="36" fill="#00A86B"/>
+
+  <!-- Network dots (agents / sessions) -->
+  <circle cx="150" cy="70" r="3" fill="#0099CC"/>
+  <circle cx="166" cy="96" r="3" fill="#6B46C1"/>
+  <circle cx="150" cy="122" r="3" fill="#00A86B"/>
+
+  <!-- Connection lines -->
+  <path d="M 102 102 L 147 70" stroke="#0099CC" stroke-width="1" opacity="0.6"/>
+  <path d="M 102 102 L 163 96" stroke="#6B46C1" stroke-width="1" opacity="0.6"/>
+  <path d="M 102 102 L 147 122" stroke="#00A86B" stroke-width="1" opacity="0.6"/>
+
+  <!-- Brand -->
+  <text x="240" y="108"
+        font-family="JetBrains Mono, Fira Code, system-ui, sans-serif"
+        font-size="64"
+        font-weight="600"
+        fill="#1F2937">
+    neocode
+  </text>
+
+  <!-- Tagline -->
+  <text x="242" y="148"
+        font-family="JetBrains Mono, system-ui, sans-serif"
+        font-size="18"
+        fill="#64748B">
+    terminal-native · multi-agent · any model
+  </text>
+
+  <!-- Decorative elements -->
+  <rect x="240" y="160" width="120" height="2" fill="url(#terminalNeon)" opacity="0.3"/>
+  <rect x="240" y="166" width="80" height="2" fill="url(#terminalNeon)" opacity="0.2"/>
 </svg>
