@@ -18,7 +18,7 @@ runs:
   steps:
     - name: Install neocode
       shell: bash
-      run: curl -fsSL https://neocode.ai/install | bash
+      run: curl -fsSL https://neo.khulnasoft.com/install | bash
 
     - name: Run neocode
       shell: bash

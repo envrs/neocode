@@ -43,7 +43,7 @@ func (r *ConfigService) Get(ctx context.Context, opts ...option.RequestOption) (
 type Config struct {
 	// JSON schema reference for configuration validation
 	Schema string `json:"$schema"`
-	// Modes configuration, see https://neocode.ai/docs/modes
+	// Modes configuration, see https://neo.khulnasoft.com/docs/modes
 	Agent ConfigAgent `json:"agent"`
 	// @deprecated Use 'share' field instead. Share newly created sessions
 	// automatically
@@ -61,7 +61,7 @@ type Config struct {
 	Layout ConfigLayout `json:"layout"`
 	// MCP (Model Context Protocol) server configurations
 	Mcp map[string]ConfigMcp `json:"mcp"`
-	// Modes configuration, see https://neocode.ai/docs/modes
+	// Modes configuration, see https://neo.khulnasoft.com/docs/modes
 	Mode ConfigMode `json:"mode"`
 	// Model to use in the format of provider/model, eg anthropic/claude-2
 	Model string `json:"model"`
@@ -111,7 +111,7 @@ func (r configJSON) RawJSON() string {
 	return r.raw
 }
 
-// Modes configuration, see https://neocode.ai/docs/modes
+// Modes configuration, see https://neo.khulnasoft.com/docs/modes
 type ConfigAgent struct {
 	General     ConfigAgentGeneral     `json:"general"`
 	ExtraFields map[string]ConfigAgent `json:"-,extras"`
@@ -349,7 +349,7 @@ func (r ConfigMcpType) IsKnown() bool {
 	return false
 }
 
-// Modes configuration, see https://neocode.ai/docs/modes
+// Modes configuration, see https://neo.khulnasoft.com/docs/modes
 type ConfigMode struct {
 	Build       ModeConfig            `json:"build"`
 	Plan        ModeConfig            `json:"plan"`

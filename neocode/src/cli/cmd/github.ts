@@ -172,7 +172,7 @@ export const GithubInstallCommand = cmd({
             "",
             "    3. Go to a GitHub issue and comment `/oc summarize` to see the agent in action",
             "",
-            "   Learn more about the GitHub agent - https://neocode.ai/docs/github/#usage-examples",
+            "   Learn more about the GitHub agent - https://neo.khulnasoft.com/docs/github/#usage-examples",
           ].join("\n"),
         )
       }
@@ -294,7 +294,7 @@ export const GithubInstallCommand = cmd({
         s.stop("Installed GitHub app")
 
         async function getInstallation() {
-          return await fetch(`https://api.neocode.ai/get_github_app_installation?owner=${app.owner}&repo=${app.repo}`)
+          return await fetch(`https://api.neo.khulnasoft.com/get_github_app_installation?owner=${app.owner}&repo=${app.repo}`)
             .then((res) => res.json())
             .then((data) => data.installation)
         }
@@ -372,7 +372,7 @@ export const GithubRunCommand = cmd({
       const actor = context.actor
       const issueId = payload.issue.number
       const runUrl = `/${owner}/${repo}/actions/runs/${runId}`
-      const shareBaseUrl = isMock ? "https://dev.neocode.ai" : "https://neocode.ai"
+      const shareBaseUrl = isMock ? "https://dev.neo.khulnasoft.com" : "https://neo.khulnasoft.com"
 
       let appToken: string
       let octoRest: Octokit
@@ -693,14 +693,14 @@ export const GithubRunCommand = cmd({
 
       async function exchangeForAppToken(token: string) {
         const response = token.startsWith("github_pat_")
-          ? await fetch("https://api.neocode.ai/exchange_github_app_token_with_pat", {
+          ? await fetch("https://api.neo.khulnasoft.com/exchange_github_app_token_with_pat", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({ owner, repo }),
           })
-          : await fetch("https://api.neocode.ai/exchange_github_app_token", {
+          : await fetch("https://api.neo.khulnasoft.com/exchange_github_app_token", {
             method: "POST",
             headers: {
               Authorization: `Bearer ${token}`,

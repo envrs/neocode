@@ -1,7 +1,7 @@
 export const domain = (() => {
-  if ($app.stage === "production") return "neocode.ai"
-  if ($app.stage === "dev") return "dev.neocode.ai"
-  return `${$app.stage}.dev.neocode.ai`
+  if ($app.stage === "production") return "neo.khulnasoft.com"
+  if ($app.stage === "dev") return "dev.neo.khulnasoft.com"
+  return `${$app.stage}.dev.neo.khulnasoft.com`
 })()
 
 const GITHUB_APP_ID = new sst.Secret("GITHUB_APP_ID")

@@ -2,8 +2,8 @@
 
 organization:
   name: neocode
-  docs: "https://neocode.ai/docs"
-  contact: "support@sst.dev"
+  docs: "https://neo.khulnasoft.com/docs"
+  contact: "support@khulnasoft.com"
 
 targets:
   typescript:

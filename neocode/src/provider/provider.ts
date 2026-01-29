@@ -188,7 +188,7 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://neocode.ai/",
+            "HTTP-Referer": "https://neo.khulnasoft.com/",
             "X-Title": "neocode",
           },
         },

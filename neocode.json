@@ -1,12 +1,14 @@
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "openrouter": {
       "models": {
         "moonshotai/kimi-k2": {
           "options": {
             "provider": {
-              "order": ["baseten"],
+              "order": [
+                "baseten"
+              ],
               "allow_fallbacks": false
             }
           }
@@ -26,7 +28,11 @@
     },
     "weather": {
       "type": "local",
-      "command": ["neocode", "x", "@h1deya/mcp-server-weather"]
+      "command": [
+        "neocode",
+        "x",
+        "@h1deya/mcp-server-weather"
+      ]
     }
   }
 }

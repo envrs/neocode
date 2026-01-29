@@ -53,7 +53,7 @@ export namespace Share {
 
   export const URL =
     process.env["NEOCODE_API"] ??
-    (Installation.isSnapshot() || Installation.isDev() ? "https://api.dev.neocode.ai" : "https://api.neocode.ai")
+    (Installation.isSnapshot() || Installation.isDev() ? "https://api.dev.neo.khulnasoft.com" : "https://api.neo.khulnasoft.com")
 
   export async function create(sessionID: string) {
     return fetch(`${URL}/share_create`, {

@@ -24,7 +24,7 @@ jobs:
 
       - name: Publish
         run: |
-          git config --global user.email "neocode@sst.dev"
+          git config --global user.email "neocode@khulnasoft.com"
           git config --global user.name "neocode"
           ./script/publish
         working-directory: ./github

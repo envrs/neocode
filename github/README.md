@@ -1,6 +1,6 @@
 # neocode GitHub Action
 
-A GitHub Action that integrates [neocode](https://neocode.ai) directly into your GitHub workflow.
+A GitHub Action that integrates [neocode](https://neo.khulnasoft.com) directly into your GitHub workflow.
 
 Mention `/neocode` in your comment, and neocode will execute tasks within your GitHub Actions runner.
 

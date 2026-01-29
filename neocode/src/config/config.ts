@@ -212,14 +212,14 @@ export namespace Config {
         })
         .catchall(Mode)
         .optional()
-        .describe("Modes configuration, see https://neocode.ai/docs/modes"),
+        .describe("Modes configuration, see https://neo.khulnasoft.com/docs/modes"),
       agent: z
         .object({
           general: Agent.optional(),
         })
         .catchall(Agent)
         .optional()
-        .describe("Modes configuration, see https://neocode.ai/docs/modes"),
+        .describe("Modes configuration, see https://neo.khulnasoft.com/docs/modes"),
       provider: z
         .record(
           ModelsDev.Provider.partial()
@@ -289,7 +289,7 @@ export namespace Config {
       .then(async (mod) => {
         const { provider, model, ...rest } = mod.default
         if (provider && model) result.model = `${provider}/${model}`
-        result["$schema"] = "https://neocode.ai/config.json"
+        result["$schema"] = "https://neo.khulnasoft.com/config.json"
         result = mergeDeep(result, rest)
         await Bun.write(path.join(Global.Path.config, "config.json"), JSON.stringify(result, null, 2))
         await fs.unlink(path.join(Global.Path.config, "config"))
@@ -333,7 +333,7 @@ export namespace Config {
     const parsed = Info.safeParse(data)
     if (parsed.success) {
       if (!parsed.data.$schema) {
-        parsed.data.$schema = "https://neocode.ai/config.json"
+        parsed.data.$schema = "https://neo.khulnasoft.com/config.json"
         await Bun.write(configPath, JSON.stringify(parsed.data, null, 2))
       }
       return parsed.data

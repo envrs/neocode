@@ -25,7 +25,7 @@ You can add custom providers by specifying the npm package for the provider and 
 
 ```json title="neocode.json" {5,9-11}
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "moonshot": {
       "npm": "@ai-sdk/openai-compatible",
@@ -48,7 +48,7 @@ You can customize the base URL for any provider by setting the `baseURL` option.
 
 ```json title="neocode.json" {6}
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "anthropic": {
       "options": {
@@ -69,7 +69,7 @@ Here's an example of specifying a provider
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "openrouter": {
       "models": {
@@ -91,7 +91,7 @@ You can also add additional models
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "openrouter": {
       "models": {
@@ -113,7 +113,7 @@ Here's an example of configuring a local model from LM Studio:
 
 ```json title="neocode.json" {4-15}
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "lmstudio": {
       "npm": "@ai-sdk/openai-compatible",
@@ -143,7 +143,7 @@ Similarly, to configure a local model from Ollama:
 
 ```json title="neocode.json" {5,7}
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
@@ -163,7 +163,7 @@ root.
 
 ```json title="neocode.json" {3}
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "model": "lmstudio/google/gemma-3n-e4b"
 }
 ```
@@ -190,7 +190,7 @@ When neocode starts up, it checks for the following:
 
    ```json title="neocode.json"
    {
-     "$schema": "https://neocode.ai/config.json",
+     "$schema": "https://neo.khulnasoft.com/config.json",
      "model": "anthropic/claude-sonnet-4-20250514"
    }
    ```

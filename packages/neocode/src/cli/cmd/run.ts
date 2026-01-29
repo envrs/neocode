@@ -92,7 +92,7 @@ export const RunCommand = cmd({
       if (cfg.share === "auto" || Flag.NEOCODE_AUTO_SHARE || args.share) {
         try {
           await Session.share(session.id)
-          UI.println(UI.Style.TEXT_INFO_BOLD + "~  https://neocode.ai/s/" + session.id.slice(-8))
+          UI.println(UI.Style.TEXT_INFO_BOLD + "~  https://neo.khulnasoft.com/s/" + session.id.slice(-8))
         } catch (error) {
           if (error instanceof Error && error.message.includes("disabled")) {
             UI.println(UI.Style.TEXT_DANGER_BOLD + "!  " + error.message)

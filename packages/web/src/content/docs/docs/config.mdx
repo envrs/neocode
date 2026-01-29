@@ -7,7 +7,7 @@ You can configure neocode using a JSON config file.
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "theme": "neocode",
   "model": "anthropic/claude-sonnet-4-20250514",
   "autoupdate": true
@@ -47,7 +47,7 @@ neocode run "Hello world"
 
 ## Schema
 
-The config file has a schema that's defined in [**`neocode.ai/config.json`**](https://neocode.ai/config.json).
+The config file has a schema that's defined in [**`neo.khulnasoft.com/config.json`**](https://neo.khulnasoft.com/config.json).
 
 Your editor should be able to validate and autocomplete based on the schema.
 
@@ -59,7 +59,7 @@ neocode comes with two built-in modes: _build_, the default with all tools enabl
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "mode": {
     "build": {},
     "plan": {},
@@ -78,7 +78,7 @@ You can configure the providers and models you want to use in your neocode confi
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "provider": {},
   "model": "anthropic/claude-sonnet-4-20250514",
   "small_model": "anthropic/claude-3-5-haiku-20241022"
@@ -97,7 +97,7 @@ You can configure the theme you want to use in your neocode config through the `
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "theme": ""
 }
 ```
@@ -121,7 +121,7 @@ You can configure the [share](/docs/share) feature through the `share` option.
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "share": "manual"
 }
 ```
@@ -142,7 +142,7 @@ You can customize your keybinds through the `keybinds` option.
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "keybinds": {}
 }
 ```
@@ -157,7 +157,7 @@ neocode will automatically download any new updates when it starts up. You can d
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "autoupdate": false
 }
 ```
@@ -170,7 +170,7 @@ You can configure MCP servers you want to use through the `mcp` option.
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "mcp": {}
 }
 ```
@@ -185,7 +185,7 @@ You can configure the instructions for the model you're using through the `instr
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "instructions": ["CONTRIBUTING.md", "docs/guidelines.md", ".cursor/rules/*.md"]
 }
 ```
@@ -201,7 +201,7 @@ You can configure specialized agents for specific tasks through the `agent` opti
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "agent": {
     "code-reviewer": {
       "description": "Reviews code for best practices and potential issues",
@@ -226,7 +226,7 @@ You can disable providers that are loaded automatically through the `disabled_pr
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "disabled_providers": ["openai", "gemini"]
 }
 ```
@@ -251,7 +251,7 @@ Use `{env:VARIABLE_NAME}` to substitute environment variables:
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "model": "{env:NEOCODE_MODEL}",
   "provider": {
     "anthropic": {
@@ -273,7 +273,7 @@ Use `{file:path/to/file}` to substitute the contents of a file:
 
 ```json title="neocode.json"
 {
-  "$schema": "https://neocode.ai/config.json",
+  "$schema": "https://neo.khulnasoft.com/config.json",
   "instructions": ["{file:./custom-instructions.md}"],
   "provider": {
     "openai": {

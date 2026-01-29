@@ -2,7 +2,7 @@
 
 <a href="https://pkg.go.dev/github.com/neopilot-ai/neocode-sdk-go"><img src="https://pkg.go.dev/badge/github.com/neopilot-ai/neocode-sdk-go.svg" alt="Go Reference"></a>
 
-The Neocode Go library provides convenient access to the [Neocode REST API](https://neocode.ai/docs)
+The Neocode Go library provides convenient access to the [Neocode REST API](https://neo.khulnasoft.com/docs)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).

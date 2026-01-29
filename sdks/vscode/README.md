@@ -1,10 +1,10 @@
 # neocode VS Code Extension
 
-A Visual Studio Code extension that integrates [neocode](https://neocode.ai) directly into your development workflow.
+A Visual Studio Code extension that integrates [neocode](https://neo.khulnasoft.com) directly into your development workflow.
 
 ## Prerequisites
 
-This extension requires the [neocode CLI](https://neocode.ai) to be installed on your system. Visit [neocode.ai](https://neocode.ai) for installation instructions.
+This extension requires the [neocode CLI](https://neo.khulnasoft.com) to be installed on your system. Visit [neo.khulnasoft.com](https://neo.khulnasoft.com) for installation instructions.
 
 ## Features
 

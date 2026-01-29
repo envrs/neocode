@@ -21,7 +21,7 @@ export interface Config {
   $schema?: string;
 
   /**
-   * Modes configuration, see https://neocode.ai/docs/modes
+   * Modes configuration, see https://neo.khulnasoft.com/docs/modes
    */
   agent?: Config.Agent;
 
@@ -64,7 +64,7 @@ export interface Config {
   mcp?: { [key: string]: McpLocalConfig | McpRemoteConfig };
 
   /**
-   * Modes configuration, see https://neocode.ai/docs/modes
+   * Modes configuration, see https://neo.khulnasoft.com/docs/modes
    */
   mode?: Config.Mode;
 
@@ -103,7 +103,7 @@ export interface Config {
 
 export namespace Config {
   /**
-   * Modes configuration, see https://neocode.ai/docs/modes
+   * Modes configuration, see https://neo.khulnasoft.com/docs/modes
    */
   export interface Agent {
     general?: Agent.General;
@@ -156,7 +156,7 @@ export namespace Config {
   }
 
   /**
-   * Modes configuration, see https://neocode.ai/docs/modes
+   * Modes configuration, see https://neo.khulnasoft.com/docs/modes
    */
   export interface Mode {
     build?: ConfigAPI.ModeConfig;

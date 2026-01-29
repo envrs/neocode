@@ -20,7 +20,7 @@ or products provided by Neocode, please follow the respective company's security
 
 ### Neocode Terms and Policies
 
-Please contact support@sst.dev for any questions or concerns regarding the security of our services.
+Please contact support@khulnasoft.com for any questions or concerns regarding the security of our services.
 
 ---
 

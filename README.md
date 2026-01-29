@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://neocode.ai">
+  <a href="https://neo.khulnasoft.com">
     <picture>
       <source srcset="packages/web/src/assets/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
       <source srcset="packages/web/src/assets/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
@@ -9,12 +9,12 @@
 </p>
 <p align="center">AI coding agent, built for the terminal.</p>
 <p align="center">
-  <a href="https://neocode.ai/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
+  <a href="https://neo.khulnasoft.com/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
   <a href="https://www.npmjs.com/package/neocode-ai"><img alt="npm" src="https://img.shields.io/npm/v/neocode-ai?style=flat-square" /></a>
   <a href="https://github.com/neopilot-ai/neocode/actions/workflows/publish.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/neopilot-ai/neocode/publish.yml?style=flat-square&branch=dev" /></a>
 </p>
 
-[![neocode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://neocode.ai)
+[![neocode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://neo.khulnasoft.com)
 
 ---
 
@@ -22,7 +22,7 @@
 
 ```bash
 # YOLO
-curl -fsSL https://neocode.ai/install | bash
+curl -fsSL https://neo.khulnasoft.com/install | bash
 
 # Package managers
 npm i -g neocode-ai@latest        # or bun/pnpm/yarn
@@ -44,13 +44,13 @@ The install script respects the following priority order for the installation pa
 
 ```bash
 # Examples
-NEOCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://neocode.ai/install | bash
-XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://neocode.ai/install | bash
+NEOCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://neo.khulnasoft.com/install | bash
+XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://neo.khulnasoft.com/install | bash
 ```
 
 ### Documentation
 
-For more info on how to configure neocode [**head over to our docs**](https://neocode.ai/docs).
+For more info on how to configure neocode [**head over to our docs**](https://neo.khulnasoft.com/docs).
 
 ### Contributing
 
