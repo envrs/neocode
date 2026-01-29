@@ -7,7 +7,7 @@ const ctx = {
   sessionID: "test",
   messageID: "",
   abort: AbortSignal.any([]),
-  metadata: () => { },
+  metadata: () => {},
 }
 const glob = await GlobTool.init()
 const list = await ListTool.init()

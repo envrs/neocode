@@ -2,7 +2,7 @@
 
 import { castToError } from '../internal/errors';
 
-export class NeocodeError extends Error { }
+export class NeocodeError extends Error {}
 
 export class APIError<
   TStatus extends number | undefined = number | undefined,
@@ -28,9 +28,9 @@ export class APIError<
       error?.message ?
         typeof error.message === 'string' ?
           error.message
-          : JSON.stringify(error.message)
-        : error ? JSON.stringify(error)
-          : message;
+        : JSON.stringify(error.message)
+      : error ? JSON.stringify(error)
+      : message;
 
     if (status && msg) {
       return `${status} ${msg}`;
@@ -113,18 +113,18 @@ export class APIConnectionTimeoutError extends APIConnectionError {
   }
 }
 
-export class BadRequestError extends APIError<400, Headers> { }
+export class BadRequestError extends APIError<400, Headers> {}
 
-export class AuthenticationError extends APIError<401, Headers> { }
+export class AuthenticationError extends APIError<401, Headers> {}
 
-export class PermissionDeniedError extends APIError<403, Headers> { }
+export class PermissionDeniedError extends APIError<403, Headers> {}
 
-export class NotFoundError extends APIError<404, Headers> { }
+export class NotFoundError extends APIError<404, Headers> {}
 
-export class ConflictError extends APIError<409, Headers> { }
+export class ConflictError extends APIError<409, Headers> {}
 
-export class UnprocessableEntityError extends APIError<422, Headers> { }
+export class UnprocessableEntityError extends APIError<422, Headers> {}
 
-export class RateLimitError extends APIError<429, Headers> { }
+export class RateLimitError extends APIError<429, Headers> {}
 
-export class InternalServerError extends APIError<number, Headers> { }
+export class InternalServerError extends APIError<number, Headers> {}

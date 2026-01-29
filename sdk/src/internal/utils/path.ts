@@ -33,8 +33,8 @@ export const createPathTagFunction = (pathEncoder = encodeURIPath) =>
           (typeof value === 'object' &&
             // handle values from other realms
             value.toString ===
-            Object.getPrototypeOf(Object.getPrototypeOf((value as any).hasOwnProperty ?? EMPTY) ?? EMPTY)
-              ?.toString))
+              Object.getPrototypeOf(Object.getPrototypeOf((value as any).hasOwnProperty ?? EMPTY) ?? EMPTY)
+                ?.toString))
       ) {
         encoded = value + '';
         invalidSegments.push({

@@ -6,9 +6,7 @@
         "moonshotai/kimi-k2": {
           "options": {
             "provider": {
-              "order": [
-                "baseten"
-              ],
+              "order": ["baseten"],
               "allow_fallbacks": false
             }
           }
@@ -28,11 +26,7 @@
     },
     "weather": {
       "type": "local",
-      "command": [
-        "neocode",
-        "x",
-        "@h1deya/mcp-server-weather"
-      ]
+      "command": ["neocode", "x", "@h1deya/mcp-server-weather"]
     }
   }
 }

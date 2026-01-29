@@ -122,5 +122,3 @@ export interface FindSymbolsParams {
 export interface FindTextParams {
   pattern: string;
 }
-
-

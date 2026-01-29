@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from '@neocode-ai/sdk/internal/uploads';
-import { toFile } from '@neocode-ai/sdk/core/uploads';
+import { multipartFormRequestOptions, createForm } from '@neopilot/sdk/internal/uploads';
+import { toFile } from '@neopilot/sdk/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {

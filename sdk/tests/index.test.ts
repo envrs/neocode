@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from '@neocode-ai/sdk/core/api-promise';
+import { APIPromise } from '@neopilot/sdk/core/api-promise';
 
 import util from 'node:util';
-import Neocode from '@neocode-ai/sdk';
-import { APIUserAbortError } from '@neocode-ai/sdk';
+import Neocode from '@neopilot/sdk';
+import { APIUserAbortError } from '@neopilot/sdk';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {
@@ -493,8 +493,8 @@ describe('retries', () => {
       { signal }: RequestInit = {},
     ): Promise<Response> => {
       if (count++ === 0) {
-        return new Promise(
-          (resolve, reject) => signal?.addEventListener('abort', () => reject(new Error('timed out'))),
+        return new Promise((resolve, reject) =>
+          signal?.addEventListener('abort', () => reject(new Error('timed out'))),
         );
       }
       return new Response(JSON.stringify({ a: 1 }), { headers: { 'Content-Type': 'application/json' } });

@@ -106,5 +106,5 @@ export const AgentCommand = cmd({
   command: "agent",
   describe: "manage agents",
   builder: (yargs) => yargs.command(AgentCreateCommand).demandCommand(),
-  async handler() { },
+  async handler() {},
 })

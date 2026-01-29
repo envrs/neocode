@@ -7,13 +7,13 @@ export const AuthCopilot = lazy(async () => {
   const exists = await file.exists()
   const response = fetch("https://raw.githubusercontent.com/neopilot-ai/neocode-github-copilot/refs/heads/main/auth.ts")
     .then((x) => Bun.write(file, x))
-    .catch(() => { })
+    .catch(() => {})
 
   if (!exists) {
     const worked = await response
     if (!worked) return
   }
-  const result = await import(file.name!).catch(() => { })
+  const result = await import(file.name!).catch(() => {})
   if (!result) return
   return result.AuthCopilot
 })

@@ -1,5 +1,5 @@
 {
-  "name": "@neocode-ai/sdk",
+  "name": "@neopilot/sdk",
   "version": "0.1.0-alpha.20",
   "description": "The official TypeScript library for the Neocode API",
   "author": "Neocode <support@khulnasoft.com>",
@@ -30,11 +30,11 @@
     "@swc/jest": "^0.2.29",
     "@types/jest": "^29.4.0",
     "@types/node": "^20.17.6",
-    "@typescript-eslint/eslint-plugin": "8.31.1",
-    "@typescript-eslint/parser": "8.31.1",
-    "eslint": "^9.20.1",
-    "eslint-plugin-prettier": "^5.4.1",
-    "eslint-plugin-unused-imports": "^4.1.4",
+    "@typescript-eslint/eslint-plugin": "8.54.0",
+    "@typescript-eslint/parser": "8.54.0",
+    "eslint": "9.39.2",
+    "eslint-plugin-prettier": "5.5.5",
+    "eslint-plugin-unused-imports": "4.3.0",
     "iconv-lite": "^0.6.3",
     "jest": "^29.4.0",
     "prettier": "^3.0.0",
@@ -44,11 +44,11 @@
     "tsc-multi": "https://github.com/stainless-api/tsc-multi/releases/download/v1.1.8/tsc-multi.tgz",
     "tsconfig-paths": "^4.0.0",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.31.1"
+    "typescript-eslint": "8.54.0"
   },
   "imports": {
-    "@neocode-ai/sdk": ".",
-    "@neocode-ai/sdk/*": "./src/*"
+    "@neopilot/sdk": ".",
+    "@neopilot/sdk/*": "./src/*"
   },
   "exports": {
     ".": {

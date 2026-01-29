@@ -50,7 +50,7 @@ export namespace MCP {
             const client = await experimental_createMCPClient({
               name: key,
               transport,
-            }).catch(() => { })
+            }).catch(() => {})
             if (!client) continue
             clients[key] = client
             break
@@ -80,7 +80,7 @@ export namespace MCP {
                 ...mcp.environment,
               },
             }),
-          }).catch(() => { })
+          }).catch(() => {})
           if (!client) {
             Bus.publish(Session.Event.Error, {
               error: {

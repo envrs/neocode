@@ -38,7 +38,7 @@ export const ServeCommand = cmd({
 
       console.log(`neocode server listening on http://${server.hostname}:${server.port}`)
 
-      await new Promise(() => { })
+      await new Promise(() => {})
 
       server.stop()
     })

@@ -7,7 +7,7 @@ organization:
 
 targets:
   typescript:
-    package_name: "@neocode-ai/sdk"
+    package_name: "@neopilot/sdk"
     production_repo: "neopilot-ai/neocode-sdk-js"
     publish:
       npm: true

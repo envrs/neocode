@@ -40,7 +40,7 @@ export function ReadableStreamFrom<T>(iterable: Iterable<T> | AsyncIterable<T>):
     Symbol.asyncIterator in iterable ? iterable[Symbol.asyncIterator]() : iterable[Symbol.iterator]();
 
   return makeReadableStream({
-    start() { },
+    start() {},
     async pull(controller: any) {
       const { done, value } = await iter.next();
       if (done) {

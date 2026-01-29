@@ -40,7 +40,7 @@ export const parseLogLevel = (
   return undefined;
 };
 
-function noop() { }
+function noop() {}
 
 function makeLogFn(fnLevel: keyof Logger, logger: Logger | undefined, logLevel: LogLevel) {
   if (!logger || levelNumbers[fnLevel] > levelNumbers[logLevel]) {
@@ -111,7 +111,7 @@ export const formatRequestDetails = (details: {
             name.toLowerCase() === 'set-cookie'
           ) ?
             '***'
-            : value,
+          : value,
         ],
       ),
     );

@@ -1,4 +1,4 @@
-import { createPathTagFunction, encodeURIPath } from '@neocode-ai/sdk/internal/utils/path';
+import { createPathTagFunction, encodeURIPath } from '@neopilot/sdk/internal/utils/path';
 import { inspect } from 'node:util';
 import { runInNewContext } from 'node:vm';
 
@@ -40,7 +40,7 @@ describe('path template tag function', () => {
     const mathObject = Math;
     const numberObject = new Number();
     const stringObject = new String();
-    const basicClass = new (class { })();
+    const basicClass = new (class {})();
     const classWithToString = new (class {
       toString() {
         return 'ok';
@@ -50,46 +50,46 @@ describe('path template tag function', () => {
     // Invalid values
     expect(() => rawPath`/a/${null}/b`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Null is not a valid path parameter\n' +
-      '/a/null/b\n' +
-      '   ^^^^',
+        'Value of type Null is not a valid path parameter\n' +
+        '/a/null/b\n' +
+        '   ^^^^',
     );
     expect(() => rawPath`/a/${undefined}/b`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Undefined is not a valid path parameter\n' +
-      '/a/undefined/b\n' +
-      '   ^^^^^^^^^',
+        'Value of type Undefined is not a valid path parameter\n' +
+        '/a/undefined/b\n' +
+        '   ^^^^^^^^^',
     );
     expect(() => rawPath`/a/${emptyObject}/b`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Object is not a valid path parameter\n' +
-      '/a/[object Object]/b\n' +
-      '   ^^^^^^^^^^^^^^^',
+        'Value of type Object is not a valid path parameter\n' +
+        '/a/[object Object]/b\n' +
+        '   ^^^^^^^^^^^^^^^',
     );
     expect(() => rawPath`?${mathObject}`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Math is not a valid path parameter\n' +
-      '?[object Math]\n' +
-      ' ^^^^^^^^^^^^^',
+        'Value of type Math is not a valid path parameter\n' +
+        '?[object Math]\n' +
+        ' ^^^^^^^^^^^^^',
     );
     expect(() => rawPath`/${basicClass}`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Object is not a valid path parameter\n' +
-      '/[object Object]\n' +
-      ' ^^^^^^^^^^^^^^',
+        'Value of type Object is not a valid path parameter\n' +
+        '/[object Object]\n' +
+        ' ^^^^^^^^^^^^^^',
     );
     expect(() => rawPath`/../${''}`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value ".." can\'t be safely passed as a path parameter\n' +
-      '/../\n' +
-      ' ^^',
+        'Value ".." can\'t be safely passed as a path parameter\n' +
+        '/../\n' +
+        ' ^^',
     );
     expect(() => rawPath`/../${{}}`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value ".." can\'t be safely passed as a path parameter\n' +
-      'Value of type Object is not a valid path parameter\n' +
-      '/../[object Object]\n' +
-      ' ^^ ^^^^^^^^^^^^^^',
+        'Value ".." can\'t be safely passed as a path parameter\n' +
+        'Value of type Object is not a valid path parameter\n' +
+        '/../[object Object]\n' +
+        ' ^^ ^^^^^^^^^^^^^^',
     );
 
     // Valid values
@@ -109,7 +109,7 @@ describe('path template tag function', () => {
     const crossRealmMathObject = newRealm.Math;
     const crossRealmNumber = new newRealm.Number();
     const crossRealmString = new newRealm.String();
-    const crossRealmClass = new (class extends newRealm.Object { })();
+    const crossRealmClass = new (class extends newRealm.Object {})();
     const crossRealmClassWithToString = new (class extends newRealm.Object {
       toString() {
         return 'ok';
@@ -119,21 +119,21 @@ describe('path template tag function', () => {
     // Invalid cross-realm values
     expect(() => rawPath`/a/${crossRealmObject}/b`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Object is not a valid path parameter\n' +
-      '/a/[object Object]/b\n' +
-      '   ^^^^^^^^^^^^^^^',
+        'Value of type Object is not a valid path parameter\n' +
+        '/a/[object Object]/b\n' +
+        '   ^^^^^^^^^^^^^^^',
     );
     expect(() => rawPath`?${crossRealmMathObject}`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Math is not a valid path parameter\n' +
-      '?[object Math]\n' +
-      ' ^^^^^^^^^^^^^',
+        'Value of type Math is not a valid path parameter\n' +
+        '?[object Math]\n' +
+        ' ^^^^^^^^^^^^^',
     );
     expect(() => rawPath`/${crossRealmClass}`).toThrow(
       'Path parameters result in path with invalid segments:\n' +
-      'Value of type Object is not a valid path parameter\n' +
-      '/[object Object]\n' +
-      ' ^^^^^^^^^^^^^^^',
+        'Value of type Object is not a valid path parameter\n' +
+        '/[object Object]\n' +
+        ' ^^^^^^^^^^^^^^^',
     );
 
     // Valid cross-realm values

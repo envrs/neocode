@@ -1,5 +1,5 @@
 {
-  "name": "@neocode-ai/sdk",
+  "name": "@neopilot/sdk",
   "version": "0.1.0-alpha.20",
   "description": "The official TypeScript library for the Neocode API",
   "author": "Neocode <support@sst.dev>",
@@ -47,8 +47,8 @@
     "typescript-eslint": "8.31.1"
   },
   "imports": {
-    "@neocode-ai/sdk": ".",
-    "@neocode-ai/sdk/*": "./src/*"
+    "@neopilot/sdk": ".",
+    "@neopilot/sdk/*": "./src/*"
   },
   "exports": {
     ".": {

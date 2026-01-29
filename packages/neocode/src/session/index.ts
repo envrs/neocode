@@ -302,9 +302,9 @@ export namespace Session {
       for (const child of await children(sessionID)) {
         await remove(child.id, false)
       }
-      await unshare(sessionID).catch(() => { })
-      await Storage.remove(`session/info/${sessionID}`).catch(() => { })
-      await Storage.removeDir(`session/message/${sessionID}/`).catch(() => { })
+      await unshare(sessionID).catch(() => {})
+      await Storage.remove(`session/info/${sessionID}`).catch(() => {})
+      await Storage.removeDir(`session/message/${sessionID}/`).catch(() => {})
       state().sessions.delete(sessionID)
       state().messages.delete(sessionID)
       if (emitEvent) {
@@ -463,7 +463,7 @@ export namespace Session {
                     sessionID: input.sessionID,
                     abort: new AbortController().signal,
                     messageID: userMsg.id,
-                    metadata: async () => { },
+                    metadata: async () => {},
                   }),
                 )
                 return [
@@ -647,7 +647,7 @@ export namespace Session {
               draft.title = title.trim()
             })
         })
-        .catch(() => { })
+        .catch(() => {})
     }
 
     const mode = await Mode.get(inputMode)
@@ -765,7 +765,7 @@ export namespace Session {
     }
 
     const stream = streamText({
-      onError() { },
+      onError() {},
       async prepareStep({ messages }) {
         const queue = (state().queued.get(input.sessionID) ?? []).filter((x) => !x.processed)
         if (queue.length) {

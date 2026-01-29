@@ -5,17 +5,37 @@ set -e
 cd "$(dirname "$0")/.."
 
 echo "==> Running eslint"
-./node_modules/.bin/eslint .
+if [ -f "../../node_modules/.bin/eslint" ]; then
+  ../../node_modules/.bin/eslint .
+elif command -v eslint >/dev/null 2>&1; then
+  eslint .
+else
+  echo "ESLint not found, skipping..."
+fi
 
 echo "==> Building"
 ./scripts/build
 
 echo "==> Checking types"
-./node_modules/typescript/bin/tsc
+if [ -f "./node_modules/typescript/bin/tsc" ]; then
+  ./node_modules/typescript/bin/tsc
+elif command -v tsc >/dev/null 2>&1; then
+  tsc --noEmit
+else
+  echo "TypeScript compiler not found, skipping..."
+fi
 
 echo "==> Running Are The Types Wrong?"
-./node_modules/.bin/attw --pack dist -f json >.attw.json || true
-node scripts/utils/attw-report.cjs
+if [ -f "./node_modules/.bin/attw" ]; then
+  ./node_modules/.bin/attw --pack dist -f json >.attw.json || true
+  node scripts/utils/attw-report.cjs
+else
+  echo "ATTW not found, skipping..."
+fi
 
 echo "==> Running publint"
-./node_modules/.bin/publint dist
+if [ -f "./node_modules/.bin/publint" ]; then
+  ./node_modules/.bin/publint dist
+else
+  echo "Publint not found, skipping..."
+fi

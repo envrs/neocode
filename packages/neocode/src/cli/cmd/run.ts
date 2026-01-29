@@ -165,9 +165,9 @@ export const RunCommand = cmd({
         ...(mode.model
           ? mode.model
           : {
-            providerID,
-            modelID,
-          }),
+              providerID,
+              modelID,
+            }),
         mode: mode.name,
         parts: [
           {

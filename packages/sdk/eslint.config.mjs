@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^@neocode-ai/sdk(/.*)?',
+              regex: '^@neopilot/sdk(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],

@@ -294,7 +294,7 @@ export namespace Config {
         await Bun.write(path.join(Global.Path.config, "config.json"), JSON.stringify(result, null, 2))
         await fs.unlink(path.join(Global.Path.config, "config"))
       })
-      .catch(() => { })
+      .catch(() => {})
 
     return result
   })

@@ -1,26 +1,16 @@
 {
-  "include": [
-    "src",
-    "tests",
-    "examples"
-  ],
+  "include": ["src", "tests", "examples"],
   "exclude": [],
   "compilerOptions": {
     "target": "es2020",
-    "lib": [
-      "es2020"
-    ],
+    "lib": ["es2020"],
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
     "baseUrl": "./",
     "paths": {
-      "@neocode-ai/sdk/*": [
-        "src/*"
-      ],
-      "@neocode-ai/sdk": [
-        "src/index.ts"
-      ]
+      "@neopilot/sdk/*": ["src/*"],
+      "@neopilot/sdk": ["src/index.ts"]
     },
     "noEmit": true,
     "resolveJsonModule": true,

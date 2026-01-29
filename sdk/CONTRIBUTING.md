@@ -55,12 +55,12 @@ $ cd neocode-sdk-js
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link @neocode-ai/sdk
+$ yarn link @neopilot/sdk
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global @neocode-ai/sdk
+$ pnpm link -—global @neopilot/sdk
 ```
 
 ## Running tests

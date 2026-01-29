@@ -112,28 +112,28 @@ export const TuiCommand = cmd({
           },
         })
 
-          ; (async () => {
-            if (Installation.isDev()) return
-            if (Installation.isSnapshot()) return
-            const config = await Config.global()
-            if (config.autoupdate === false) return
-            const latest = await Installation.latest().catch(() => { })
-            if (!latest) return
-            if (Installation.VERSION === latest) return
-            const method = await Installation.method()
-            if (method === "unknown") return
-            await Installation.upgrade(method, latest)
-              .then(() => Bus.publish(Installation.Event.Updated, { version: latest }))
-              .catch(() => { })
-          })()
-          ; (async () => {
-            if (Ide.alreadyInstalled()) return
-            const ide = Ide.ide()
-            if (ide === "unknown") return
-            await Ide.install(ide)
-              .then(() => Bus.publish(Ide.Event.Installed, { ide }))
-              .catch(() => { })
-          })()
+        ;(async () => {
+          if (Installation.isDev()) return
+          if (Installation.isSnapshot()) return
+          const config = await Config.global()
+          if (config.autoupdate === false) return
+          const latest = await Installation.latest().catch(() => {})
+          if (!latest) return
+          if (Installation.VERSION === latest) return
+          const method = await Installation.method()
+          if (method === "unknown") return
+          await Installation.upgrade(method, latest)
+            .then(() => Bus.publish(Installation.Event.Updated, { version: latest }))
+            .catch(() => {})
+        })()
+        ;(async () => {
+          if (Ide.alreadyInstalled()) return
+          const ide = Ide.ide()
+          if (ide === "unknown") return
+          await Ide.install(ide)
+            .then(() => Bus.publish(Ide.Event.Installed, { ide }))
+            .catch(() => {})
+        })()
 
         await proc.exited
         server.stop()

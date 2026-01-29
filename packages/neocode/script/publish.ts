@@ -10,12 +10,12 @@ const snapshot = process.argv.includes("--snapshot")
 const version = snapshot
   ? `0.0.0-${new Date().toISOString().slice(0, 16).replace(/[-:T]/g, "")}`
   : await $`git describe --tags --abbrev=0`
-    .text()
-    .then((x) => x.substring(1).trim())
-    .catch(() => {
-      console.error("tag not found")
-      process.exit(1)
-    })
+      .text()
+      .then((x) => x.substring(1).trim())
+      .catch(() => {
+        console.error("tag not found")
+        process.exit(1)
+      })
 
 console.log(`publishing ${version}`)
 

@@ -7,8 +7,34 @@
   "scripts": {
     "dev": "bun run packages/neocode/src/index.ts",
     "typecheck": "bun run --filter='*' typecheck",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "test:unit": "bun test --testNamePattern='^(?!.*integration)'",
+    "test:integration": "bun test --testNamePattern='integration'",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "rm -rf node_modules dist build coverage .turbo",
+    "clean:full": "bun run clean && bun run clean:deps",
+    "clean:deps": "rm -rf node_modules && bun install",
+    "build": "bun run --filter='*' build",
+    "build:watch": "bun run --filter='*' build --watch",
+    "dev:tui": "bun run packages/neocode/src/index.ts --tui",
+    "dev:debug": "bun run packages/neocode/src/index.ts --debug",
     "stainless": "./scripts/stainless",
-    "postinstall": "./scripts/hooks"
+    "stainless:watch": "./scripts/stainless --watch",
+    "postinstall": "./scripts/hooks",
+    "precommit": "bun run typecheck && bun run lint && bun run test:unit",
+    "prepare": "husky install || true",
+    "release": "bun run build && bun run test && bun run stainless",
+    "docs:dev": "bun run web/src/dev",
+    "docs:build": "bun run web/src/build",
+    "analyze": "echo '📊 Project Analysis:' && echo 'Package sizes:' && du -sh node_modules packages/*/node_modules 2>/dev/null || echo 'No node_modules found' && echo 'Build sizes:' && find packages -name 'dist' -type d -exec du -sh {} \\; 2>/dev/null || echo 'No dist folders found' && echo 'TypeScript files:' && find packages -name '*.ts' | wc -l && echo 'Test files:' && find packages -name '*.test.*' | wc -l",
+    "deps:check": "bunx npm-check-updates",
+    "deps:update": "bunx npm-check-updates -u",
+    "cache:clean": "bun pm cache rm",
+    "docker:build": "docker build -t neocode .",
+    "docker:run": "docker run -it neocode"
   },
   "workspaces": {
     "packages": [
@@ -23,7 +49,13 @@
   },
   "devDependencies": {
     "prettier": "3.5.3",
-    "sst": "3.17.8"
+    "sst": "3.17.8",
+    "@typescript-eslint/eslint-plugin": "8.31.1",
+    "@typescript-eslint/parser": "8.31.1",
+    "eslint": "^9.20.1",
+    "eslint-plugin-prettier": "^5.4.1",
+    "eslint-plugin-unused-imports": "^4.1.4",
+    "typescript-eslint": "8.31.1"
   },
   "repository": {
     "type": "git",

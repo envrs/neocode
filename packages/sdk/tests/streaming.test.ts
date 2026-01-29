@@ -1,6 +1,6 @@
 import assert from 'assert';
-import { _iterSSEMessages } from '@neocode-ai/sdk/core/streaming';
-import { ReadableStreamFrom } from '@neocode-ai/sdk/internal/shims';
+import { _iterSSEMessages } from '@neopilot/sdk/core/streaming';
+import { ReadableStreamFrom } from '@neopilot/sdk/internal/shims';
 
 describe('streaming decoding', () => {
   test('basic', async () => {
