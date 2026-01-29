@@ -42,7 +42,7 @@ for (const [os, arch] of targets) {
   console.log(`building ${os}-${arch}`)
   const name = `${pkg.name}-${os}-${arch}`
   await $`mkdir -p dist/${name}/bin`
-  await $`CGO_ENABLED=0 GOOS=${os} GOARCH=${GOARCH[arch]} go build -ldflags="-s -w -X main.Version=${version}" -o ../neocode/dist/${name}/bin/tui ../tui/cmd/neocode/main.go`.cwd(
+  await $`CGO_ENABLED=0 GOOS=${os} GOARCH=${GOARCH[arch]} go build -ldflags="-s -w -X main.Version=${version}" -o ../neocode/dist/${name}/bin/tui ./cmd/neocode/main.go`.cwd(
     "../tui",
   )
   await $`bun build --define NEOCODE_VERSION="'${version}'" --compile --minify --target=bun-${os}-${arch} --outfile=dist/${name}/bin/neocode ./src/index.ts ./dist/${name}/bin/tui`
