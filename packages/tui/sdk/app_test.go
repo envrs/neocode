@@ -1,0 +1,131 @@
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+package neocode_test
+
+import (
+	"context"
+	"errors"
+	"os"
+	"testing"
+
+	"github.com/neopilot-ai/neocode-sdk-go"
+	"github.com/neopilot-ai/neocode-sdk-go/internal/testutil"
+	"github.com/neopilot-ai/neocode-sdk-go/option"
+)
+
+func TestAppGet(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := neocode.NewClient(
+		option.WithBaseURL(baseURL),
+	)
+	_, err := client.App.Get(context.TODO())
+	if err != nil {
+		var apierr *neocode.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAppInit(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := neocode.NewClient(
+		option.WithBaseURL(baseURL),
+	)
+	_, err := client.App.Init(context.TODO())
+	if err != nil {
+		var apierr *neocode.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAppLogWithOptionalParams(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := neocode.NewClient(
+		option.WithBaseURL(baseURL),
+	)
+	_, err := client.App.Log(context.TODO(), neocode.AppLogParams{
+		Level:   neocode.F(neocode.AppLogParamsLevelDebug),
+		Message: neocode.F("message"),
+		Service: neocode.F("service"),
+		Extra: neocode.F(map[string]interface{}{
+			"foo": "bar",
+		}),
+	})
+	if err != nil {
+		var apierr *neocode.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAppModes(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := neocode.NewClient(
+		option.WithBaseURL(baseURL),
+	)
+	_, err := client.App.Modes(context.TODO())
+	if err != nil {
+		var apierr *neocode.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}
+
+func TestAppProviders(t *testing.T) {
+	t.Skip("skipped: tests are disabled for the time being")
+	baseURL := "http://localhost:4010"
+	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
+		baseURL = envURL
+	}
+	if !testutil.CheckTestServer(t, baseURL) {
+		return
+	}
+	client := neocode.NewClient(
+		option.WithBaseURL(baseURL),
+	)
+	_, err := client.App.Providers(context.TODO())
+	if err != nil {
+		var apierr *neocode.Error
+		if errors.As(err, &apierr) {
+			t.Log(string(apierr.DumpRequest(true)))
+		}
+		t.Fatalf("err should be nil: %s", err.Error())
+	}
+}

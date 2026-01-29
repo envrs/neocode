@@ -1,0 +1,29 @@
+name: "neocode GitHub Action"
+description: "Run neocode in GitHub Actions workflows"
+branding:
+  icon: "code"
+  color: "orange"
+
+inputs:
+  model:
+    description: "Model to use"
+    required: true
+
+  share:
+    description: "Share the neocode session (defaults to true for public repos)"
+    required: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install neocode
+      shell: bash
+      run: curl -fsSL https://neocode.ai/install | bash
+
+    - name: Run neocode
+      shell: bash
+      id: run_neocode
+      run: neocode github run
+      env:
+        MODEL: ${{ inputs.model }}
+        SHARE: ${{ inputs.share }}

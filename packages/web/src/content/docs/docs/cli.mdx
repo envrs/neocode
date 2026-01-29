@@ -1,0 +1,132 @@
+---
+title: CLI
+description: The neocode CLI options and commands.
+---
+
+Running the neocode CLI starts it for the current directory.
+
+```bash
+neocode
+```
+
+Or you can start it for a specific working directory.
+
+```bash
+neocode /path/to/project
+```
+
+---
+
+## Commands
+
+The neocode CLI also has the following commands.
+
+---
+
+### run
+
+Run neocode in non-interactive mode by passing a prompt directly.
+
+```bash
+neocode run [message..]
+```
+
+This is useful for scripting, automation, or when you want a quick answer without launching the full TUI. For example.
+
+```bash "neocode run"
+neocode run Explain the use of context in Go
+```
+
+#### Flags
+
+| Flag         | Short | Description                                |
+| ------------ | ----- | ------------------------------------------ |
+| `--continue` | `-c`  | Continue the last session                  |
+| `--session`  | `-s`  | Session ID to continue                     |
+| `--share`    |       | Share the session                          |
+| `--model`    | `-m`  | Model to use in the form of provider/model |
+
+---
+
+### auth
+
+Command to manage credentials and login for providers.
+
+```bash
+neocode auth [command]
+```
+
+---
+
+#### login
+
+neocode is powered by the provider list at [Models.dev](https://models.dev), so you can use `neocode auth login` to configure API keys for any provider you'd like to use. This is stored in `~/.local/share/neocode/auth.json`.
+
+```bash
+neocode auth login
+```
+
+When neocode starts up it loads the providers from the credentials file. And if there are any keys defined in your environments or a `.env` file in your project.
+
+---
+
+#### list
+
+Lists all the authenticated providers as stored in the credentials file.
+
+```bash
+neocode auth list
+```
+
+Or the short version.
+
+```bash
+neocode auth ls
+```
+
+---
+
+#### logout
+
+Logs you out of a provider by clearing it from the credentials file.
+
+```bash
+neocode auth logout
+```
+
+---
+
+### upgrade
+
+Updates neocode to the latest version or a specific version.
+
+```bash
+neocode upgrade [target]
+```
+
+To upgrade to the latest version.
+
+```bash
+neocode upgrade
+```
+
+To upgrade to a specific version.
+
+```bash
+neocode upgrade v0.1.48
+```
+
+---
+
+## Flags
+
+The neocode CLI takes the following flags.
+
+| Flag           | Short | Description          |
+| -------------- | ----- | -------------------- |
+| `--help`       | `-h`  | Display help         |
+| `--version`    |       | Print version number |
+| `--print-logs` |       | Print logs to stderr |
+| `--prompt`     | `-p`  | Prompt to use        |
+| `--model`      | `-m`  | Model to use in the form of provider/model |
+| `--mode`       |       | Mode to use          |

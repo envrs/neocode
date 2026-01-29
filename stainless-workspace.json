@@ -1,0 +1,5 @@
+{
+  "project": "neocode",
+  "openapi_spec": "openapi.json",
+  "stainless_config": "stainless.yml"
+}
