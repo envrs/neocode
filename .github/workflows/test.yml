@@ -1,0 +1,138 @@
+name: test
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+  workflow_dispatch:
+jobs:
+  test:
+    name: test (${{ matrix.settings.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        settings:
+          - name: linux
+            host: blacksmith-4vcpu-ubuntu-2404
+            playwright: bunx playwright install --with-deps
+            workdir: .
+            command: |
+              git config --global user.email "bot@neo.khulnasoft.com"
+              git config --global user.name "neocode"
+              bun turbo test
+          - name: windows
+            host: windows-latest
+            playwright: bunx playwright install
+            workdir: packages/app
+            command: bun test:e2e:local
+    runs-on: ${{ matrix.settings.host }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Bun
+        uses: ./.github/actions/setup-bun
+
+      - name: Install Playwright browsers
+        working-directory: packages/app
+        run: ${{ matrix.settings.playwright }}
+
+      - name: Set OS-specific paths
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            printf '%s\n' "NEOCODE_E2E_ROOT=${{ runner.temp }}\\neocode-e2e" >> "$GITHUB_ENV"
+            printf '%s\n' "NEOCODE_TEST_HOME=${{ runner.temp }}\\neocode-e2e\\home" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_DATA_HOME=${{ runner.temp }}\\neocode-e2e\\share" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_CACHE_HOME=${{ runner.temp }}\\neocode-e2e\\cache" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_CONFIG_HOME=${{ runner.temp }}\\neocode-e2e\\config" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_STATE_HOME=${{ runner.temp }}\\neocode-e2e\\state" >> "$GITHUB_ENV"
+          else
+            printf '%s\n' "NEOCODE_E2E_ROOT=${{ runner.temp }}/neocode-e2e" >> "$GITHUB_ENV"
+            printf '%s\n' "NEOCODE_TEST_HOME=${{ runner.temp }}/neocode-e2e/home" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_DATA_HOME=${{ runner.temp }}/neocode-e2e/share" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_CACHE_HOME=${{ runner.temp }}/neocode-e2e/cache" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_CONFIG_HOME=${{ runner.temp }}/neocode-e2e/config" >> "$GITHUB_ENV"
+            printf '%s\n' "XDG_STATE_HOME=${{ runner.temp }}/neocode-e2e/state" >> "$GITHUB_ENV"
+          fi
+
+      - name: Seed neocode data
+        if: matrix.settings.name != 'windows'
+        working-directory: packages/neocode
+        run: bun script/seed-e2e.ts
+        env:
+          NEOCODE_DISABLE_SHARE: "true"
+          NEOCODE_DISABLE_LSP_DOWNLOAD: "true"
+          NEOCODE_DISABLE_DEFAULT_PLUGINS: "true"
+          NEOCODE_EXPERIMENTAL_DISABLE_FILEWATCHER: "true"
+          NEOCODE_TEST_HOME: ${{ env.NEOCODE_TEST_HOME }}
+          XDG_DATA_HOME: ${{ env.XDG_DATA_HOME }}
+          XDG_CACHE_HOME: ${{ env.XDG_CACHE_HOME }}
+          XDG_CONFIG_HOME: ${{ env.XDG_CONFIG_HOME }}
+          XDG_STATE_HOME: ${{ env.XDG_STATE_HOME }}
+          NEOCODE_E2E_PROJECT_DIR: ${{ github.workspace }}
+          NEOCODE_E2E_SESSION_TITLE: "E2E Session"
+          NEOCODE_E2E_MESSAGE: "Seeded for UI e2e"
+          NEOCODE_E2E_MODEL: "neocode/gpt-5-nano"
+
+      - name: Run neocode server
+        if: matrix.settings.name != 'windows'
+        working-directory: packages/neocode
+        run: bun dev -- --print-logs --log-level WARN serve --port 4096 --hostname 127.0.0.1 &
+        env:
+          NEOCODE_DISABLE_SHARE: "true"
+          NEOCODE_DISABLE_LSP_DOWNLOAD: "true"
+          NEOCODE_DISABLE_DEFAULT_PLUGINS: "true"
+          NEOCODE_EXPERIMENTAL_DISABLE_FILEWATCHER: "true"
+          NEOCODE_TEST_HOME: ${{ env.NEOCODE_TEST_HOME }}
+          XDG_DATA_HOME: ${{ env.XDG_DATA_HOME }}
+          XDG_CACHE_HOME: ${{ env.XDG_CACHE_HOME }}
+          XDG_CONFIG_HOME: ${{ env.XDG_CONFIG_HOME }}
+          XDG_STATE_HOME: ${{ env.XDG_STATE_HOME }}
+          NEOCODE_CLIENT: "app"
+
+      - name: Wait for neocode server
+        if: matrix.settings.name != 'windows'
+        run: |
+          for i in {1..120}; do
+            curl -fsS "http://127.0.0.1:4096/global/health" > /dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+
+      - name: run
+        working-directory: ${{ matrix.settings.workdir }}
+        run: ${{ matrix.settings.command }}
+        env:
+          CI: true
+          NEOCODE_DISABLE_SHARE: "true"
+          NEOCODE_DISABLE_LSP_DOWNLOAD: "true"
+          NEOCODE_DISABLE_DEFAULT_PLUGINS: "true"
+          NEOCODE_EXPERIMENTAL_DISABLE_FILEWATCHER: "true"
+          NEOCODE_TEST_HOME: ${{ env.NEOCODE_TEST_HOME }}
+          XDG_DATA_HOME: ${{ env.XDG_DATA_HOME }}
+          XDG_CACHE_HOME: ${{ env.XDG_CACHE_HOME }}
+          XDG_CONFIG_HOME: ${{ env.XDG_CONFIG_HOME }}
+          XDG_STATE_HOME: ${{ env.XDG_STATE_HOME }}
+          PLAYWRIGHT_SERVER_HOST: "127.0.0.1"
+          PLAYWRIGHT_SERVER_PORT: "4096"
+          VITE_NEOCODE_SERVER_HOST: "127.0.0.1"
+          VITE_NEOCODE_SERVER_PORT: "4096"
+          NEOCODE_CLIENT: "app"
+        timeout-minutes: 30
+
+      - name: Upload Playwright artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ matrix.settings.name }}-${{ github.run_attempt }}
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            packages/app/e2e/test-results
+            packages/app/e2e/playwright-report

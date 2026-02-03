@@ -1,0 +1,17 @@
+{
+  "$schema": "https://neo.khulnasoft.com/config.json",
+  // "plugin": ["neocode-openai-codex-auth"],
+  // "enterprise": {
+  //   "url": "https://enterprise.dev.neo.khulnasoft.com",
+  // },
+  "provider": {
+    "neocode": {
+      "options": {},
+    },
+  },
+  "mcp": {},
+  "tools": {
+    "github-triage": false,
+    "github-pr-search": false,
+  },
+}
