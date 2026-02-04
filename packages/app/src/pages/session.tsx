@@ -2157,7 +2157,10 @@ export default function Page() {
                   }}
                   newSessionWorktree={newSessionWorktree()}
                   onNewSessionWorktreeReset={() => setStore("newSessionWorktree", "main")}
-                  onSubmit={resumeScroll}
+                  onSubmit={() => {
+                    comments.clear()
+                    resumeScroll()
+                  }}
                 />
               </Show>
             </div>
