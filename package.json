@@ -8,6 +8,8 @@
   "scripts": {
     "dev": "bun run --cwd packages/neocode --conditions=browser src/index.ts",
     "typecheck": "bun turbo typecheck",
+    "fmt": "prettier --write .",
+    "preinstall": "npx only-allow bun",
     "prepare": "husky",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",

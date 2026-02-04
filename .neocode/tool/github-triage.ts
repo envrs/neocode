@@ -29,7 +29,7 @@ export default tool({
   description: DESCRIPTION,
   args: {
     assignee: tool.schema
-      .enum(["thdxr", "adamdotdevin", "rekram1-node", "fwang", "jayair", "kommander"])
+      .enum(["thdxr", "neopilotai", "rekram1-node", "fwang", "jayair", "kommander"])
       .describe("The username of the assignee")
       .default("rekram1-node"),
     labels: tool.schema
@@ -45,8 +45,8 @@ export default tool({
 
     const results: string[] = []
 
-    if (args.assignee === "adamdotdevin" && !args.labels.includes("desktop")) {
-      throw new Error("Only desktop issues should be assigned to adamdotdevin")
+    if (args.assignee === "neopilotai" && !args.labels.includes("desktop")) {
+      throw new Error("Only desktop issues should be assigned to neopilotai")
     }
 
     if (args.assignee === "fwang" && !args.labels.includes("zen")) {

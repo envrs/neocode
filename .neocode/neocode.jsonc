@@ -1,5 +1,5 @@
 {
-  "$schema": "https://neo.khulnasoft.com/config.json",
+  "$schema": "./config.json",
   // "plugin": ["neocode-openai-codex-auth"],
   // "enterprise": {
   //   "url": "https://enterprise.dev.neo.khulnasoft.com",
