@@ -12,7 +12,7 @@ import { Global } from "../../src/global"
 const managedConfigDir = process.env.NEOCODE_TEST_MANAGED_CONFIG_DIR!
 
 afterEach(async () => {
-  await fs.rm(managedConfigDir, { force: true, recursive: true }).catch(() => { })
+  await fs.rm(managedConfigDir, { force: true, recursive: true }).catch(() => {})
 })
 
 async function writeManagedSettings(settings: object, filename = "neocode.json") {

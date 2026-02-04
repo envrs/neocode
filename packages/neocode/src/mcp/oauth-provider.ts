@@ -29,7 +29,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     private serverUrl: string,
     private config: McpOAuthConfig,
     private callbacks: McpOAuthCallbacks,
-  ) { }
+  ) {}
 
   get redirectUrl(): string {
     return `http://127.0.0.1:${OAUTH_CALLBACK_PORT}${OAUTH_CALLBACK_PATH}`

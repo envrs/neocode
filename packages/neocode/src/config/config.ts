@@ -83,10 +83,7 @@ export namespace Config {
         const remoteConfig = wellknown.config ?? {}
         // Add $schema to prevent load() from trying to write back to a non-existent file
         if (!remoteConfig.$schema) remoteConfig.$schema = "https://neo.khulnasoft.com/config.json"
-        result = mergeConfigConcatArrays(
-          result,
-          await load(JSON.stringify(remoteConfig), `${key}/.well-known/neocode`),
-        )
+        result = mergeConfigConcatArrays(result, await load(JSON.stringify(remoteConfig), `${key}/.well-known/neocode`))
         log.debug("loaded remote config from well-known", { url: key })
       }
     }
@@ -119,12 +116,12 @@ export namespace Config {
       // Only scan project .neocode/ directories when project discovery is enabled
       ...(!Flag.NEOCODE_DISABLE_PROJECT_CONFIG
         ? await Array.fromAsync(
-          Filesystem.up({
-            targets: [".neocode"],
-            start: Instance.directory,
-            stop: Instance.worktree,
-          }),
-        )
+            Filesystem.up({
+              targets: [".neocode"],
+              start: Instance.directory,
+              stop: Instance.worktree,
+            }),
+          )
         : []),
       // Always scan ~/.neocode/ (user home directory)
       ...(await Array.fromAsync(
@@ -249,11 +246,11 @@ export namespace Config {
       {
         cwd: dir,
       },
-    ).catch(() => { })
+    ).catch(() => {})
 
     // Install any additional dependencies defined in the package.json
     // This allows local plugins and custom tools to use external packages
-    await BunProc.run(["install"], { cwd: dir }).catch(() => { })
+    await BunProc.run(["install"], { cwd: dir }).catch(() => {})
   }
 
   function rel(item: string, patterns: string[]) {
@@ -1141,7 +1138,7 @@ export namespace Config {
           await Bun.write(path.join(Global.Path.config, "config.json"), JSON.stringify(result, null, 2))
           await fs.unlink(legacy)
         })
-        .catch(() => { })
+        .catch(() => {})
     }
 
     return result
@@ -1232,7 +1229,7 @@ export namespace Config {
         parsed.data.$schema = "https://neo.khulnasoft.com/config.json"
         // Write the $schema to the original text to preserve variables like {env:VAR}
         const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://neo.khulnasoft.com/config.json",')
-        await Bun.write(configFilepath, updated).catch(() => { })
+        await Bun.write(configFilepath, updated).catch(() => {})
       }
       const data = parsed.data
       if (data.plugin) {
@@ -1240,7 +1237,7 @@ export namespace Config {
           const plugin = data.plugin[i]
           try {
             data.plugin[i] = import.meta.resolve!(plugin, configFilepath)
-          } catch (err) { }
+          } catch (err) {}
         }
       }
       return data

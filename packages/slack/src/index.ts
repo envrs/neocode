@@ -20,23 +20,23 @@ const neocode = await createNeocode({
 console.log("✅ Neocode server ready")
 
 const sessions = new Map<string, { client: any; server: any; sessionId: string; channel: string; thread: string }>()
-  ; (async () => {
-    const events = await neocode.client.event.subscribe()
-    for await (const event of events.stream) {
-      if (event.type === "message.part.updated") {
-        const part = event.properties.part
-        if (part.type === "tool") {
-          // Find the session for this tool update
-          for (const [sessionKey, session] of sessions.entries()) {
-            if (session.sessionId === part.sessionID) {
-              handleToolUpdate(part, session.channel, session.thread)
-              break
-            }
+;(async () => {
+  const events = await neocode.client.event.subscribe()
+  for await (const event of events.stream) {
+    if (event.type === "message.part.updated") {
+      const part = event.properties.part
+      if (part.type === "tool") {
+        // Find the session for this tool update
+        for (const [sessionKey, session] of sessions.entries()) {
+          if (session.sessionId === part.sessionID) {
+            handleToolUpdate(part, session.channel, session.thread)
+            break
           }
         }
       }
     }
-  })()
+  }
+})()
 
 async function handleToolUpdate(part: ToolPart, channel: string, thread: string) {
   if (part.state.status !== "completed") return
@@ -47,7 +47,7 @@ async function handleToolUpdate(part: ToolPart, channel: string, thread: string)
       thread_ts: thread,
       text: toolMessage,
     })
-    .catch(() => { })
+    .catch(() => {})
 }
 
 app.use(async ({ next, context }) => {

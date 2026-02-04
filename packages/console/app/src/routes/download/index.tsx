@@ -419,8 +419,8 @@ export default function Download() {
           <ul>
             <li>
               <Faq question="What is NeoCode?">
-                NeoCode is an open source agent that helps you write and run code with any AI model. It's available as
-                a terminal-based interface, desktop app, or IDE extension.
+                NeoCode is an open source agent that helps you write and run code with any AI model. It's available as a
+                terminal-based interface, desktop app, or IDE extension.
               </Faq>
             </li>
             <li>

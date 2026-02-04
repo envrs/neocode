@@ -20,12 +20,12 @@ export const ImportCommand = cmd({
     await bootstrap(process.cwd(), async () => {
       let exportData:
         | {
-          info: Session.Info
-          messages: Array<{
-            info: any
-            parts: any[]
-          }>
-        }
+            info: Session.Info
+            messages: Array<{
+              info: any
+              parts: any[]
+            }>
+          }
         | undefined
 
       const isUrl = args.file.startsWith("http://") || args.file.startsWith("https://")
@@ -67,7 +67,7 @@ export const ImportCommand = cmd({
         }
       } else {
         const file = Bun.file(args.file)
-        exportData = await file.json().catch(() => { })
+        exportData = await file.json().catch(() => {})
         if (!exportData) {
           process.stdout.write(`File not found: ${args.file}`)
           process.stdout.write(EOL)

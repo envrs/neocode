@@ -921,10 +921,10 @@ export namespace ACP {
               const isText = effectiveMime.startsWith("text/") || effectiveMime === "application/json"
               const resource = isText
                 ? {
-                  uri: `file://${filename}`,
-                  mimeType: effectiveMime,
-                  text: Buffer.from(base64Data, "base64").toString("utf-8"),
-                }
+                    uri: `file://${filename}`,
+                    mimeType: effectiveMime,
+                    text: Buffer.from(base64Data, "base64").toString("utf-8"),
+                  }
                 : { uri: `file://${filename}`, mimeType: effectiveMime, blob: base64Data }
 
               await this.connection
@@ -1017,9 +1017,9 @@ export namespace ACP {
       const currentModeId = modeState.currentModeId
       const modes = currentModeId
         ? {
-          availableModes: modeState.availableModes,
-          currentModeId,
-        }
+            availableModes: modeState.availableModes,
+            currentModeId,
+          }
         : undefined
 
       const commands = await this.config.sdk.command

@@ -62,12 +62,12 @@ nix run nixpkgs#neocode           # or github:neopilot-ai/neocode for latest dev
 
 NeoCode is also available as a desktop application. Download directly from the [releases page](https://github.com/neopilot-ai/neocode/releases) or [neo.khulnasoft.com/download](https://neo.khulnasoft.com/download).
 
-| Platform              | Download                              |
-| --------------------- | ------------------------------------- |
+| Platform              | Download                             |
+| --------------------- | ------------------------------------ |
 | macOS (Apple Silicon) | `neocode-desktop-darwin-aarch64.dmg` |
 | macOS (Intel)         | `neocode-desktop-darwin-x64.dmg`     |
 | Windows               | `neocode-desktop-windows-x64.exe`    |
-| Linux                 | `.deb`, `.rpm`, or AppImage           |
+| Linux                 | `.deb`, `.rpm`, or AppImage          |
 
 ```bash
 # macOS (Homebrew)

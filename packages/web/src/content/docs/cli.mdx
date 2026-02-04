@@ -345,7 +345,7 @@ neocode run --attach http://localhost:4096 "Explain async/await in JavaScript"
 | `--file`     | `-f`  | File(s) to attach to message                                       |
 | `--format`   |       | Format: default (formatted) or json (raw JSON events)              |
 | `--title`    |       | Title for the session (uses truncated prompt if no value provided) |
-| `--attach`   |       | Attach to a running neocode server (e.g., http://localhost:4096)  |
+| `--attach`   |       | Attach to a running neocode server (e.g., http://localhost:4096)   |
 | `--port`     |       | Port for the local server (defaults to random port)                |
 
 ---
@@ -551,27 +551,27 @@ The neocode CLI takes the following global flags.
 
 NeoCode can be configured using environment variables.
 
-| Variable                              | Type    | Description                                       |
-| ------------------------------------- | ------- | ------------------------------------------------- |
-| `NEOCODE_AUTO_SHARE`                 | boolean | Automatically share sessions                      |
-| `NEOCODE_GIT_BASH_PATH`              | string  | Path to Git Bash executable on Windows            |
-| `NEOCODE_CONFIG`                     | string  | Path to config file                               |
-| `NEOCODE_CONFIG_DIR`                 | string  | Path to config directory                          |
-| `NEOCODE_CONFIG_CONTENT`             | string  | Inline json config content                        |
-| `NEOCODE_DISABLE_AUTOUPDATE`         | boolean | Disable automatic update checks                   |
-| `NEOCODE_DISABLE_PRUNE`              | boolean | Disable pruning of old data                       |
-| `NEOCODE_DISABLE_TERMINAL_TITLE`     | boolean | Disable automatic terminal title updates          |
-| `NEOCODE_PERMISSION`                 | string  | Inlined json permissions config                   |
-| `NEOCODE_DISABLE_DEFAULT_PLUGINS`    | boolean | Disable default plugins                           |
-| `NEOCODE_DISABLE_LSP_DOWNLOAD`       | boolean | Disable automatic LSP server downloads            |
-| `NEOCODE_ENABLE_EXPERIMENTAL_MODELS` | boolean | Enable experimental models                        |
-| `NEOCODE_DISABLE_AUTOCOMPACT`        | boolean | Disable automatic context compaction              |
-| `NEOCODE_DISABLE_CLAUDE_CODE`        | boolean | Disable reading from `.claude` (prompt + skills)  |
-| `NEOCODE_DISABLE_CLAUDE_CODE_PROMPT` | boolean | Disable reading `~/.claude/CLAUDE.md`             |
-| `NEOCODE_DISABLE_CLAUDE_CODE_SKILLS` | boolean | Disable loading `.claude/skills`                  |
-| `NEOCODE_CLIENT`                     | string  | Client identifier (defaults to `cli`)             |
-| `NEOCODE_ENABLE_EXA`                 | boolean | Enable Exa web search tools                       |
-| `NEOCODE_SERVER_PASSWORD`            | string  | Enable basic auth for `serve`/`web`               |
+| Variable                             | Type    | Description                                      |
+| ------------------------------------ | ------- | ------------------------------------------------ |
+| `NEOCODE_AUTO_SHARE`                 | boolean | Automatically share sessions                     |
+| `NEOCODE_GIT_BASH_PATH`              | string  | Path to Git Bash executable on Windows           |
+| `NEOCODE_CONFIG`                     | string  | Path to config file                              |
+| `NEOCODE_CONFIG_DIR`                 | string  | Path to config directory                         |
+| `NEOCODE_CONFIG_CONTENT`             | string  | Inline json config content                       |
+| `NEOCODE_DISABLE_AUTOUPDATE`         | boolean | Disable automatic update checks                  |
+| `NEOCODE_DISABLE_PRUNE`              | boolean | Disable pruning of old data                      |
+| `NEOCODE_DISABLE_TERMINAL_TITLE`     | boolean | Disable automatic terminal title updates         |
+| `NEOCODE_PERMISSION`                 | string  | Inlined json permissions config                  |
+| `NEOCODE_DISABLE_DEFAULT_PLUGINS`    | boolean | Disable default plugins                          |
+| `NEOCODE_DISABLE_LSP_DOWNLOAD`       | boolean | Disable automatic LSP server downloads           |
+| `NEOCODE_ENABLE_EXPERIMENTAL_MODELS` | boolean | Enable experimental models                       |
+| `NEOCODE_DISABLE_AUTOCOMPACT`        | boolean | Disable automatic context compaction             |
+| `NEOCODE_DISABLE_CLAUDE_CODE`        | boolean | Disable reading from `.claude` (prompt + skills) |
+| `NEOCODE_DISABLE_CLAUDE_CODE_PROMPT` | boolean | Disable reading `~/.claude/CLAUDE.md`            |
+| `NEOCODE_DISABLE_CLAUDE_CODE_SKILLS` | boolean | Disable loading `.claude/skills`                 |
+| `NEOCODE_CLIENT`                     | string  | Client identifier (defaults to `cli`)            |
+| `NEOCODE_ENABLE_EXA`                 | boolean | Enable Exa web search tools                      |
+| `NEOCODE_SERVER_PASSWORD`            | string  | Enable basic auth for `serve`/`web`              |
 | `NEOCODE_SERVER_USERNAME`            | string  | Override basic auth username (default `neocode`) |
 
 ---
@@ -580,8 +580,8 @@ NeoCode can be configured using environment variables.
 
 These environment variables enable experimental features that may change or be removed.
 
-| Variable                                        | Type    | Description                             |
-| ----------------------------------------------- | ------- | --------------------------------------- |
+| Variable                                       | Type    | Description                             |
+| ---------------------------------------------- | ------- | --------------------------------------- |
 | `NEOCODE_EXPERIMENTAL`                         | boolean | Enable all experimental features        |
 | `NEOCODE_EXPERIMENTAL_ICON_DISCOVERY`          | boolean | Enable icon discovery                   |
 | `NEOCODE_EXPERIMENTAL_DISABLE_COPY_ON_SELECT`  | boolean | Disable copy on select in TUI           |

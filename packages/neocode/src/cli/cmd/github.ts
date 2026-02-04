@@ -185,7 +185,7 @@ export const GithubCommand = cmd({
   command: "github",
   describe: "manage GitHub agent",
   builder: (yargs) => yargs.command(GithubInstallCommand).command(GithubRunCommand).demandCommand(),
-  async handler() { },
+  async handler() {},
 })
 
 export const GithubInstallCommand = cmd({
@@ -974,18 +974,18 @@ export const GithubRunCommand = cmd({
       async function exchangeForAppToken(token: string) {
         const response = token.startsWith("github_pat_")
           ? await fetch(`${oidcBaseUrl}/exchange_github_app_token_with_pat`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ owner, repo }),
-          })
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ owner, repo }),
+            })
           : await fetch(`${oidcBaseUrl}/exchange_github_app_token`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          })
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            })
 
         if (!response.ok) {
           const responseJson = (await response.json()) as { error?: string }

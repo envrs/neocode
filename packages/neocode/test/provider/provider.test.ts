@@ -13,7 +13,7 @@ mock.module("../../src/bun/index", () => ({
       throw new Error("BunProc.run should not be called in tests")
     },
     which: () => process.execPath,
-    InstallFailedError: class extends Error { },
+    InstallFailedError: class extends Error {},
   },
 }))
 

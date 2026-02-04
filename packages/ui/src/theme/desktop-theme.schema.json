@@ -4,12 +4,7 @@
   "title": "NeoCode Desktop Theme",
   "description": "A theme definition for the NeoCode desktop application",
   "type": "object",
-  "required": [
-    "name",
-    "id",
-    "light",
-    "dark"
-  ],
+  "required": ["name", "id", "light", "dark"],
   "properties": {
     "$schema": {
       "type": "string",
@@ -47,17 +42,7 @@
     "ThemeSeedColors": {
       "type": "object",
       "description": "The minimum set of colors needed to generate a theme",
-      "required": [
-        "neutral",
-        "primary",
-        "success",
-        "warning",
-        "error",
-        "info",
-        "interactive",
-        "diffAdd",
-        "diffDelete"
-      ],
+      "required": ["neutral", "primary", "success", "warning", "error", "info", "interactive", "diffAdd", "diffDelete"],
       "properties": {
         "neutral": {
           "$ref": "#/definitions/HexColor",
@@ -100,9 +85,7 @@
     "ThemeVariant": {
       "type": "object",
       "description": "A theme variant (light or dark) with seed colors and optional overrides",
-      "required": [
-        "seeds"
-      ],
+      "required": ["seeds"],
       "properties": {
         "seeds": {
           "$ref": "#/definitions/ThemeSeedColors",

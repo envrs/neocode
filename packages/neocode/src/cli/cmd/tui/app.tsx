@@ -487,7 +487,7 @@ function App() {
       title: "Open docs",
       value: "docs.open",
       onSelect: () => {
-        open("https://neo.khulnasoft.com/docs").catch(() => { })
+        open("https://neo.khulnasoft.com/docs").catch(() => {})
         dialog.clear()
       },
       category: "System",

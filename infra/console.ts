@@ -13,16 +13,16 @@ const cluster = planetscale.getDatabaseOutput({
 const branch =
   $app.stage === "production"
     ? planetscale.getBranchOutput({
-      name: "production",
-      organization: cluster.organization,
-      database: cluster.name,
-    })
+        name: "production",
+        organization: cluster.organization,
+        database: cluster.name,
+      })
     : new planetscale.Branch("DatabaseBranch", {
-      database: cluster.name,
-      organization: cluster.organization,
-      name: $app.stage,
-      parentBranch: "production",
-    })
+        database: cluster.name,
+        organization: cluster.organization,
+        name: $app.stage,
+        parentBranch: "production",
+      })
 const password = new planetscale.Password("DatabasePassword", {
   name: $app.stage,
   database: cluster.name,
@@ -184,9 +184,9 @@ new sst.cloudflare.x.SolidStart("Console", {
     ...ZEN_MODELS,
     ...($dev
       ? [
-        new sst.Secret("CLOUDFLARE_DEFAULT_ACCOUNT_ID", process.env.CLOUDFLARE_DEFAULT_ACCOUNT_ID!),
-        new sst.Secret("CLOUDFLARE_API_TOKEN", process.env.CLOUDFLARE_API_TOKEN!),
-      ]
+          new sst.Secret("CLOUDFLARE_DEFAULT_ACCOUNT_ID", process.env.CLOUDFLARE_DEFAULT_ACCOUNT_ID!),
+          new sst.Secret("CLOUDFLARE_API_TOKEN", process.env.CLOUDFLARE_API_TOKEN!),
+        ]
       : []),
     gatewayKv,
   ],

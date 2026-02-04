@@ -290,7 +290,7 @@ export const RunCommand = cmd({
       for (const filePath of list) {
         const resolvedPath = path.resolve(process.cwd(), filePath)
         const file = Bun.file(resolvedPath)
-        const stats = await file.stat().catch(() => { })
+        const stats = await file.stat().catch(() => {})
         if (!stats) {
           UI.error(`File not found: ${filePath}`)
           process.exit(1)
@@ -496,7 +496,7 @@ export const RunCommand = cmd({
             UI.println(
               UI.Style.TEXT_WARNING_BOLD + "!",
               UI.Style.TEXT_NORMAL +
-              `permission requested: ${permission.permission} (${permission.patterns.join(", ")}); auto-rejecting`,
+                `permission requested: ${permission.permission} (${permission.patterns.join(", ")}); auto-rejecting`,
             )
             await sdk.permission.reply({
               requestID: permission.id,
