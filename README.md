@@ -42,7 +42,7 @@
 
 ```bash
 # YOLO
-curl -fsSL https://neo.khulnasoft.com/install | bash
+curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash
 
 # Package managers
 npm i -g neocode-ai@latest        # or bun/pnpm/yarn
@@ -87,8 +87,8 @@ The install script respects the following priority order for the installation pa
 
 ```bash
 # Examples
-NEOCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://neo.khulnasoft.com/install | bash
-XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://neo.khulnasoft.com/install | bash
+NEOCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash
+XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash
 ```
 
 ### Agents

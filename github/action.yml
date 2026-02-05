@@ -54,7 +54,7 @@ runs:
     - name: Install neocode
       if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      run: curl -fsSL https://neo.khulnasoft.com/install | bash
+      run: curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash
 
     - name: Add neocode to PATH
       shell: bash

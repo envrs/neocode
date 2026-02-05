@@ -34,7 +34,7 @@ jobs:
         run: bun install
 
       - name: Install neocode
-        run: curl -fsSL https://neo.khulnasoft.com/install | bash
+        run: curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash
 
       - name: Build prompt
         env:

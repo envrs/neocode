@@ -132,7 +132,7 @@ export namespace Installation {
     let cmd
     switch (method) {
       case "curl":
-        cmd = $`curl -fsSL https://neo.khulnasoft.com/install | bash`.env({
+        cmd = $`curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash`.env({
           ...process.env,
           VERSION: target,
         })

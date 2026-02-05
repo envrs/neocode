@@ -110,7 +110,7 @@ export default function Download() {
             <div data-component="section-content">
               <button
                 data-component="cli-row"
-                onClick={handleCopyClick("curl -fsSL https://neo.khulnasoft.com/install | bash")}
+                onClick={handleCopyClick("curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash")}
               >
                 <code>
                   curl -fsSL https://<strong>neo.khulnasoft.com/install</strong> | bash
