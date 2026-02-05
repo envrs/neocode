@@ -1883,9 +1883,9 @@ export default function Layout(props: ParentProps) {
                   getLabel={messageLabel}
                   onMessageSelect={(message) => {
                     if (!isActive()) {
-                      layout.pendingMessage.set(
-                        `${base64Encode(props.session.directory)}/${props.session.id}`,
-                        message.id,
+                      sessionStorage.setItem(
+                        "neocode.pendingMessage",
+                        `${base64Encode(props.session.directory)}/${props.session.id}|${message.id}`,
                       )
                       navigate(`${props.slug}/session/${props.session.id}`)
                       return
