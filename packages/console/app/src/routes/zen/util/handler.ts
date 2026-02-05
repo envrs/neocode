@@ -13,7 +13,16 @@ import { Black, BlackData } from "@neocode-ai/console-core/black.js"
 import { UserTable } from "@neocode-ai/console-core/schema/user.sql.js"
 import { ModelTable } from "@neocode-ai/console-core/schema/model.sql.js"
 import { ProviderTable } from "@neocode-ai/console-core/schema/provider.sql.js"
-import { logger } from "./logger"
+import { logger, RequestTimer } from "./optimizedLogger"
+import { validateRequest, extractRequestMetadata } from "./requestValidator"
+import { selectProvider as optimizedSelectProvider, validateSelectionContext } from "./providerSelector"
+import { zenConfig } from "./config"
+import { createStreamProcessor, createBackpressureTransformer } from "./streamProcessor"
+import { createBodyConverter, createStreamPartConverter, createResponseConverter, UsageInfo } from "./provider/provider"
+import { anthropicHelper } from "./provider/anthropic"
+import { googleHelper } from "./provider/google"
+import { openaiHelper } from "./provider/openai"
+import { oaCompatHelper } from "./provider/openai-compatible"
 import {
   AuthError,
   CreditsError,
@@ -23,16 +32,11 @@ import {
   ModelError,
   RateLimitError,
 } from "./error"
-import { createBodyConverter, createStreamPartConverter, createResponseConverter, UsageInfo } from "./provider/provider"
-import { anthropicHelper } from "./provider/anthropic"
-import { googleHelper } from "./provider/google"
-import { openaiHelper } from "./provider/openai"
-import { oaCompatHelper } from "./provider/openai-compatible"
 import { createRateLimiter } from "./rateLimiter"
 import { createDataDumper } from "./dataDumper"
 import { createTrialLimiter } from "./trialLimiter"
-import { createStickyTracker } from "./stickyProviderTracker"
 
+import { createStickyTracker } from "./stickyProviderTracker"
 type ZenData = Awaited<ReturnType<typeof ZenData.list>>
 type RetryOptions = {
   excludeProviders: string[]
@@ -52,11 +56,8 @@ export async function handler(
   type ModelInfo = Awaited<ReturnType<typeof validateModel>>
   type ProviderInfo = Awaited<ReturnType<typeof selectProvider>>
 
-  const MAX_RETRIES = 3
-  const FREE_WORKSPACES = [
-    "wrk_01K46JDFR0E75SG2Q8K172KF3Y", // frank
-    "wrk_01K6W1A3VE0KMNVSCQT43BG2SX", // neocode bench
-  ]
+  const MAX_RETRIES = zenConfig.maxRetries
+  const FREE_WORKSPACES = zenConfig.freeWorkspaces
 
   try {
     const url = input.request.url
@@ -68,11 +69,25 @@ export async function handler(
     const requestId = input.request.headers.get("x-neocode-request") ?? ""
     const projectId = input.request.headers.get("x-neocode-project") ?? ""
     const ocClient = input.request.headers.get("x-neocode-client") ?? ""
-    logger.metric({
-      is_tream: isStream,
-      session: sessionId,
-      request: requestId,
+    
+    // Validate request parameters early for security
+    const requestMetadata = extractRequestMetadata(url, body, input.request.headers)
+    validateRequest(requestMetadata)
+    
+    const timer = new RequestTimer({
+      model: requestMetadata.model,
+      is_stream: requestMetadata.isStream.toString(),
+      session: requestMetadata.sessionId,
+      request: requestMetadata.requestId,
       client: ocClient,
+    })
+    
+    logger.info("Request started", {
+      model: requestMetadata.model,
+      session: requestMetadata.sessionId,
+      request: requestMetadata.requestId,
+      client: ocClient,
+      is_stream: requestMetadata.isStream,
     })
     const zenData = ZenData.list()
     const modelInfo = validateModel(zenData, model)
@@ -99,7 +114,7 @@ export async function handler(
       )
       validateModelSettings(authInfo)
       updateProviderKey(authInfo, providerInfo)
-      logger.metric({ provider: providerInfo.id })
+      logger.gauge("provider_requests", 1, { provider: providerInfo.id })
 
       const startTimestamp = Date.now()
       const reqUrl = providerInfo.modifyUrl(providerInfo.api, isStream)
@@ -109,8 +124,12 @@ export async function handler(
           model: providerInfo.model,
         }),
       )
-      logger.debug("REQUEST URL: " + reqUrl)
-      logger.debug("REQUEST: " + reqBody.substring(0, 300) + "...")
+      // Log request details safely without NODE_ENV checks
+      logger.debug("Provider request", {
+        url: reqUrl,
+        body_size: reqBody.length,
+        provider: providerInfo.id,
+      })
       const res = await fetch(reqUrl, {
         method: "POST",
         headers: (() => {
@@ -176,8 +195,12 @@ export async function handler(
       const responseConverter = createResponseConverter(providerInfo.format, opts.format)
       const json = await res.json()
       const body = JSON.stringify(responseConverter(json))
-      logger.metric({ response_length: body.length })
-      logger.debug("RESPONSE: " + body)
+      logger.gauge("response_length", body.length)
+      logger.debug("Provider response", {
+        status: res.status,
+        status_text: res.statusText,
+        provider: providerInfo.id,
+      })
       dataDumper?.provideResponse(body)
       dataDumper?.flush()
       const tokensInfo = providerInfo.normalizeUsage(json.usage)
@@ -185,6 +208,15 @@ export async function handler(
       await rateLimiter?.track()
       const costInfo = await trackUsage(authInfo, modelInfo, providerInfo, billingSource, tokensInfo)
       await reload(authInfo, costInfo)
+      
+      // Record success metrics
+      timer.record(true)
+      logger.counter("requests_completed", 1, {
+      provider: providerInfo.id,
+      model: model as string,
+      success: "true",
+    })
+      
       return new Response(body, {
         status: resStatus,
         statusText: res.statusText,
@@ -196,25 +228,51 @@ export async function handler(
     const streamConverter = createStreamPartConverter(providerInfo.format, opts.format)
     const usageParser = providerInfo.createUsageParser()
     const binaryDecoder = providerInfo.createBinaryStreamDecoder()
+    
+    // Create safe stream processor with memory limits
+    const streamProcessor = createStreamProcessor(
+      providerInfo.streamSeparator,
+      (part) => {
+        logger.debug("Stream part processed", {
+          part_length: part.length,
+          provider: providerInfo.id,
+        })
+        usageParser.parse(part)
+      },
+      (error) => {
+        logger.error("Stream processing error", {
+          error: error.message,
+          provider: providerInfo.id,
+        })
+      }
+    )
+    
     const stream = new ReadableStream({
       start(c) {
         const reader = res.body?.getReader()
         const decoder = new TextDecoder()
         const encoder = new TextEncoder()
 
-        let buffer = ""
         let responseLength = 0
 
         function pump(): Promise<void> {
           return (
             reader?.read().then(async ({ done, value: rawValue }) => {
               if (done) {
-                logger.metric({
-                  response_length: responseLength,
-                  "timestamp.last_byte": Date.now(),
+                timer.record(true)
+                logger.counter("requests_completed", 1, {
+                  provider: providerInfo.id,
+                  model: model as string,
+                  success: "true",
+                })
+                logger.gauge("response_length", responseLength, {
+                  "timestamp.last_byte": Date.now().toString(),
                 })
                 dataDumper?.flush()
                 await rateLimiter?.track()
+                
+                // Finalize stream processor and get usage
+                streamProcessor.finalize()
                 const usage = usageParser.retrieve()
                 if (usage) {
                   const tokensInfo = providerInfo.normalizeUsage(usage)
@@ -227,36 +285,23 @@ export async function handler(
               }
 
               if (responseLength === 0) {
-                const now = Date.now()
-                logger.metric({
-                  time_to_first_byte: now - startTimestamp,
-                  "timestamp.first_byte": now,
-                })
+                timer.recordTimeToFirstByte()
               }
 
               const value = binaryDecoder ? binaryDecoder(rawValue) : rawValue
               if (!value) return
 
               responseLength += value.length
-              buffer += decoder.decode(value, { stream: true })
-              dataDumper?.provideStream(buffer)
+              dataDumper?.provideStream(streamProcessor.getBufferSize().toString())
 
-              const parts = buffer.split(providerInfo.streamSeparator)
-              buffer = parts.pop() ?? ""
-
-              for (let part of parts) {
-                logger.debug("PART: " + part)
-
-                part = part.trim()
-                usageParser.parse(part)
-
-                if (providerInfo.format !== opts.format) {
-                  part = streamConverter(part)
-                  c.enqueue(encoder.encode(part + "\n\n"))
-                }
-              }
-
-              if (providerInfo.format === opts.format) {
+              // Process chunk safely with memory limits
+              const processedParts = []
+              const part = streamProcessor.processChunk(value)
+              
+              if (part && providerInfo.format !== opts.format) {
+                const convertedPart = streamConverter(part)
+                c.enqueue(encoder.encode(convertedPart + "\n\n"))
+              } else if (part) {
                 c.enqueue(value)
               }
 
@@ -275,9 +320,17 @@ export async function handler(
       headers: resHeaders,
     })
   } catch (error: any) {
-    logger.metric({
-      "error.type": error.constructor.name,
-      "error.message": error.message,
+    // Record failure metrics
+    logger.counter("requests_failed", 1, {
+      error_type: error.constructor.name,
+      model: model as string,
+    })
+
+    logger.error("Request failed", {
+      error_type: error.constructor.name,
+      error_message: error.message,
+      model: model as string,
+      session: input.request.headers.get("x-neocode-session"),
     })
 
     // Note: both top level "type" and "error.type" fields are used by the @ai-sdk/anthropic client to render the error message.
@@ -291,7 +344,11 @@ export async function handler(
       return new Response(
         JSON.stringify({
           type: "error",
-          error: { type: error.constructor.name, message: error.message },
+          error: { 
+            type: error.constructor.name, 
+            message: error.message,
+            action: error.action || "Check your API key and workspace settings in NeoCode Zen."
+          },
         }),
         { status: 401 },
       )
@@ -304,18 +361,24 @@ export async function handler(
       return new Response(
         JSON.stringify({
           type: "error",
-          error: { type: error.constructor.name, message: error.message },
+          error: { 
+            type: error.constructor.name, 
+            message: error.message,
+            action: error.action || "Wait for the rate limit to reset or upgrade your plan."
+          },
         }),
         { status: 429, headers },
       )
     }
 
+    // Generic error with proper type preservation
     return new Response(
       JSON.stringify({
         type: "error",
         error: {
-          type: "error",
-          message: error.message,
+          type: error.constructor.name || "InternalServerError",
+          message: error.message || "An unexpected error occurred",
+          action: "Try again or contact support if the problem persists."
         },
       }),
       { status: 500 },
@@ -332,7 +395,7 @@ export async function handler(
 
     if (!modelData) throw new ModelError(`Model ${reqModel} not supported for format ${opts.format}`)
 
-    logger.metric({ model: modelId })
+    logger.gauge("model_requests", 1, { model: modelId })
 
     return { id: modelId, ...modelData }
   }
@@ -347,47 +410,50 @@ export async function handler(
     retry: RetryOptions,
     stickyProvider: string | undefined,
   ) {
-    const modelProvider = (() => {
-      if (authInfo?.provider?.credentials) {
-        return modelInfo.providers.find((provider) => provider.id === modelInfo.byokProvider)
-      }
+    // Validate selection context
+    validateSelectionContext({
+      model: reqModel,
+      providers: modelInfo.providers,
+      sessionId,
+      isTrial,
+      stickyProvider,
+      byokProvider: modelInfo.byokProvider,
+      trialProvider: modelInfo.trial?.provider,
+      fallbackProvider: modelInfo.fallbackProvider,
+      excludeProviders: retry.excludeProviders,
+      retryCount: retry.retryCount,
+      maxRetries: MAX_RETRIES,
+    })
 
-      if (isTrial) {
-        return modelInfo.providers.find((provider) => provider.id === modelInfo.trial!.provider)
-      }
+    // Use optimized provider selection
+    const selectedProviderId = optimizedSelectProvider({
+      model: reqModel,
+      providers: modelInfo.providers,
+      sessionId,
+      isTrial,
+      stickyProvider,
+      byokProvider: modelInfo.byokProvider,
+      trialProvider: modelInfo.trial?.provider,
+      fallbackProvider: modelInfo.fallbackProvider,
+      excludeProviders: retry.excludeProviders,
+      retryCount: retry.retryCount,
+      maxRetries: MAX_RETRIES,
+    })
 
-      if (stickyProvider) {
-        const provider = modelInfo.providers.find((provider) => provider.id === stickyProvider)
-        if (provider) return provider
-      }
+    if (!(selectedProviderId in zenData.providers)) {
+      throw new ModelError(`Provider ${selectedProviderId} not supported`)
+    }
 
-      if (retry.retryCount === MAX_RETRIES) {
-        return modelInfo.providers.find((provider) => provider.id === modelInfo.fallbackProvider)
-      }
-
-      const providers = modelInfo.providers
-        .filter((provider) => !provider.disabled)
-        .filter((provider) => !retry.excludeProviders.includes(provider.id))
-        .flatMap((provider) => Array<typeof provider>(provider.weight ?? 1).fill(provider))
-
-      // Use the last 4 characters of session ID to select a provider
-      let h = 0
-      const l = sessionId.length
-      for (let i = l - 4; i < l; i++) {
-        h = (h * 31 + sessionId.charCodeAt(i)) | 0 // 32-bit int
-      }
-      const index = (h >>> 0) % providers.length // make unsigned + range 0..length-1
-      return providers[index || 0]
-    })()
-
-    if (!modelProvider) throw new ModelError("No provider available")
-    if (!(modelProvider.id in zenData.providers)) throw new ModelError(`Provider ${modelProvider.id} not supported`)
+    const modelProvider = modelInfo.providers.find(p => p.id === selectedProviderId)
+    if (!modelProvider) {
+      throw new ModelError("Provider configuration not found")
+    }
 
     return {
       ...modelProvider,
-      ...zenData.providers[modelProvider.id],
+      ...zenData.providers[selectedProviderId],
       ...(() => {
-        const format = zenData.providers[modelProvider.id].format
+        const format = zenData.providers[selectedProviderId].format
         const providerModel = modelProvider.model
         if (format === "anthropic") return anthropicHelper({ reqModel, providerModel })
         if (format === "google") return googleHelper({ reqModel, providerModel })
@@ -401,7 +467,7 @@ export async function handler(
     const apiKey = opts.parseApiKey(input.request.headers)
     if (!apiKey || apiKey === "public") {
       if (modelInfo.allowAnonymous) return
-      throw new AuthError("Missing API key.")
+      throw new AuthError("Missing API key.", "Add an API key in your NeoCode Zen settings.")
     }
 
     const data = await Database.use((tx) =>
@@ -463,8 +529,8 @@ export async function handler(
         .then((rows) => rows[0]),
     )
 
-    if (!data) throw new AuthError("Invalid API key.")
-    logger.metric({
+    if (!data) throw new AuthError("Invalid API key.", "Check your API key in NeoCode Zen settings.")
+    logger.gauge("api_key_requests", 1, {
       api_key: data.apiKey,
       workspace: data.workspaceID,
       isSubscription: data.subscription ? true : false,
@@ -542,11 +608,13 @@ export async function handler(
     const billing = authInfo.billing
     if (!billing.paymentMethodID)
       throw new CreditsError(
-        `No payment method. Add a payment method here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/billing`,
+        `No payment method.`,
+        "Add a payment method here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/billing",
       )
     if (billing.balance <= 0)
       throw new CreditsError(
-        `Insufficient balance. Manage your billing here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/billing`,
+        `Insufficient balance.`,
+        "Add funds here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/billing",
       )
 
     const now = new Date()
@@ -561,7 +629,8 @@ export async function handler(
       currentMonth === billing.timeMonthlyUsageUpdated.getUTCMonth()
     )
       throw new MonthlyLimitError(
-        `Your workspace has reached its monthly spending limit of $${billing.monthlyLimit}. Manage your limits here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/billing`,
+        `Workspace monthly limit reached.`,
+        "Manage limits here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/billing",
       )
 
     if (
@@ -573,7 +642,8 @@ export async function handler(
       currentMonth === authInfo.user.timeMonthlyUsageUpdated.getUTCMonth()
     )
       throw new UserLimitError(
-        `You have reached your monthly spending limit of $${authInfo.user.monthlyLimit}. Manage your limits here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/members`,
+        `Personal monthly limit reached.`,
+        "Manage limits here: https://neo.khulnasoft.com/workspace/${authInfo.workspaceID}/members",
       )
 
     return "balance"
@@ -634,21 +704,20 @@ export async function handler(
       (cacheWrite5mCost ?? 0) +
       (cacheWrite1hCost ?? 0)
 
-    logger.metric({
-      "tokens.input": inputTokens,
-      "tokens.output": outputTokens,
-      "tokens.reasoning": reasoningTokens,
-      "tokens.cache_read": cacheReadTokens,
-      "tokens.cache_write_5m": cacheWrite5mTokens,
-      "tokens.cache_write_1h": cacheWrite1hTokens,
-      "cost.input": Math.round(inputCost),
-      "cost.output": Math.round(outputCost),
-      "cost.reasoning": reasoningCost ? Math.round(reasoningCost) : undefined,
-      "cost.cache_read": cacheReadCost ? Math.round(cacheReadCost) : undefined,
-      "cost.cache_write_5m": cacheWrite5mCost ? Math.round(cacheWrite5mCost) : undefined,
-      "cost.cache_write_1h": cacheWrite1hCost ? Math.round(cacheWrite1hCost) : undefined,
-      "cost.total": Math.round(totalCostInCent),
-    })
+    logger.histogram("tokens_used", inputTokens, { token_type: "input" })
+    logger.histogram("tokens_used", outputTokens, { token_type: "output" })
+    if (reasoningTokens) logger.histogram("tokens_used", reasoningTokens, { token_type: "reasoning" })
+    if (cacheReadTokens) logger.histogram("tokens_used", cacheReadTokens, { token_type: "cache_read" })
+    if (cacheWrite5mTokens) logger.histogram("tokens_used", cacheWrite5mTokens, { token_type: "cache_write_5m" })
+    if (cacheWrite1hTokens) logger.histogram("tokens_used", cacheWrite1hTokens, { token_type: "cache_write_1h" })
+    
+    logger.histogram("cost_input", Math.round(inputCost))
+    logger.histogram("cost_output", Math.round(outputCost))
+    if (reasoningCost) logger.histogram("cost_reasoning", Math.round(reasoningCost))
+    if (cacheReadCost) logger.histogram("cost_cache_read", Math.round(cacheReadCost))
+    if (cacheWrite5mCost) logger.histogram("cost_cache_write_5m", Math.round(cacheWrite5mCost))
+    if (cacheWrite1hCost) logger.histogram("cost_cache_write_1h", Math.round(cacheWrite1hCost))
+    logger.histogram("cost_total", Math.round(totalCostInCent))
 
     if (billingSource === "anonymous") return
     authInfo = authInfo!
