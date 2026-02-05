@@ -8,7 +8,7 @@ This extension requires the [neocode CLI](https://neo.khulnasoft.com) to be inst
 
 ## Features
 
-- **Quick Launch**: Use `Cmd+Esc` (Mac) or `Ctrl+Esc` (Windows/Linux) to open neocode in a split terminal view, or focus an existing terminal session if one is already running.
+- **Quick Launch**: Use `Cmd+Esc` (Mac) or `Ctrl+Esc` (Windows/Linux) to NeoCode in a split terminal view, or focus an existing terminal session if one is already running.
 - **New Session**: Use `Cmd+Shift+Esc` (Mac) or `Ctrl+Shift+Esc` (Windows/Linux) to start a new neocode terminal session, even if one is already open. You can also click the neocode button in the UI.
 - **Context Awareness**: Automatically share your current selection or tab with neocode.
 - **File Reference Shortcuts**: Use `Cmd+Option+K` (Mac) or `Alt+Ctrl+K` (Linux/Windows) to insert file references. For example, `@File#L37-42`.

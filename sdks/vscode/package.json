@@ -2,8 +2,8 @@
   "name": "neocode",
   "displayName": "neocode",
   "description": "neocode for VS Code",
-  "version": "1.1.49",
-  "publisher": "sst-dev",
+  "version": "1.1.1",
+  "publisher": "neopilot-ai",
   "repository": {
     "type": "git",
     "url": "https://github.com/neopilot-ai/neocode"
@@ -26,7 +26,7 @@
     "commands": [
       {
         "command": "neocode.openTerminal",
-        "title": "Open neocode",
+        "title": "NeoCode",
         "icon": {
           "light": "images/button-dark.svg",
           "dark": "images/button-light.svg"
@@ -34,7 +34,7 @@
       },
       {
         "command": "neocode.openNewTerminal",
-        "title": "Open neocode in new tab",
+        "title": "NeoCode in new tab",
         "icon": {
           "light": "images/button-dark.svg",
           "dark": "images/button-light.svg"
