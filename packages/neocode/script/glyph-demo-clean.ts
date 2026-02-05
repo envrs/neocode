@@ -122,12 +122,12 @@ function main() {
   console.log('─'.repeat(50))
   
   const examples = [
-    { action: 'Analyzing CI logs...', mathoji: 'thinking' },
-    { action: 'Updating classifier weights', mathoji: 'learning' },
-    { action: 'Fix validated (tests: 42/42)', mathoji: 'verified' },
-    { action: 'Performance improved by 23%', mathoji: 'optimized' },
-    { action: 'System equilibrium reached', mathoji: 'stable' },
-    { action: 'High memory usage detected', mathoji: 'warning' }
+    { action: 'Analyzing CI logs...', mathoji: 'thinking' as const },
+    { action: 'Updating classifier weights', mathoji: 'learning' as const },
+    { action: 'Fix validated (tests: 42/42)', mathoji: 'verified' as const },
+    { action: 'Performance improved by 23%', mathoji: 'optimized' as const },
+    { action: 'System equilibrium reached', mathoji: 'stable' as const },
+    { action: 'High memory usage detected', mathoji: 'warning' as const }
   ]
   
   examples.forEach(({ action, mathoji }) => {
