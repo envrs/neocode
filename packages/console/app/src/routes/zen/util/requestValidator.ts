@@ -20,7 +20,7 @@ const MAX_BODY_SIZE = 10 * 1024 * 1024 // 10MB
  */
 export function validateRequest(validation: RequestValidation): void {
   // Validate model name
-  if (!validation.model || typeof validation.model !== 'string') {
+  if (!validation.model || typeof validation.model !== "string") {
     throw new ModelError("Model name is required and must be a string")
   }
   if (validation.model.length > MAX_MODEL_NAME_LENGTH) {
@@ -31,7 +31,7 @@ export function validateRequest(validation: RequestValidation): void {
   }
 
   // Validate session ID
-  if (validation.sessionId && typeof validation.sessionId === 'string') {
+  if (validation.sessionId && typeof validation.sessionId === "string") {
     if (validation.sessionId.length > MAX_SESSION_ID_LENGTH) {
       throw new ModelError(`Session ID too long (max ${MAX_SESSION_ID_LENGTH} characters)`)
     }
@@ -41,7 +41,7 @@ export function validateRequest(validation: RequestValidation): void {
   }
 
   // Validate request ID
-  if (validation.requestId && typeof validation.requestId === 'string') {
+  if (validation.requestId && typeof validation.requestId === "string") {
     if (validation.requestId.length > MAX_REQUEST_ID_LENGTH) {
       throw new ModelError(`Request ID too long (max ${MAX_REQUEST_ID_LENGTH} characters)`)
     }
@@ -51,7 +51,7 @@ export function validateRequest(validation: RequestValidation): void {
   }
 
   // Validate project ID
-  if (validation.projectId && typeof validation.projectId === 'string') {
+  if (validation.projectId && typeof validation.projectId === "string") {
     if (validation.projectId.length > MAX_PROJECT_ID_LENGTH) {
       throw new ModelError(`Project ID too long (max ${MAX_PROJECT_ID_LENGTH} characters)`)
     }
@@ -66,7 +66,7 @@ export function validateRequest(validation: RequestValidation): void {
   }
 
   // Validate stream flag
-  if (typeof validation.isStream !== 'boolean') {
+  if (typeof validation.isStream !== "boolean") {
     throw new ModelError("Stream flag must be boolean")
   }
 }
@@ -74,20 +74,16 @@ export function validateRequest(validation: RequestValidation): void {
 /**
  * Sanitizes and extracts request metadata
  */
-export function extractRequestMetadata(
-  url: string,
-  body: any,
-  headers: Headers
-): RequestValidation {
-  const contentLength = headers.get('content-length')
+export function extractRequestMetadata(url: string, body: any, headers: Headers): RequestValidation {
+  const contentLength = headers.get("content-length")
   const bodySize = contentLength ? parseInt(contentLength, 10) : 0
 
   return {
-    model: body?.model || '',
-    sessionId: headers.get('x-neocode-session') || '',
-    requestId: headers.get('x-neocode-request') || '',
-    projectId: headers.get('x-neocode-project') || '',
+    model: body?.model || "",
+    sessionId: headers.get("x-neocode-session") || "",
+    requestId: headers.get("x-neocode-request") || "",
+    projectId: headers.get("x-neocode-project") || "",
     isStream: !!body?.stream,
-    bodySize
+    bodySize,
   }
 }

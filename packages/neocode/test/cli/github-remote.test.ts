@@ -2,7 +2,10 @@ import { test, expect } from "bun:test"
 import { parseGitHubRemote } from "../../src/cli/cmd/github"
 
 test("parses https URL with .git suffix", () => {
-  expect(parseGitHubRemote("https://github.com/neopilot-ai/neocode.git")).toEqual({ owner: "neopilot-ai", repo: "neocode" })
+  expect(parseGitHubRemote("https://github.com/neopilot-ai/neocode.git")).toEqual({
+    owner: "neopilot-ai",
+    repo: "neocode",
+  })
 })
 
 test("parses https URL without .git suffix", () => {
@@ -18,11 +21,17 @@ test("parses git@ URL without .git suffix", () => {
 })
 
 test("parses ssh:// URL with .git suffix", () => {
-  expect(parseGitHubRemote("ssh://git@github.com/neopilot-ai/neocode.git")).toEqual({ owner: "neopilot-ai", repo: "neocode" })
+  expect(parseGitHubRemote("ssh://git@github.com/neopilot-ai/neocode.git")).toEqual({
+    owner: "neopilot-ai",
+    repo: "neocode",
+  })
 })
 
 test("parses ssh:// URL without .git suffix", () => {
-  expect(parseGitHubRemote("ssh://git@github.com/neopilot-ai/neocode")).toEqual({ owner: "neopilot-ai", repo: "neocode" })
+  expect(parseGitHubRemote("ssh://git@github.com/neopilot-ai/neocode")).toEqual({
+    owner: "neopilot-ai",
+    repo: "neocode",
+  })
 })
 
 test("parses http URL", () => {

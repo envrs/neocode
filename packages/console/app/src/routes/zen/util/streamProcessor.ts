@@ -15,7 +15,7 @@ export interface StreamProcessor {
 export function createStreamProcessor(
   streamSeparator: string,
   onPart: (part: string) => void,
-  onError: (error: Error) => void
+  onError: (error: Error) => void,
 ): StreamProcessor {
   let buffer = ""
   let totalSize = 0
@@ -30,7 +30,7 @@ export function createStreamProcessor(
 
         const decoder = new TextDecoder()
         const chunk = decoder.decode(value, { stream: true })
-        
+
         // Check buffer size limit
         if (totalSize + chunk.length > MAX_BUFFER_SIZE) {
           throw new Error(`Buffer overflow: ${totalSize + chunk.length} bytes (max ${MAX_BUFFER_SIZE})`)
@@ -73,7 +73,7 @@ export function createStreamProcessor(
 
     getBufferSize(): number {
       return totalSize
-    }
+    },
   }
 }
 
@@ -82,7 +82,7 @@ export function createStreamProcessor(
  */
 export function createBackpressureTransformer(
   processor: StreamProcessor,
-  maxQueueSize: number = 100
+  maxQueueSize: number = 100,
 ): TransformStream<Uint8Array, string> {
   let queue: string[] = []
   let controller: TransformStreamDefaultController<string>
@@ -96,7 +96,7 @@ export function createBackpressureTransformer(
       const part = processor.processChunk(chunk)
       if (part) {
         queue.push(part)
-        
+
         // Apply backpressure if queue is full
         if (queue.length >= maxQueueSize) {
           throw new Error("Stream queue overflow - applying backpressure")
@@ -107,7 +107,7 @@ export function createBackpressureTransformer(
     flush() {
       // Flush remaining data
       processor.finalize()
-      
+
       // Enqueue all queued parts
       while (queue.length > 0) {
         const part = queue.shift()
@@ -115,6 +115,6 @@ export function createBackpressureTransformer(
           controller.enqueue(part)
         }
       }
-    }
+    },
   })
 }

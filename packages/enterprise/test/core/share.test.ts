@@ -21,35 +21,35 @@ mock.module("../../src/core/storage", () => ({
     list: async (options?: { prefix?: string[]; limit?: number; after?: string; before?: string }) => {
       const prefix = options?.prefix ? options.prefix.join("/") + (options.prefix.length ? "/" : "") : ""
       const keys = Array.from(mockStorage.keys())
-        .filter(key => key.startsWith(prefix))
-        .map(key => key.replace(/\.json$/, "").split("/"))
-      
+        .filter((key) => key.startsWith(prefix))
+        .map((key) => key.replace(/\.json$/, "").split("/"))
+
       keys.sort()
-      
+
       let filtered = keys
       if (options?.after && options.prefix) {
         const afterPath = [...options.prefix, options.after].join("/")
-        const afterIndex = keys.findIndex(k => k.join("/") === afterPath)
+        const afterIndex = keys.findIndex((k) => k.join("/") === afterPath)
         if (afterIndex !== -1) {
           filtered = keys.slice(afterIndex + 1)
         }
       }
-      
+
       if (options?.before && options.prefix) {
         const beforePath = [...options.prefix, options.before].join("/")
-        const beforeIndex = filtered.findIndex(k => k.join("/") === beforePath)
+        const beforeIndex = filtered.findIndex((k) => k.join("/") === beforePath)
         if (beforeIndex !== -1) {
           filtered = filtered.slice(0, beforeIndex)
         }
       }
-      
+
       if (options?.limit) {
         filtered = filtered.slice(0, options.limit)
       }
-      
+
       return filtered
-    }
-  }
+    },
+  },
 }))
 
 describe.concurrent("core.share", () => {

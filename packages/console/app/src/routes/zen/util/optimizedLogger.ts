@@ -1,7 +1,7 @@
 import { Resource } from "@neocode-ai/console-resource"
 
-type LogLevel = 'debug' | 'info' | 'warn' | 'error'
-type MetricLevel = 'counter' | 'gauge' | 'histogram'
+type LogLevel = "debug" | "info" | "warn" | "error"
+type MetricLevel = "counter" | "gauge" | "histogram"
 
 interface LogEntry {
   level: LogLevel
@@ -29,7 +29,7 @@ class OptimizedLogger {
   constructor() {
     this.isProduction = Resource.App.stage === "production"
     // Set minimum log level based on environment
-    this.minLogLevel = this.isProduction ? 'info' : 'debug'
+    this.minLogLevel = this.isProduction ? "info" : "debug"
   }
 
   /**
@@ -40,7 +40,7 @@ class OptimizedLogger {
       debug: 0,
       info: 1,
       warn: 2,
-      error: 3
+      error: 3,
     }
     return levels[level] >= levels[this.minLogLevel]
   }
@@ -54,21 +54,21 @@ class OptimizedLogger {
     const logEntry = {
       ...entry,
       timestamp: entry.timestamp || new Date().toISOString(),
-      service: 'zen-gateway'
+      service: "zen-gateway",
     }
 
     // Use appropriate console method based on level
     switch (entry.level) {
-      case 'debug':
+      case "debug":
         console.debug(JSON.stringify(logEntry))
         break
-      case 'info':
+      case "info":
         console.info(JSON.stringify(logEntry))
         break
-      case 'warn':
+      case "warn":
         console.warn(JSON.stringify(logEntry))
         break
-      case 'error':
+      case "error":
         console.error(JSON.stringify(logEntry))
         break
     }
@@ -81,7 +81,7 @@ class OptimizedLogger {
     const metricEntry = {
       ...entry,
       timestamp: entry.timestamp || new Date().toISOString(),
-      service: 'zen-gateway'
+      service: "zen-gateway",
     }
 
     console.log(`_metric:${JSON.stringify(metricEntry)}`)
@@ -89,32 +89,32 @@ class OptimizedLogger {
 
   // Convenience methods with proper level checking
   debug(message: string, context?: Record<string, any>): void {
-    this.log({ level: 'debug', message, context })
+    this.log({ level: "debug", message, context })
   }
 
   info(message: string, context?: Record<string, any>): void {
-    this.log({ level: 'info', message, context })
+    this.log({ level: "info", message, context })
   }
 
   warn(message: string, context?: Record<string, any>): void {
-    this.log({ level: 'warn', message, context })
+    this.log({ level: "warn", message, context })
   }
 
   error(message: string, context?: Record<string, any>): void {
-    this.log({ level: 'error', message, context })
+    this.log({ level: "error", message, context })
   }
 
   // Specific metric methods with consistent naming
   counter(name: string, value: number = 1, labels?: Record<string, string>): void {
-    this.metric({ type: 'counter', name, value, labels })
+    this.metric({ type: "counter", name, value, labels })
   }
 
   gauge(name: string, value: number, labels?: Record<string, string>): void {
-    this.metric({ type: 'gauge', name, value, labels })
+    this.metric({ type: "gauge", name, value, labels })
   }
 
   histogram(name: string, value: number, labels?: Record<string, string>): void {
-    this.metric({ type: 'histogram', name, value, labels })
+    this.metric({ type: "histogram", name, value, labels })
   }
 }
 
@@ -138,9 +138,9 @@ export class RequestTimer {
    */
   record(success: boolean = true): number {
     const duration = Date.now() - this.startTime
-    logger.histogram('request_duration_ms', duration, {
+    logger.histogram("request_duration_ms", duration, {
       ...this.labels,
-      success: success.toString()
+      success: success.toString(),
     })
     return duration
   }
@@ -150,7 +150,7 @@ export class RequestTimer {
    */
   recordTimeToFirstByte(): number {
     const duration = Date.now() - this.startTime
-    logger.histogram('time_to_first_byte_ms', duration, this.labels)
+    logger.histogram("time_to_first_byte_ms", duration, this.labels)
     return duration
   }
 }

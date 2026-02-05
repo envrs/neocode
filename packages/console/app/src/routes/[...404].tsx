@@ -25,7 +25,9 @@ export default function NotFound() {
             <A href="/docs">Docs</A>
           </div>
           <div data-slot="action">
-            <a href="https://github.com/neopilot-ai/neocode" target="_blank" rel="noopener">GitHub</a>
+            <a href="https://github.com/neopilot-ai/neocode" target="_blank" rel="noopener">
+              GitHub
+            </a>
           </div>
           <div data-slot="action">
             <A href="/discord">Discord</A>

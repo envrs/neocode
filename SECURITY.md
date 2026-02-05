@@ -2,10 +2,10 @@
 
 ## Supported Versions
 
-| Version | Supported          |
-|---------|--------------------|
-| 1.x.x   | ✅ Current         |
-| < 1.0   | ❌ Unsupported     |
+| Version | Supported      |
+| ------- | -------------- |
+| 1.x.x   | ✅ Current     |
+| < 1.0   | ❌ Unsupported |
 
 ## Reporting a Vulnerability
 
@@ -30,12 +30,14 @@ Please include:
 ## Security Best Practices
 
 ### For Users
+
 - Keep NeoCode updated to the latest version
 - Review permission settings carefully
 - Use in trusted environments
 - Monitor access logs regularly
 
 ### For Developers
+
 - Validate all user inputs
 - Use principle of least privilege
 - Keep dependencies updated
@@ -52,6 +54,7 @@ Please include:
 ## Security Updates
 
 Security updates are announced through:
+
 - GitHub Security Advisories
 - Release notes
 - Discord announcements

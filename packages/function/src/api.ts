@@ -5,7 +5,6 @@ import { jwtVerify, createRemoteJWKSet } from "jose"
 import { createAppAuth } from "@octokit/auth-app"
 import { Octokit } from "@octokit/rest"
 
-
 type Env = {
   SYNC_SERVER: DurableObjectNamespace<SyncServer>
   Bucket: R2Bucket
@@ -49,7 +48,7 @@ export class SyncServer extends DurableObject<Env> {
     })
   }
 
-  async webSocketMessage(ws, message) { }
+  async webSocketMessage(ws, message) {}
 
   async webSocketClose(ws, code, reason, wasClean) {
     ws.close(code, "Durable Object is closing WebSocket")
@@ -235,8 +234,8 @@ export default new Hono<{ Bindings: Env }>()
     const parsed =
       typeof content === "string" && content.trim().startsWith("{")
         ? (JSON.parse(content) as {
-          text?: string
-        })
+            text?: string
+          })
         : undefined
     const text = typeof parsed?.text === "string" ? parsed.text : typeof content === "string" ? content : ""
 
