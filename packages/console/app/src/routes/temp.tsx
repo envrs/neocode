@@ -1,8 +1,8 @@
 import "./index.css"
 import { Title } from "@solidjs/meta"
 import { onCleanup, onMount } from "solid-js"
-import logoLight from "../asset/logo-ornate-light.svg"
-import logoDark from "../asset/logo-ornate-dark.svg"
+import { Logo } from "@neocode-ai/ui/logo"
+import { A } from "@solidjs/router"
 import IMG_SPLASH from "../asset/lander/screenshot-splash.png"
 import { IconCopy, IconCheck } from "../component/icon"
 
@@ -42,20 +42,19 @@ export default function Home() {
 
       <div data-component="content">
         <section data-component="top">
-          <img data-slot="logo light" src={logoLight} alt="neocode logo light" />
-          <img data-slot="logo dark" src={logoDark} alt="neocode logo dark" />
+          <Logo class="header-logo" />
           <h1 data-slot="title">The AI coding agent built for the terminal</h1>
           <div data-slot="login">
-            <a href="/auth">neocode zen</a>
+            <A href="/auth">neocode zen</A>
           </div>
         </section>
 
         <section data-component="cta">
           <div data-slot="left">
-            <a href="/docs">Get Started</a>
+            <A href="/docs">Get Started</A>
           </div>
           <div data-slot="center">
-            <a href="/auth">neocode zen</a>
+            <A href="/auth">neocode zen</A>
           </div>
           <div data-slot="right">
             <button data-copy data-slot="command">

@@ -1,14 +1,55 @@
+import { JSX } from "solid-js"
+
+type GlyphProps = { x: number; color?: string; weakColor?: string }
+
+// Paths extracted from logo-ornate set and translated to 0,0 base
+// Box size for each letter is roughly 24x36 within a 30-unit width cell
+
+const N = (p: GlyphProps) => (
+  <g transform={`translate(${p.x}, 0)`}>
+    <path d="M18 36H6V18H18V36Z" fill={p.weakColor || "var(--icon-weak-base)"} />
+    <path d="M18 12H6V36H0V6H18V12ZM24 36H18V12H24V36Z" fill={p.color || "var(--icon-base)"} />
+  </g>
+)
+
+const E = (p: GlyphProps) => (
+  <g transform={`translate(${p.x}, 0)`}>
+    <path d="M24 24V30H6V24H24Z" fill={p.weakColor || "var(--icon-weak-base)"} />
+    <path d="M24 24H6V30H24V36H0V6H24V24ZM6 18H18V12H6V18Z" fill={p.color || "var(--icon-base)"} />
+  </g>
+)
+
+const O = (p: GlyphProps) => (
+  <g transform={`translate(${p.x}, 0)`}>
+    <path d="M18 30H6V18H18V30Z" fill={p.weakColor || "var(--icon-weak-base)"} />
+    <path d="M18 12H6V30H18V12ZM24 36H0V6H24V36Z" fill={p.color || "var(--icon-base)"} />
+  </g>
+)
+
+const C = (p: GlyphProps) => (
+  <g transform={`translate(${p.x}, 0)`}>
+    <path d="M24 30H6V18H24V30Z" fill={p.weakColor || "var(--icon-weak-base)"} />
+    <path d="M24 12H6V30H24V36H0V6H24V12Z" fill={p.color || "var(--icon-base)"} />
+  </g>
+)
+
+const D = (p: GlyphProps) => (
+  <g transform={`translate(${p.x}, 0)`}>
+    <path d="M18 30H6V18H18V30Z" fill={p.weakColor || "var(--icon-weak-base)"} />
+    <path d="M18 12H6V30H18V12ZM24 36H18V6H18V0H24V36Z" fill={p.color || "var(--icon-base)"} />
+  </g>
+)
+
 export const Mark = (props: { class?: string }) => {
   return (
     <svg
       data-component="logo-mark"
       classList={{ [props.class ?? ""]: !!props.class }}
-      viewBox="0 0 16 20"
+      viewBox="0 0 24 36"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path data-slot="logo-logo-mark-shadow" d="M12 16H4V8H12V16Z" fill="var(--icon-weak-base)" />
-      <path data-slot="logo-logo-mark-o" d="M12 4H4V16H12V4ZM16 20H0V0H16V20Z" fill="var(--icon-strong-base)" />
+      <N x={0} color="var(--icon-strong-base)" />
     </svg>
   )
 }
@@ -18,12 +59,11 @@ export const Splash = (props: { class?: string }) => {
     <svg
       data-component="logo-splash"
       classList={{ [props.class ?? ""]: !!props.class }}
-      viewBox="0 0 80 100"
+      viewBox="0 0 24 40"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      <path d="M60 80H20V40H60V80Z" fill="var(--icon-base)" />
-      <path d="M60 20H20V80H60V20ZM80 100H0V0H80V100Z" fill="var(--icon-strong-base)" />
+      <N x={0} color="var(--icon-strong-base)" />
     </svg>
   )
 }
@@ -36,24 +76,14 @@ export const Logo = (props: { class?: string }) => {
       fill="none"
       classList={{ [props.class ?? ""]: !!props.class }}
     >
-      <g>
-        <path d="M18 30H6V18H18V30Z" fill="var(--icon-weak-base)" />
-        <path d="M18 12H6V30H18V12ZM24 36H0V6H24V36Z" fill="var(--icon-base)" />
-        <path d="M48 30H36V18H48V30Z" fill="var(--icon-weak-base)" />
-        <path d="M36 30H48V12H36V30ZM54 36H36V42H30V6H54V36Z" fill="var(--icon-base)" />
-        <path d="M84 24V30H66V24H84Z" fill="var(--icon-weak-base)" />
-        <path d="M84 24H66V30H84V36H60V6H84V24ZM66 18H78V12H66V18Z" fill="var(--icon-base)" />
-        <path d="M108 36H96V18H108V36Z" fill="var(--icon-weak-base)" />
-        <path d="M108 12H96V36H90V6H108V12ZM114 36H108V12H114V36Z" fill="var(--icon-base)" />
-        <path d="M144 30H126V18H144V30Z" fill="var(--icon-weak-base)" />
-        <path d="M144 12H126V30H144V36H120V6H144V12Z" fill="var(--icon-strong-base)" />
-        <path d="M168 30H156V18H168V30Z" fill="var(--icon-weak-base)" />
-        <path d="M168 12H156V30H168V12ZM174 36H150V6H174V36Z" fill="var(--icon-strong-base)" />
-        <path d="M198 30H186V18H198V30Z" fill="var(--icon-weak-base)" />
-        <path d="M198 12H186V30H198V12ZM204 36H180V6H198V0H204V36Z" fill="var(--icon-strong-base)" />
-        <path d="M234 24V30H216V24H234Z" fill="var(--icon-weak-base)" />
-        <path d="M216 12V18H228V12H216ZM234 24H216V30H234V36H210V6H234V24Z" fill="var(--icon-strong-base)" />
-      </g>
+      <N x={0} />
+      <E x={30} />
+      <O x={60} />
+      {/* Gap for "NEO CODE" spacing */}
+      <C x={120} color="var(--icon-strong-base)" />
+      <O x={150} color="var(--icon-strong-base)" />
+      <D x={180} color="var(--icon-strong-base)" />
+      <E x={210} color="var(--icon-strong-base)" />
     </svg>
   )
 }

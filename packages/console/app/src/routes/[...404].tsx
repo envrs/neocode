@@ -1,8 +1,8 @@
 import "./[...404].css"
 import { Title } from "@solidjs/meta"
 import { HttpStatusCode } from "@solidjs/start"
-import logoLight from "../asset/logo-ornate-light.svg"
-import logoDark from "../asset/logo-ornate-dark.svg"
+import { Logo } from "@neocode-ai/ui/logo"
+import { A } from "@solidjs/router"
 
 export default function NotFound() {
   return (
@@ -11,25 +11,24 @@ export default function NotFound() {
       <HttpStatusCode code={404} />
       <div data-component="content">
         <section data-component="top">
-          <a href="/" data-slot="logo-link">
-            <img data-slot="logo light" src={logoLight} alt="neocode logo light" />
-            <img data-slot="logo dark" src={logoDark} alt="neocode logo dark" />
-          </a>
+          <A href="/" data-slot="logo-link">
+            <Logo class="header-logo" />
+          </A>
           <h1 data-slot="title">404 - Page Not Found</h1>
         </section>
 
         <section data-component="actions">
           <div data-slot="action">
-            <a href="/">Home</a>
+            <A href="/">Home</A>
           </div>
           <div data-slot="action">
-            <a href="/docs">Docs</a>
+            <A href="/docs">Docs</A>
           </div>
           <div data-slot="action">
-            <a href="https://github.com/neopilot-ai/neocode">GitHub</a>
+            <a href="https://github.com/neopilot-ai/neocode" target="_blank" rel="noopener">GitHub</a>
           </div>
           <div data-slot="action">
-            <a href="/discord">Discord</a>
+            <A href="/discord">Discord</A>
           </div>
         </section>
       </div>

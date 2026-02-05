@@ -14,6 +14,7 @@ import copyLogoSvgDark from "../asset/lander/neocode-logo-dark.svg"
 import copyWordmarkSvgLight from "../asset/lander/neocode-wordmark-light.svg"
 import copyWordmarkSvgDark from "../asset/lander/neocode-wordmark-dark.svg"
 import { A, createAsync, useNavigate } from "@solidjs/router"
+import { Logo } from "@neocode-ai/ui/logo"
 import { createMemo, Match, Show, Switch } from "solid-js"
 import { createStore } from "solid-js/store"
 import { github } from "~/lib/github"
@@ -40,9 +41,9 @@ export function Header(props: { zen?: boolean; hideGetStarted?: boolean }) {
   const starCount = createMemo(() =>
     githubData()?.stars
       ? new Intl.NumberFormat("en-US", {
-          notation: "compact",
-          compactDisplay: "short",
-        }).format(githubData()?.stars!)
+        notation: "compact",
+        compactDisplay: "short",
+      }).format(githubData()?.stars!)
       : config.github.starsFormatted.compact,
   )
 
@@ -118,9 +119,8 @@ export function Header(props: { zen?: boolean; hideGetStarted?: boolean }) {
   return (
     <section data-component="top">
       <div onContextMenu={handleLogoContextMenu}>
-        <A href="/">
-          <img data-slot="logo light" src={logoLight} alt="neocode logo light" width="189" height="34" />
-          <img data-slot="logo dark" src={logoDark} alt="neocode logo dark" width="189" height="34" />
+        <A href="/" class="header-logo-link">
+          <Logo class="header-logo" />
         </A>
       </div>
 

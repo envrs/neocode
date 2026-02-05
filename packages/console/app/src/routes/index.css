@@ -217,9 +217,16 @@ body {
 
     z-index: 10;
 
-    img {
+    img,
+    .header-logo {
       height: 34px;
       width: auto;
+    }
+
+    .header-logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
     }
 
     [data-component="nav-desktop"] {

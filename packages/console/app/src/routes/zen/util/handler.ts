@@ -59,21 +59,22 @@ export async function handler(
   const MAX_RETRIES = zenConfig.maxRetries
   const FREE_WORKSPACES = zenConfig.freeWorkspaces
 
+  let model = "unknown"
   try {
     const url = input.request.url
     const body = await input.request.json()
-    const model = opts.parseModel(url, body)
+    model = opts.parseModel(url, body)
     const isStream = opts.parseIsStream(url, body)
     const ip = input.request.headers.get("x-real-ip") ?? ""
     const sessionId = input.request.headers.get("x-neocode-session") ?? ""
     const requestId = input.request.headers.get("x-neocode-request") ?? ""
     const projectId = input.request.headers.get("x-neocode-project") ?? ""
     const ocClient = input.request.headers.get("x-neocode-client") ?? ""
-    
+
     // Validate request parameters early for security
     const requestMetadata = extractRequestMetadata(url, body, input.request.headers)
     validateRequest(requestMetadata)
-    
+
     const timer = new RequestTimer({
       model: requestMetadata.model,
       is_stream: requestMetadata.isStream.toString(),
@@ -81,7 +82,7 @@ export async function handler(
       request: requestMetadata.requestId,
       client: ocClient,
     })
-    
+
     logger.info("Request started", {
       model: requestMetadata.model,
       session: requestMetadata.sessionId,
@@ -208,15 +209,15 @@ export async function handler(
       await rateLimiter?.track()
       const costInfo = await trackUsage(authInfo, modelInfo, providerInfo, billingSource, tokensInfo)
       await reload(authInfo, costInfo)
-      
+
       // Record success metrics
       timer.record(true)
       logger.counter("requests_completed", 1, {
-      provider: providerInfo.id,
-      model: model as string,
-      success: "true",
-    })
-      
+        provider: providerInfo.id,
+        model: model,
+        success: "true",
+      })
+
       return new Response(body, {
         status: resStatus,
         statusText: res.statusText,
@@ -228,7 +229,7 @@ export async function handler(
     const streamConverter = createStreamPartConverter(providerInfo.format, opts.format)
     const usageParser = providerInfo.createUsageParser()
     const binaryDecoder = providerInfo.createBinaryStreamDecoder()
-    
+
     // Create safe stream processor with memory limits
     const streamProcessor = createStreamProcessor(
       providerInfo.streamSeparator,
@@ -246,7 +247,7 @@ export async function handler(
         })
       }
     )
-    
+
     const stream = new ReadableStream({
       start(c) {
         const reader = res.body?.getReader()
@@ -262,7 +263,7 @@ export async function handler(
                 timer.record(true)
                 logger.counter("requests_completed", 1, {
                   provider: providerInfo.id,
-                  model: model as string,
+                  model: model,
                   success: "true",
                 })
                 logger.gauge("response_length", responseLength, {
@@ -270,7 +271,7 @@ export async function handler(
                 })
                 dataDumper?.flush()
                 await rateLimiter?.track()
-                
+
                 // Finalize stream processor and get usage
                 streamProcessor.finalize()
                 const usage = usageParser.retrieve()
@@ -297,7 +298,7 @@ export async function handler(
               // Process chunk safely with memory limits
               const processedParts = []
               const part = streamProcessor.processChunk(value)
-              
+
               if (part && providerInfo.format !== opts.format) {
                 const convertedPart = streamConverter(part)
                 c.enqueue(encoder.encode(convertedPart + "\n\n"))
@@ -323,13 +324,13 @@ export async function handler(
     // Record failure metrics
     logger.counter("requests_failed", 1, {
       error_type: error.constructor.name,
-      model: model as string,
+      model: model,
     })
 
     logger.error("Request failed", {
       error_type: error.constructor.name,
       error_message: error.message,
-      model: model as string,
+      model: model,
       session: input.request.headers.get("x-neocode-session"),
     })
 
@@ -344,8 +345,8 @@ export async function handler(
       return new Response(
         JSON.stringify({
           type: "error",
-          error: { 
-            type: error.constructor.name, 
+          error: {
+            type: error.constructor.name,
             message: error.message,
             action: error.action || "Check your API key and workspace settings in NeoCode Zen."
           },
@@ -361,8 +362,8 @@ export async function handler(
       return new Response(
         JSON.stringify({
           type: "error",
-          error: { 
-            type: error.constructor.name, 
+          error: {
+            type: error.constructor.name,
             message: error.message,
             action: error.action || "Wait for the rate limit to reset or upgrade your plan."
           },
@@ -512,9 +513,9 @@ export async function handler(
           ProviderTable,
           modelInfo.byokProvider
             ? and(
-                eq(ProviderTable.workspaceID, KeyTable.workspaceID),
-                eq(ProviderTable.provider, modelInfo.byokProvider),
-              )
+              eq(ProviderTable.workspaceID, KeyTable.workspaceID),
+              eq(ProviderTable.provider, modelInfo.byokProvider),
+            )
             : sql`false`,
         )
         .leftJoin(
@@ -533,8 +534,8 @@ export async function handler(
     logger.gauge("api_key_requests", 1, {
       api_key: data.apiKey,
       workspace: data.workspaceID,
-      isSubscription: data.subscription ? true : false,
-      subscription: data.billing.subscription?.plan,
+      isSubscription: data.subscription ? "true" : "false",
+      subscription: data.billing.subscription?.plan ?? "",
     })
 
     return {
@@ -671,7 +672,7 @@ export async function handler(
 
     const modelCost =
       modelInfo.cost200K &&
-      inputTokens + (cacheReadTokens ?? 0) + (cacheWrite5mTokens ?? 0) + (cacheWrite1hTokens ?? 0) > 200_000
+        inputTokens + (cacheReadTokens ?? 0) + (cacheWrite5mTokens ?? 0) + (cacheWrite1hTokens ?? 0) > 200_000
         ? modelInfo.cost200K
         : modelInfo.cost
 
@@ -710,7 +711,7 @@ export async function handler(
     if (cacheReadTokens) logger.histogram("tokens_used", cacheReadTokens, { token_type: "cache_read" })
     if (cacheWrite5mTokens) logger.histogram("tokens_used", cacheWrite5mTokens, { token_type: "cache_write_5m" })
     if (cacheWrite1hTokens) logger.histogram("tokens_used", cacheWrite1hTokens, { token_type: "cache_write_1h" })
-    
+
     logger.histogram("cost_input", Math.round(inputCost))
     logger.histogram("cost_output", Math.round(outputCost))
     if (reasoningCost) logger.histogram("cost_reasoning", Math.round(reasoningCost))
@@ -746,71 +747,71 @@ export async function handler(
           .where(and(eq(KeyTable.workspaceID, authInfo.workspaceID), eq(KeyTable.id, authInfo.apiKeyId))),
         ...(billingSource === "subscription"
           ? (() => {
-              const plan = authInfo.billing.subscription!.plan
-              const black = BlackData.getLimits({ plan })
-              const week = getWeekBounds(new Date())
-              const rollingWindowSeconds = black.rollingWindow * 3600
-              return [
-                db
-                  .update(SubscriptionTable)
-                  .set({
-                    fixedUsage: sql`
+            const plan = authInfo.billing.subscription!.plan
+            const black = BlackData.getLimits({ plan })
+            const week = getWeekBounds(new Date())
+            const rollingWindowSeconds = black.rollingWindow * 3600
+            return [
+              db
+                .update(SubscriptionTable)
+                .set({
+                  fixedUsage: sql`
               CASE
                 WHEN ${SubscriptionTable.timeFixedUpdated} >= ${week.start} THEN ${SubscriptionTable.fixedUsage} + ${cost}
                 ELSE ${cost}
               END
             `,
-                    timeFixedUpdated: sql`now()`,
-                    rollingUsage: sql`
+                  timeFixedUpdated: sql`now()`,
+                  rollingUsage: sql`
               CASE
                 WHEN UNIX_TIMESTAMP(${SubscriptionTable.timeRollingUpdated}) >= UNIX_TIMESTAMP(now()) - ${rollingWindowSeconds} THEN ${SubscriptionTable.rollingUsage} + ${cost}
                 ELSE ${cost}
               END
             `,
-                    timeRollingUpdated: sql`
+                  timeRollingUpdated: sql`
               CASE
                 WHEN UNIX_TIMESTAMP(${SubscriptionTable.timeRollingUpdated}) >= UNIX_TIMESTAMP(now()) - ${rollingWindowSeconds} THEN ${SubscriptionTable.timeRollingUpdated}
                 ELSE now()
               END
             `,
-                  })
-                  .where(
-                    and(
-                      eq(SubscriptionTable.workspaceID, authInfo.workspaceID),
-                      eq(SubscriptionTable.userID, authInfo.user.id),
-                    ),
+                })
+                .where(
+                  and(
+                    eq(SubscriptionTable.workspaceID, authInfo.workspaceID),
+                    eq(SubscriptionTable.userID, authInfo.user.id),
                   ),
-              ]
-            })()
+                ),
+            ]
+          })()
           : [
-              db
-                .update(BillingTable)
-                .set({
-                  balance: authInfo.isFree
-                    ? sql`${BillingTable.balance} - ${0}`
-                    : sql`${BillingTable.balance} - ${cost}`,
-                  monthlyUsage: sql`
+            db
+              .update(BillingTable)
+              .set({
+                balance: authInfo.isFree
+                  ? sql`${BillingTable.balance} - ${0}`
+                  : sql`${BillingTable.balance} - ${cost}`,
+                monthlyUsage: sql`
               CASE
                 WHEN MONTH(${BillingTable.timeMonthlyUsageUpdated}) = MONTH(now()) AND YEAR(${BillingTable.timeMonthlyUsageUpdated}) = YEAR(now()) THEN ${BillingTable.monthlyUsage} + ${cost}
                 ELSE ${cost}
               END
             `,
-                  timeMonthlyUsageUpdated: sql`now()`,
-                })
-                .where(eq(BillingTable.workspaceID, authInfo.workspaceID)),
-              db
-                .update(UserTable)
-                .set({
-                  monthlyUsage: sql`
+                timeMonthlyUsageUpdated: sql`now()`,
+              })
+              .where(eq(BillingTable.workspaceID, authInfo.workspaceID)),
+            db
+              .update(UserTable)
+              .set({
+                monthlyUsage: sql`
               CASE
                 WHEN MONTH(${UserTable.timeMonthlyUsageUpdated}) = MONTH(now()) AND YEAR(${UserTable.timeMonthlyUsageUpdated}) = YEAR(now()) THEN ${UserTable.monthlyUsage} + ${cost}
                 ELSE ${cost}
               END
             `,
-                  timeMonthlyUsageUpdated: sql`now()`,
-                })
-                .where(and(eq(UserTable.workspaceID, authInfo.workspaceID), eq(UserTable.id, authInfo.user.id))),
-            ]),
+                timeMonthlyUsageUpdated: sql`now()`,
+              })
+              .where(and(eq(UserTable.workspaceID, authInfo.workspaceID), eq(UserTable.id, authInfo.user.id))),
+          ]),
       ]),
     )
 

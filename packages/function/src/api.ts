@@ -4,7 +4,7 @@ import { randomUUID } from "node:crypto"
 import { jwtVerify, createRemoteJWKSet } from "jose"
 import { createAppAuth } from "@octokit/auth-app"
 import { Octokit } from "@octokit/rest"
-import { Resource } from "sst"
+
 
 type Env = {
   SYNC_SERVER: DurableObjectNamespace<SyncServer>
@@ -17,8 +17,8 @@ async function getFeishuTenantToken(): Promise<string> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      app_id: Resource.FEISHU_APP_ID.value,
-      app_secret: Resource.FEISHU_APP_SECRET.value,
+      app_id: (process.env as any).FEISHU_APP_ID,
+      app_secret: (process.env as any).FEISHU_APP_SECRET,
     }),
   })
   const data = (await response.json()) as { tenant_access_token?: string }
@@ -49,7 +49,7 @@ export class SyncServer extends DurableObject<Env> {
     })
   }
 
-  async webSocketMessage(ws, message) {}
+  async webSocketMessage(ws, message) { }
 
   async webSocketClose(ws, code, reason, wasClean) {
     ws.close(code, "Durable Object is closing WebSocket")
@@ -154,7 +154,7 @@ export default new Hono<{ Bindings: Env }>()
     const body = await c.req.json<{ sessionShortName: string; adminSecret: string }>()
     const sessionShortName = body.sessionShortName
     const adminSecret = body.adminSecret
-    if (adminSecret !== Resource.ADMIN_SECRET.value) throw new Error("Invalid admin secret")
+    if (adminSecret !== (process.env as any).ADMIN_SECRET) throw new Error("Invalid admin secret")
     const id = c.env.SYNC_SERVER.idFromName(sessionShortName)
     const stub = c.env.SYNC_SERVER.get(id)
     await stub.clear()
@@ -235,8 +235,8 @@ export default new Hono<{ Bindings: Env }>()
     const parsed =
       typeof content === "string" && content.trim().startsWith("{")
         ? (JSON.parse(content) as {
-            text?: string
-          })
+          text?: string
+        })
         : undefined
     const text = typeof parsed?.text === "string" ? parsed.text : typeof content === "string" ? content : ""
 
@@ -248,12 +248,12 @@ export default new Hono<{ Bindings: Env }>()
     if (threadId) message = `${message} [${threadId}]`
 
     const response = await fetch(
-      `https://discord.com/api/v10/channels/${Resource.DISCORD_SUPPORT_CHANNEL_ID.value}/messages`,
+      `https://discord.com/api/v10/channels/${(process.env as any).DISCORD_SUPPORT_CHANNEL_ID}/messages`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bot ${Resource.DISCORD_SUPPORT_BOT_TOKEN.value}`,
+          Authorization: `Bot ${(process.env as any).DISCORD_SUPPORT_BOT_TOKEN}`,
         },
         body: JSON.stringify({
           content: `${message}`,
@@ -299,8 +299,8 @@ export default new Hono<{ Bindings: Env }>()
 
     // Create app JWT token
     const auth = createAppAuth({
-      appId: Resource.GITHUB_APP_ID.value,
-      privateKey: Resource.GITHUB_APP_PRIVATE_KEY.value,
+      appId: (process.env as any).GITHUB_APP_ID,
+      privateKey: (process.env as any).GITHUB_APP_PRIVATE_KEY,
     })
     const appAuth = await auth({ type: "app" })
 
@@ -377,8 +377,8 @@ export default new Hono<{ Bindings: Env }>()
     const repo = c.req.query("repo")
 
     const auth = createAppAuth({
-      appId: Resource.GITHUB_APP_ID.value,
-      privateKey: Resource.GITHUB_APP_PRIVATE_KEY.value,
+      appId: (process.env as any).GITHUB_APP_ID,
+      privateKey: (process.env as any).GITHUB_APP_PRIVATE_KEY,
     })
     const appAuth = await auth({ type: "app" })
 

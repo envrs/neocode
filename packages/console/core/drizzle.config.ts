@@ -1,4 +1,3 @@
-import { Resource } from "sst"
 import { defineConfig } from "drizzle-kit"
 
 export default defineConfig({
@@ -8,11 +7,11 @@ export default defineConfig({
   verbose: true,
   dialect: "mysql",
   dbCredentials: {
-    database: Resource.Database.database,
-    host: Resource.Database.host,
-    user: Resource.Database.username,
-    password: Resource.Database.password,
-    port: Resource.Database.port,
+    database: process.env.DATABASE_NAME!,
+    host: process.env.DATABASE_HOST!,
+    user: process.env.DATABASE_USERNAME!,
+    password: process.env.DATABASE_PASSWORD!,
+    port: parseInt(process.env.DATABASE_PORT || "3306"),
     ssl: {
       rejectUnauthorized: false,
     },
