@@ -247,6 +247,23 @@ Examples:
 These are not strictly enforced, they are just general guidelines:
 
 - **Functions:** Keep logic within a single function unless breaking it out adds clear reuse or composition benefits.
+
+## Security
+
+### Reporting Security Issues
+If you discover a security vulnerability, please **do not open a public issue**. Instead, send an email to **security@neocode.ai**. See our [Security Policy](SECURITY.md) for details.
+
+### Security Best Practices for Contributors
+- Validate all user inputs with Zod schemas
+- Follow principle of least privilege
+- Review permission implications of changes
+- Keep dependencies updated
+- Add tests for security-critical code
+
+### Security Review Process
+- All security-related changes require additional review
+- Automated security scans run on all PRs
+- Breaking changes to security features need maintainer approval
 - **Destructuring:** Do not do unnecessary destructuring of variables.
 - **Control flow:** Avoid `else` statements.
 - **Error handling:** Prefer `.catch(...)` instead of `try`/`catch` when possible.

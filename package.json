@@ -13,7 +13,8 @@
     "prepare": "husky",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",
-    "test": "echo 'do not run tests from root' && exit 1"
+    "test": "echo 'do not run tests from root' && exit 1",
+    "test:coverage": "bun test --coverage"
   },
   "workspaces": {
     "packages": [
@@ -67,6 +68,9 @@
   "devDependencies": {
     "@actions/artifact": "5.0.1",
     "@tsconfig/bun": "catalog:",
+    "@typescript-eslint/eslint-plugin": "8.54.0",
+    "@typescript-eslint/parser": "8.54.0",
+    "eslint": "9.39.2",
     "husky": "9.1.7",
     "prettier": "3.6.2",
     "semver": "^7.6.0",
@@ -74,11 +78,22 @@
     "turbo": "2.5.6"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "12.6.12",
     "@aws-sdk/client-s3": "3.933.0",
+    "@isaacs/brace-expansion": "5.0.1",
+    "@modelcontextprotocol/sdk": "1.26.0",
     "@neocode-ai/plugin": "workspace:*",
     "@neocode-ai/script": "workspace:*",
     "@neocode-ai/sdk": "workspace:*",
-    "typescript": "catalog:"
+    "@remix-run/router": "1.23.2",
+    "astro": "5.17.1",
+    "esbuild": "0.27.2",
+    "fast-xml-parser": "5.3.4",
+    "hono": "4.11.7",
+    "react-router": "7.13.0",
+    "seroval": "1.5.0",
+    "typescript": "catalog:",
+    "wrangler": "4.62.0"
   },
   "repository": {
     "type": "git",
