@@ -1,9 +1,61 @@
-import { describe, expect, test, afterAll } from "bun:test"
+import { describe, expect, test, afterAll, beforeEach, mock } from "bun:test"
 import { Share } from "../../src/core/share"
 import { Storage } from "../../src/core/storage"
 import { Identifier } from "@neocode-ai/util/identifier"
 
+// Mock the storage adapter for tests
+const mockStorage = new Map<string, string>()
+
+mock.module("../../src/core/storage", () => ({
+  Storage: {
+    write: async (key: string[], value: any) => {
+      mockStorage.set(key.join("/") + ".json", JSON.stringify(value))
+    },
+    read: async (key: string[]) => {
+      const value = mockStorage.get(key.join("/") + ".json")
+      return value ? JSON.parse(value) : undefined
+    },
+    remove: async (key: string[]) => {
+      mockStorage.delete(key.join("/") + ".json")
+    },
+    list: async (options?: { prefix?: string[]; limit?: number; after?: string; before?: string }) => {
+      const prefix = options?.prefix ? options.prefix.join("/") + (options.prefix.length ? "/" : "") : ""
+      const keys = Array.from(mockStorage.keys())
+        .filter(key => key.startsWith(prefix))
+        .map(key => key.replace(/\.json$/, "").split("/"))
+      
+      keys.sort()
+      
+      let filtered = keys
+      if (options?.after && options.prefix) {
+        const afterPath = [...options.prefix, options.after].join("/")
+        const afterIndex = keys.findIndex(k => k.join("/") === afterPath)
+        if (afterIndex !== -1) {
+          filtered = keys.slice(afterIndex + 1)
+        }
+      }
+      
+      if (options?.before && options.prefix) {
+        const beforePath = [...options.prefix, options.before].join("/")
+        const beforeIndex = filtered.findIndex(k => k.join("/") === beforePath)
+        if (beforeIndex !== -1) {
+          filtered = filtered.slice(0, beforeIndex)
+        }
+      }
+      
+      if (options?.limit) {
+        filtered = filtered.slice(0, options.limit)
+      }
+      
+      return filtered
+    }
+  }
+}))
+
 describe.concurrent("core.share", () => {
+  beforeEach(() => {
+    mockStorage.clear()
+  })
   test("should create a share", async () => {
     const sessionID = Identifier.descending()
     const share = await Share.create({ sessionID })
