@@ -12,7 +12,6 @@ export const Resource = new Proxy(
       const value = (process.env as any)[prop]
 
       // If the value is a string that looks like JSON, parse it
-      // (This mimics SST's behavior for some resources)
       if (typeof value === "string" && (value.startsWith("{") || value.startsWith("["))) {
         try {
           return JSON.parse(value)
@@ -24,8 +23,7 @@ export const Resource = new Proxy(
       // Handle simple values
       if (value !== undefined) return value
 
-      // Special handling for things that used to be SST resources
-      // but are now just env vars
+      // Special handling for env vars
       return {
         value: (process.env as any)[prop],
       }

@@ -21,4 +21,8 @@ jobs:
         with:
           node-version: "24"
 
-      - run: echo "SST deployment removed"
+      - name: Deploy to Cloudflare Workers
+        run: |
+          ./script/deploy-cloudflare.ts
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
