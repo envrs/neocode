@@ -216,7 +216,7 @@ export default function Home() {
 
           <section data-component="testimonials">
             {/*Dax*/}
-            <a href="https://x.com/thdxr/status/1973531687629017227">
+            <a href="https://x.com/khulnasoft-bot/status/1973531687629017227">
               <div data-slot="testimonial">
                 <div data-slot="name">
                   <img src={avatarDax} alt="" />
@@ -229,7 +229,7 @@ export default function Home() {
               </div>
             </a>
             {/*Jay*/}
-            <a href="https://x.com/jayair/status/1973530190870618456">
+            <a href="https://x.com/envrs/status/1973530190870618456">
               <div data-slot="testimonial">
                 <div data-slot="name">
                   <img src={avatarJay} alt="" />
@@ -255,7 +255,7 @@ export default function Home() {
               </div>
             </a>
             {/*David*/}
-            <a href="https://x.com/iamdavidhill/status/1973530568773214622">
+            <a href="https://x.com/khulnasoft-bot/status/1973530568773214622">
               <div data-slot="testimonial">
                 <div data-slot="name">
                   <img src={avatarDavid} alt="" />

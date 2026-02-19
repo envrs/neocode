@@ -1,4 +1,5 @@
 import { test, expect } from "bun:test"
+import path from "path"
 import { tmpdir } from "../fixture/fixture"
 import { Instance } from "../../src/project/instance"
 import { Agent } from "../../src/agent/agent"
@@ -70,6 +71,20 @@ test("explore agent denies edit and write", async () => {
       expect(evalPerm(explore, "write")).toBe("deny")
       expect(evalPerm(explore, "todoread")).toBe("deny")
       expect(evalPerm(explore, "todowrite")).toBe("deny")
+    },
+  })
+})
+
+test("explore agent asks for external directories and allows Truncate.GLOB", async () => {
+  const { Truncate } = await import("../../src/tool/truncation")
+  await using tmp = await tmpdir()
+  await Instance.provide({
+    directory: tmp.path,
+    fn: async () => {
+      const explore = await Agent.get("explore")
+      expect(explore).toBeDefined()
+      expect(PermissionNext.evaluate("external_directory", "/some/other/path", explore!.permission).action).toBe("ask")
+      expect(PermissionNext.evaluate("external_directory", Truncate.GLOB, explore!.permission).action).toBe("allow")
     },
   })
 })
@@ -511,6 +526,42 @@ test("explicit Truncate.GLOB deny is respected", async () => {
       expect(PermissionNext.evaluate("external_directory", Truncate.DIR, build!.permission).action).toBe("deny")
     },
   })
+})
+
+test("skill directories are allowed for external_directory", async () => {
+  await using tmp = await tmpdir({
+    git: true,
+    init: async (dir) => {
+      const skillDir = path.join(dir, ".neocode", "skill", "perm-skill")
+      await Bun.write(
+        path.join(skillDir, "SKILL.md"),
+        `---
+name: perm-skill
+description: Permission skill.
+---
+
+# Permission Skill
+`,
+      )
+    },
+  })
+
+  const home = process.env.NEOCODE_TEST_HOME
+  process.env.NEOCODE_TEST_HOME = tmp.path
+
+  try {
+    await Instance.provide({
+      directory: tmp.path,
+      fn: async () => {
+        const build = await Agent.get("build")
+        const skillDir = path.join(tmp.path, ".neocode", "skill", "perm-skill")
+        const target = path.join(skillDir, "reference", "notes.md")
+        expect(PermissionNext.evaluate("external_directory", target, build!.permission).action).toBe("allow")
+      },
+    })
+  } finally {
+    process.env.NEOCODE_TEST_HOME = home
+  }
 })
 
 test("defaultAgent returns build when no default_agent config", async () => {

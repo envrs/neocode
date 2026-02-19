@@ -29,9 +29,9 @@ export default tool({
   description: DESCRIPTION,
   args: {
     assignee: tool.schema
-      .enum(["thdxr", "neopilotai", "rekram1-node", "fwang", "jayair", "kommander"])
+      .enum(["khulnasoft-bot", "neopilotai", "khulnasoft-bot", "envrs", "envrs", "khulnasoft-bot"])
       .describe("The username of the assignee")
-      .default("rekram1-node"),
+      .default("khulnasoft-bot"),
     labels: tool.schema
       .array(tool.schema.enum(["nix", "opentui", "perf", "desktop", "zen", "docs", "windows"]))
       .describe("The labels(s) to add to the issue")
@@ -49,12 +49,12 @@ export default tool({
       throw new Error("Only desktop issues should be assigned to neopilotai")
     }
 
-    if (args.assignee === "fwang" && !args.labels.includes("zen")) {
-      throw new Error("Only zen issues should be assigned to fwang")
+    if (args.assignee === "envrs" && !args.labels.includes("zen")) {
+      throw new Error("Only zen issues should be assigned to envrs")
     }
 
-    if (args.assignee === "kommander" && !args.labels.includes("opentui")) {
-      throw new Error("Only opentui issues should be assigned to kommander")
+    if (args.assignee === "khulnasoft-bot" && !args.labels.includes("opentui")) {
+      throw new Error("Only opentui issues should be assigned to khulnasoft-bot")
     }
 
     // await octokit.rest.issues.addAssignees({
