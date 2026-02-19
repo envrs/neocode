@@ -33,7 +33,9 @@ export const ProjectIcon = (props: { project: LocalProject; class?: string; noti
         <Avatar
           fallback={name()}
           src={
-            props.project.id === NEOCODE_PROJECT_ID ? "https://neo.khulnasoft.com/favicon.svg" : props.project.icon?.override
+            props.project.id === NEOCODE_PROJECT_ID
+              ? "https://neo.khulnasoft.com/favicon.svg"
+              : props.project.icon?.override
           }
           {...getAvatarColors(props.project.icon?.color)}
           class="size-full rounded"

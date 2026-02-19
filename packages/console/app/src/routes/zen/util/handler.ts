@@ -297,10 +297,10 @@ export async function handler(
       return new Response(
         JSON.stringify({
           type: "error",
-          error: { 
-            type: error.constructor.name, 
+          error: {
+            type: error.constructor.name,
             message: error.message,
-            action: (error as any).action
+            action: (error as any).action,
           },
         }),
         { status: 401 },
@@ -382,7 +382,7 @@ export async function handler(
 
       // Improved provider selection using crypto for better distribution
       if (providers.length === 0) throw new ModelError("No available providers")
-      
+
       let index = 0
       if (sessionId.length >= 4) {
         // Use crypto API for better random distribution
@@ -393,7 +393,7 @@ export async function handler(
         }
         index = Math.abs(hashBuffer.reduce((acc, val) => acc + val, 0)) % providers.length
       }
-      
+
       return providers[index]
     })()
 
