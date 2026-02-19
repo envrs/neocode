@@ -53,7 +53,7 @@ test("headers are passed to transports when oauth is enabled (default)", async (
       await Bun.write(
         `${dir}/neocode.json`,
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             "test-server": {
               type: "remote",

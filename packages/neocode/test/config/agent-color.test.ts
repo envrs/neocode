@@ -12,9 +12,10 @@ test("agent color parsed from project config", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             build: { color: "#FFA500" },
+            plan: { color: "primary" },
           },
         }),
       )
@@ -25,6 +26,7 @@ test("agent color parsed from project config", async () => {
     fn: async () => {
       const cfg = await Config.get()
       expect(cfg.agent?.["build"]?.color).toBe("#FFA500")
+      expect(cfg.agent?.["plan"]?.color).toBe("primary")
     },
   })
 })
@@ -35,9 +37,10 @@ test("Agent.get includes color from config", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             plan: { color: "#A855F7" },
+            build: { color: "accent" },
           },
         }),
       )
@@ -48,6 +51,8 @@ test("Agent.get includes color from config", async () => {
     fn: async () => {
       const plan = await AgentSvc.get("plan")
       expect(plan?.color).toBe("#A855F7")
+      const build = await AgentSvc.get("build")
+      expect(build?.color).toBe("accent")
     },
   })
 })

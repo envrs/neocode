@@ -39,7 +39,7 @@ test("loads JSON config file", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         model: "test/model",
         username: "testuser",
       })
@@ -62,7 +62,7 @@ test("loads JSONC config file", async () => {
         path.join(dir, "neocode.jsonc"),
         `{
         // This is a comment
-        "$schema": "https://neo.khulnasoft.com/config.json",
+        "$schema": "https://neocode.ai/config.json",
         "model": "test/model",
         "username": "testuser"
       }`,
@@ -85,14 +85,14 @@ test("merges multiple config files with correct precedence", async () => {
       await writeConfig(
         dir,
         {
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           model: "base",
           username: "base",
         },
         "neocode.jsonc",
       )
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         model: "override",
       })
     },
@@ -115,7 +115,7 @@ test("handles environment variable substitution", async () => {
     await using tmp = await tmpdir({
       init: async (dir) => {
         await writeConfig(dir, {
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           theme: "{env:TEST_VAR}",
         })
       },
@@ -179,7 +179,7 @@ test("handles file inclusion substitution", async () => {
     init: async (dir) => {
       await Bun.write(path.join(dir, "included.txt"), "test_theme")
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         theme: "{file:included.txt}",
       })
     },
@@ -193,11 +193,30 @@ test("handles file inclusion substitution", async () => {
   })
 })
 
+test("handles file inclusion with replacement tokens", async () => {
+  await using tmp = await tmpdir({
+    init: async (dir) => {
+      await Bun.write(path.join(dir, "included.md"), "const out = await Bun.$`echo hi`")
+      await writeConfig(dir, {
+        $schema: "https://neocode.ai/config.json",
+        theme: "{file:included.md}",
+      })
+    },
+  })
+  await Instance.provide({
+    directory: tmp.path,
+    fn: async () => {
+      const config = await Config.get()
+      expect(config.theme).toBe("const out = await Bun.$`echo hi`")
+    },
+  })
+})
+
 test("validates config schema and throws on invalid fields", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         invalid_field: "should cause error",
       })
     },
@@ -229,7 +248,7 @@ test("handles agent configuration", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         agent: {
           test_agent: {
             model: "test/model",
@@ -259,7 +278,7 @@ test("treats agent variant as model-scoped setting (not provider option)", async
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         agent: {
           test_agent: {
             model: "openai/gpt-5.2",
@@ -290,7 +309,7 @@ test("handles command configuration", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         command: {
           test_command: {
             template: "test template",
@@ -320,7 +339,7 @@ test("migrates autoshare to share field", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           autoshare: true,
         }),
       )
@@ -342,7 +361,7 @@ test("migrates mode field to agent field", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mode: {
             test_mode: {
               model: "test/model",
@@ -566,6 +585,68 @@ test("gets config directories", async () => {
   })
 })
 
+test("does not try to install dependencies in read-only NEOCODE_CONFIG_DIR", async () => {
+  if (process.platform === "win32") return
+
+  await using tmp = await tmpdir<string>({
+    init: async (dir) => {
+      const ro = path.join(dir, "readonly")
+      await fs.mkdir(ro, { recursive: true })
+      await fs.chmod(ro, 0o555)
+      return ro
+    },
+    dispose: async (dir) => {
+      const ro = path.join(dir, "readonly")
+      await fs.chmod(ro, 0o755).catch(() => {})
+      return ro
+    },
+  })
+
+  const prev = process.env.NEOCODE_CONFIG_DIR
+  process.env.NEOCODE_CONFIG_DIR = tmp.extra
+
+  try {
+    await Instance.provide({
+      directory: tmp.path,
+      fn: async () => {
+        await Config.get()
+      },
+    })
+  } finally {
+    if (prev === undefined) delete process.env.NEOCODE_CONFIG_DIR
+    else process.env.NEOCODE_CONFIG_DIR = prev
+  }
+})
+
+test("installs dependencies in writable NEOCODE_CONFIG_DIR", async () => {
+  await using tmp = await tmpdir<string>({
+    init: async (dir) => {
+      const cfg = path.join(dir, "configdir")
+      await fs.mkdir(cfg, { recursive: true })
+      return cfg
+    },
+  })
+
+  const prev = process.env.NEOCODE_CONFIG_DIR
+  process.env.NEOCODE_CONFIG_DIR = tmp.extra
+
+  try {
+    await Instance.provide({
+      directory: tmp.path,
+      fn: async () => {
+        await Config.get()
+        await Config.waitForDependencies()
+      },
+    })
+
+    expect(await Bun.file(path.join(tmp.extra, "package.json")).exists()).toBe(true)
+    expect(await Bun.file(path.join(tmp.extra, ".gitignore")).exists()).toBe(true)
+  } finally {
+    if (prev === undefined) delete process.env.NEOCODE_CONFIG_DIR
+    else process.env.NEOCODE_CONFIG_DIR = prev
+  }
+})
+
 test("resolves scoped npm plugins in config", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
@@ -595,7 +676,7 @@ test("resolves scoped npm plugins in config", async () => {
 
       await Bun.write(
         path.join(dir, "neocode.json"),
-        JSON.stringify({ $schema: "https://neo.khulnasoft.com/config.json", plugin: ["@scope/plugin"] }, null, 2),
+        JSON.stringify({ $schema: "https://neocode.ai/config.json", plugin: ["@scope/plugin"] }, null, 2),
       )
     },
   })
@@ -630,7 +711,7 @@ test("merges plugin arrays from global and local configs", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           plugin: ["global-plugin-1", "global-plugin-2"],
         }),
       )
@@ -639,7 +720,7 @@ test("merges plugin arrays from global and local configs", async () => {
       await Bun.write(
         path.join(neocodeDir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           plugin: ["local-plugin-1"],
         }),
       )
@@ -706,7 +787,7 @@ test("merges instructions arrays from global and local configs", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           instructions: ["global-instructions.md", "shared-rules.md"],
         }),
       )
@@ -714,7 +795,7 @@ test("merges instructions arrays from global and local configs", async () => {
       await Bun.write(
         path.join(neocodeDir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           instructions: ["local-instructions.md"],
         }),
       )
@@ -745,7 +826,7 @@ test("deduplicates duplicate instructions from global and local configs", async 
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           instructions: ["duplicate.md", "global-only.md"],
         }),
       )
@@ -753,7 +834,7 @@ test("deduplicates duplicate instructions from global and local configs", async 
       await Bun.write(
         path.join(neocodeDir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           instructions: ["duplicate.md", "local-only.md"],
         }),
       )
@@ -789,7 +870,7 @@ test("deduplicates duplicate plugins from global and local configs", async () =>
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           plugin: ["duplicate-plugin", "global-plugin-1"],
         }),
       )
@@ -798,7 +879,7 @@ test("deduplicates duplicate plugins from global and local configs", async () =>
       await Bun.write(
         path.join(neocodeDir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           plugin: ["duplicate-plugin", "local-plugin-1"],
         }),
       )
@@ -837,7 +918,7 @@ test("migrates legacy tools config to permissions - allow", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -868,7 +949,7 @@ test("migrates legacy tools config to permissions - deny", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -899,7 +980,7 @@ test("migrates legacy write tool to edit permission", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -929,7 +1010,7 @@ test("managed settings override user settings", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         model: "user/model",
         share: "auto",
         username: "testuser",
@@ -938,7 +1019,7 @@ test("managed settings override user settings", async () => {
   })
 
   await writeManagedSettings({
-    $schema: "https://neo.khulnasoft.com/config.json",
+    $schema: "https://neocode.ai/config.json",
     model: "managed/model",
     share: "disabled",
   })
@@ -958,7 +1039,7 @@ test("managed settings override project settings", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         autoupdate: true,
         disabled_providers: [],
         theme: "dark",
@@ -967,7 +1048,7 @@ test("managed settings override project settings", async () => {
   })
 
   await writeManagedSettings({
-    $schema: "https://neo.khulnasoft.com/config.json",
+    $schema: "https://neocode.ai/config.json",
     autoupdate: false,
     disabled_providers: ["openai"],
   })
@@ -987,7 +1068,7 @@ test("missing managed settings file is not an error", async () => {
   await using tmp = await tmpdir({
     init: async (dir) => {
       await writeConfig(dir, {
-        $schema: "https://neo.khulnasoft.com/config.json",
+        $schema: "https://neocode.ai/config.json",
         model: "user/model",
       })
     },
@@ -1008,7 +1089,7 @@ test("migrates legacy edit tool to edit permission", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -1037,7 +1118,7 @@ test("migrates legacy patch tool to edit permission", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -1066,7 +1147,7 @@ test("migrates legacy multiedit tool to edit permission", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -1095,7 +1176,7 @@ test("migrates mixed legacy tools config", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               tools: {
@@ -1130,7 +1211,7 @@ test("merges legacy tools with existing permission config", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           agent: {
             test: {
               permission: {
@@ -1163,7 +1244,7 @@ test("permission config preserves key order", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           permission: {
             "*": "deny",
             edit: "ask",
@@ -1211,7 +1292,7 @@ test("project config can override MCP server enabled status", async () => {
       await Bun.write(
         path.join(dir, "neocode.jsonc"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             jira: {
               type: "remote",
@@ -1230,7 +1311,7 @@ test("project config can override MCP server enabled status", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             jira: {
               type: "remote",
@@ -1269,7 +1350,7 @@ test("MCP config deep merges preserving base config properties", async () => {
       await Bun.write(
         path.join(dir, "neocode.jsonc"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             myserver: {
               type: "remote",
@@ -1286,7 +1367,7 @@ test("MCP config deep merges preserving base config properties", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             myserver: {
               type: "remote",
@@ -1321,7 +1402,7 @@ test("local .neocode config can override MCP from project config", async () => {
       await Bun.write(
         path.join(dir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             docs: {
               type: "remote",
@@ -1337,7 +1418,7 @@ test("local .neocode config can override MCP from project config", async () => {
       await Bun.write(
         path.join(neocodeDir, "neocode.json"),
         JSON.stringify({
-          $schema: "https://neo.khulnasoft.com/config.json",
+          $schema: "https://neocode.ai/config.json",
           mcp: {
             docs: {
               type: "remote",
@@ -1405,7 +1486,7 @@ test("project config overrides remote well-known config", async () => {
         await Bun.write(
           path.join(dir, "neocode.json"),
           JSON.stringify({
-            $schema: "https://neo.khulnasoft.com/config.json",
+            $schema: "https://neocode.ai/config.json",
             mcp: {
               jira: {
                 type: "remote",
@@ -1498,7 +1579,7 @@ describe("deduplicatePlugins", () => {
         await Bun.write(
           path.join(dir, "neocode.json"),
           JSON.stringify({
-            $schema: "https://neo.khulnasoft.com/config.json",
+            $schema: "https://neocode.ai/config.json",
             plugin: ["my-plugin@1.0.0"],
           }),
         )
@@ -1533,7 +1614,7 @@ describe("NEOCODE_DISABLE_PROJECT_CONFIG", () => {
           await Bun.write(
             path.join(dir, "neocode.json"),
             JSON.stringify({
-              $schema: "https://neo.khulnasoft.com/config.json",
+              $schema: "https://neocode.ai/config.json",
               model: "project/model",
               username: "project-user",
             }),
@@ -1628,7 +1709,7 @@ describe("NEOCODE_DISABLE_PROJECT_CONFIG", () => {
           await Bun.write(
             path.join(dir, "neocode.json"),
             JSON.stringify({
-              $schema: "https://neo.khulnasoft.com/config.json",
+              $schema: "https://neocode.ai/config.json",
               instructions: ["./CUSTOM.md"],
             }),
           )
@@ -1674,7 +1755,7 @@ describe("NEOCODE_DISABLE_PROJECT_CONFIG", () => {
           await Bun.write(
             path.join(dir, "neocode.json"),
             JSON.stringify({
-              $schema: "https://neo.khulnasoft.com/config.json",
+              $schema: "https://neocode.ai/config.json",
               model: "configdir/model",
             }),
           )
@@ -1687,7 +1768,7 @@ describe("NEOCODE_DISABLE_PROJECT_CONFIG", () => {
           await Bun.write(
             path.join(dir, "neocode.json"),
             JSON.stringify({
-              $schema: "https://neo.khulnasoft.com/config.json",
+              $schema: "https://neocode.ai/config.json",
               model: "project/model",
             }),
           )

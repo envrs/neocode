@@ -2,7 +2,7 @@ import { createMemo, createSignal, For } from "solid-js"
 import { DEFAULT_THEMES, useTheme } from "@tui/context/theme"
 
 const themeCount = Object.keys(DEFAULT_THEMES).length
-const themeTip = `Use {highlight}/theme{/highlight} or {highlight}Ctrl+X T{/highlight} to switch between ${themeCount} built-in themes`
+const themeTip = `Use {highlight}/themes{/highlight} or {highlight}Ctrl+X T{/highlight} to switch between ${themeCount} built-in themes`
 
 type TipPart = { text: string; highlight: boolean }
 
@@ -54,7 +54,7 @@ const TIPS = [
   "Press {highlight}Tab{/highlight} to cycle between Build and Plan agents",
   "Use {highlight}/undo{/highlight} to revert the last message and file changes",
   "Use {highlight}/redo{/highlight} to restore previously undone messages and file changes",
-  "Run {highlight}/share{/highlight} to create a public link to your conversation at neo.khulnasoft.com",
+  "Run {highlight}/share{/highlight} to create a public link to your conversation at neocode.ai",
   "Drag and drop images into the terminal to add them as context",
   "Press {highlight}Ctrl+V{/highlight} to paste images from your clipboard into the prompt",
   "Press {highlight}Ctrl+X E{/highlight} or {highlight}/editor{/highlight} to compose messages in your external editor",
@@ -126,7 +126,7 @@ const TIPS = [
   "Use {highlight}{file:path}{/highlight} to include file contents in config values",
   "Use {highlight}instructions{/highlight} in config to load additional rules files",
   "Set agent {highlight}temperature{/highlight} from 0.0 (focused) to 1.0 (creative)",
-  "Configure {highlight}maxSteps{/highlight} to limit agentic iterations per request",
+  "Configure {highlight}steps{/highlight} to limit agentic iterations per request",
   'Set {highlight}"tools": {"bash": false}{/highlight} to disable specific tools',
   'Set {highlight}"mcp_*": false{/highlight} to disable all tools from an MCP server',
   "Override global tool settings per agent configuration",
@@ -142,12 +142,11 @@ const TIPS = [
   "Press {highlight}Ctrl+X S{/highlight} or {highlight}/status{/highlight} to see system status info",
   "Enable {highlight}tui.scroll_acceleration{/highlight} for smooth macOS-style scrolling",
   "Toggle username display in chat via command palette ({highlight}Ctrl+P{/highlight})",
-  "Run {highlight}docker run -it --rm ghcr.io/neopilot-ai/neocode{/highlight} for containerized use",
+  "Run {highlight}docker run -it --rm ghcr.io/anomalyco/neocode{/highlight} for containerized use",
   "Use {highlight}/connect{/highlight} with NeoCode Zen for curated, tested models",
   "Commit your project's {highlight}AGENTS.md{/highlight} file to Git for team sharing",
   "Use {highlight}/review{/highlight} to review uncommitted changes, branches, or PRs",
   "Run {highlight}/help{/highlight} or {highlight}Ctrl+X H{/highlight} to show the help dialog",
-  "Use {highlight}/details{/highlight} to toggle tool execution details visibility",
   "Use {highlight}/rename{/highlight} to rename the current session",
   "Press {highlight}Ctrl+Z{/highlight} to suspend the terminal and return to your shell",
 ]

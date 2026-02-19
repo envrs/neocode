@@ -39,7 +39,7 @@ export class McpOAuthProvider implements OAuthClientProvider {
     return {
       redirect_uris: [this.redirectUrl],
       client_name: "NeoCode",
-      client_uri: "https://neo.khulnasoft.com",
+      client_uri: "https://neocode.ai",
       grant_types: ["authorization_code", "refresh_token"],
       response_types: ["code"],
       token_endpoint_auth_method: this.config.clientSecret ? "client_secret_post" : "none",
@@ -148,6 +148,28 @@ export class McpOAuthProvider implements OAuthClientProvider {
       throw new Error(`No OAuth state saved for MCP server: ${this.mcpName}`)
     }
     return entry.oauthState
+  }
+
+  async invalidateCredentials(type: "all" | "client" | "tokens"): Promise<void> {
+    log.info("invalidating credentials", { mcpName: this.mcpName, type })
+    const entry = await McpAuth.get(this.mcpName)
+    if (!entry) {
+      return
+    }
+
+    switch (type) {
+      case "all":
+        await McpAuth.remove(this.mcpName)
+        break
+      case "client":
+        delete entry.clientInfo
+        await McpAuth.set(this.mcpName, entry)
+        break
+      case "tokens":
+        delete entry.tokens
+        await McpAuth.set(this.mcpName, entry)
+        break
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 import path from "path"
 import { exec } from "child_process"
+import { Filesystem } from "../../util/filesystem"
 import * as prompts from "@clack/prompts"
 import { map, pipe, sortBy, values } from "remeda"
 import { Octokit } from "@octokit/rest"
@@ -160,25 +161,29 @@ export function parseGitHubRemote(url: string): { owner: string; repo: string } 
 
 /**
  * Extracts displayable text from assistant response parts.
- * Returns null for tool-only or reasoning-only responses (signals summary needed).
- * Throws for truly unusable responses (empty, step-start only, etc.).
+ * Returns null for non-text responses (signals summary needed).
+ * Throws only for truly empty responses.
  */
 export function extractResponseText(parts: MessageV2.Part[]): string | null {
-  // Priority 1: Look for text parts
   const textPart = parts.findLast((p) => p.type === "text")
   if (textPart) return textPart.text
 
-  // Priority 2: Reasoning-only - return null to signal summary needed
-  const reasoningPart = parts.findLast((p) => p.type === "reasoning")
-  if (reasoningPart) return null
+  // Non-text parts (tools, reasoning, step-start/step-finish, etc.) - signal summary needed
+  if (parts.length > 0) return null
 
-  // Priority 3: Tool-only - return null to signal summary needed
-  const toolParts = parts.filter((p) => p.type === "tool" && p.state.status === "completed")
-  if (toolParts.length > 0) return null
+  throw new Error("Failed to parse response: no parts returned")
+}
 
-  // No usable parts - throw with debug info
-  const partTypes = parts.map((p) => p.type).join(", ") || "none"
-  throw new Error(`Failed to parse response. Part types found: [${partTypes}]`)
+/**
+ * Formats a PROMPT_TOO_LARGE error message with details about files in the prompt.
+ * Content is base64 encoded, so we calculate original size by multiplying by 0.75.
+ */
+export function formatPromptTooLargeError(files: { filename: string; content: string }[]): string {
+  const fileDetails =
+    files.length > 0
+      ? `\n\nFiles in prompt:\n${files.map((f) => `  - ${f.filename} (${((f.content.length * 0.75) / 1024).toFixed(0)} KB)`).join("\n")}`
+      : ""
+  return `PROMPT_TOO_LARGE: The prompt exceeds the model's context limit.${fileDetails}`
 }
 
 export const GithubCommand = cmd({
@@ -236,7 +241,7 @@ export const GithubInstallCommand = cmd({
                 "",
                 "    3. Go to a GitHub issue and comment `/oc summarize` to see the agent in action",
                 "",
-                "   Learn more about the GitHub agent - https://neo.khulnasoft.com/docs/github/#usage-examples",
+                "   Learn more about the GitHub agent - https://neocode.ai/docs/github/#usage-examples",
               ].join("\n"),
             )
           }
@@ -355,7 +360,7 @@ export const GithubInstallCommand = cmd({
 
             async function getInstallation() {
               return await fetch(
-                `https://api.neo.khulnasoft.com/get_github_app_installation?owner=${app.owner}&repo=${app.repo}`,
+                `https://api.neocode.ai/get_github_app_installation?owner=${app.owner}&repo=${app.repo}`,
               )
                 .then((res) => res.json())
                 .then((data) => data.installation)
@@ -368,7 +373,7 @@ export const GithubInstallCommand = cmd({
                 ? ""
                 : `\n        env:${providers[provider].env.map((e) => `\n          ${e}: \${{ secrets.${e} }}`).join("")}`
 
-            await Bun.write(
+            await Filesystem.write(
               path.join(app.root, WORKFLOW_FILE),
               `name: neocode
 
@@ -398,7 +403,7 @@ jobs:
           persist-credentials: false
 
       - name: Run neocode
-        uses: neopilot-ai/neocode/github@latest${envStr}
+        uses: anomalyco/neocode/github@latest${envStr}
         with:
           model: ${provider}/${model}`,
             )
@@ -467,7 +472,7 @@ export const GithubRunCommand = cmd({
           ? (payload as IssueCommentEvent | IssuesEvent).issue.number
           : (payload as PullRequestEvent | PullRequestReviewCommentEvent).pull_request.number
       const runUrl = `/${owner}/${repo}/actions/runs/${runId}`
-      const shareBaseUrl = isMock ? "https://dev.neo.khulnasoft.com" : "https://neo.khulnasoft.com"
+      const shareBaseUrl = isMock ? "https://dev.neocode.ai" : "https://neocode.ai"
 
       let appToken: string
       let octoRest: Octokit
@@ -683,7 +688,7 @@ export const GithubRunCommand = cmd({
 
       function normalizeOidcBaseUrl(): string {
         const value = process.env["OIDC_BASE_URL"]
-        if (!value) return "https://api.neo.khulnasoft.com"
+        if (!value) return "https://api.neocode.ai"
         return value.replace(/\/+$/, "")
       }
 
@@ -810,6 +815,7 @@ export const GithubRunCommand = cmd({
             replacement,
           })
         }
+
         return { userPrompt: prompt, promptFiles: imgData }
       }
 
@@ -917,10 +923,15 @@ export const GithubRunCommand = cmd({
 
         // result should always be assistant just satisfying type checker
         if (result.info.role === "assistant" && result.info.error) {
-          console.error("Agent error:", result.info.error)
-          throw new Error(
-            `${result.info.error.name}: ${"message" in result.info.error ? result.info.error.message : ""}`,
-          )
+          const err = result.info.error
+          console.error("Agent error:", err)
+
+          if (err.name === "ContextOverflowError") {
+            throw new Error(formatPromptTooLargeError(files))
+          }
+
+          const errorMsg = err.data?.message || ""
+          throw new Error(`${err.name}: ${errorMsg}`)
         }
 
         const text = extractResponseText(result.parts)
@@ -946,10 +957,15 @@ export const GithubRunCommand = cmd({
         })
 
         if (summary.info.role === "assistant" && summary.info.error) {
-          console.error("Summary agent error:", summary.info.error)
-          throw new Error(
-            `${summary.info.error.name}: ${"message" in summary.info.error ? summary.info.error.message : ""}`,
-          )
+          const err = summary.info.error
+          console.error("Summary agent error:", err)
+
+          if (err.name === "ContextOverflowError") {
+            throw new Error(formatPromptTooLargeError(files))
+          }
+
+          const errorMsg = err.data?.message || ""
+          throw new Error(`${err.name}: ${errorMsg}`)
         }
 
         const summaryText = extractResponseText(summary.parts)
@@ -1304,7 +1320,7 @@ Co-authored-by: ${actor} <${actor}@users.noreply.github.com>"`
           const titleAlt = encodeURIComponent(session.title.substring(0, 50))
           const title64 = Buffer.from(session.title.substring(0, 700), "utf8").toString("base64")
 
-          return `<a href="${shareBaseUrl}/s/${shareId}"><img width="200" alt="${titleAlt}" src="https://social-cards.khulnasoft.com/neocode-share/${title64}.png?model=${providerID}/${modelID}&version=${session.version}&id=${shareId}" /></a>\n`
+          return `<a href="${shareBaseUrl}/s/${shareId}"><img width="200" alt="${titleAlt}" src="https://social-cards.sst.dev/neocode-share/${title64}.png?model=${providerID}/${modelID}&version=${session.version}&id=${shareId}" /></a>\n`
         })()
         const shareUrl = shareId ? `[neocode session](${shareBaseUrl}/s/${shareId})&nbsp;&nbsp;|&nbsp;&nbsp;` : ""
         return `\n\n${image}${shareUrl}[github run](${runUrl})`

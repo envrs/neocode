@@ -121,8 +121,8 @@ export namespace Installation {
   )
 
   async function getBrewFormula() {
-    const tapFormula = await $`brew list --formula neopilot-ai/tap/neocode`.throws(false).quiet().text()
-    if (tapFormula.includes("neocode")) return "neopilot-ai/tap/neocode"
+    const tapFormula = await $`brew list --formula anomalyco/tap/neocode`.throws(false).quiet().text()
+    if (tapFormula.includes("neocode")) return "anomalyco/tap/neocode"
     const coreFormula = await $`brew list --formula neocode`.throws(false).quiet().text()
     if (coreFormula.includes("neocode")) return "neocode"
     return "neocode"
@@ -132,7 +132,7 @@ export namespace Installation {
     let cmd
     switch (method) {
       case "curl":
-        cmd = $`curl -fsSL https://raw.githubusercontent.com/neopilot-ai/neocode/refs/heads/dev/install | bash`.env({
+        cmd = $`curl -fsSL https://neocode.ai/install | bash`.env({
           ...process.env,
           VERSION: target,
         })
@@ -148,6 +148,16 @@ export namespace Installation {
         break
       case "brew": {
         const formula = await getBrewFormula()
+        if (formula.includes("/")) {
+          cmd =
+            $`brew tap anomalyco/tap && cd "$(brew --repo anomalyco/tap)" && git pull --ff-only && brew upgrade ${formula}`.env(
+              {
+                HOMEBREW_NO_AUTO_UPDATE: "1",
+                ...process.env,
+              },
+            )
+          break
+        }
         cmd = $`brew upgrade ${formula}`.env({
           HOMEBREW_NO_AUTO_UPDATE: "1",
           ...process.env,
@@ -188,14 +198,19 @@ export namespace Installation {
 
     if (detectedMethod === "brew") {
       const formula = await getBrewFormula()
-      if (formula === "neocode") {
-        return fetch("https://formulae.brew.sh/api/formula/neocode.json")
-          .then((res) => {
-            if (!res.ok) throw new Error(res.statusText)
-            return res.json()
-          })
-          .then((data: any) => data.versions.stable)
+      if (formula.includes("/")) {
+        const infoJson = await $`brew info --json=v2 ${formula}`.quiet().text()
+        const info = JSON.parse(infoJson)
+        const version = info.formulae?.[0]?.versions?.stable
+        if (!version) throw new Error(`Could not detect version for tap formula: ${formula}`)
+        return version
       }
+      return fetch("https://formulae.brew.sh/api/formula/neocode.json")
+        .then((res) => {
+          if (!res.ok) throw new Error(res.statusText)
+          return res.json()
+        })
+        .then((data: any) => data.versions.stable)
     }
 
     if (detectedMethod === "npm" || detectedMethod === "bun" || detectedMethod === "pnpm") {
@@ -236,7 +251,7 @@ export namespace Installation {
         .then((data: any) => data.version)
     }
 
-    return fetch("https://api.github.com/repos/neopilot-ai/neocode/releases/latest")
+    return fetch("https://api.github.com/repos/anomalyco/neocode/releases/latest")
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText)
         return res.json()
