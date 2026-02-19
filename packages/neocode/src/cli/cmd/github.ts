@@ -403,7 +403,7 @@ jobs:
           persist-credentials: false
 
       - name: Run neocode
-        uses: anomalyco/neocode/github@latest${envStr}
+        uses: neopilot-ai/neocode/github@latest${envStr}
         with:
           model: ${provider}/${model}`,
             )

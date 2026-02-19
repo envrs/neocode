@@ -121,8 +121,8 @@ export namespace Installation {
   )
 
   async function getBrewFormula() {
-    const tapFormula = await $`brew list --formula anomalyco/tap/neocode`.throws(false).quiet().text()
-    if (tapFormula.includes("neocode")) return "anomalyco/tap/neocode"
+    const tapFormula = await $`brew list --formula neopilot-ai/tap/neocode`.throws(false).quiet().text()
+    if (tapFormula.includes("neocode")) return "neopilot-ai/tap/neocode"
     const coreFormula = await $`brew list --formula neocode`.throws(false).quiet().text()
     if (coreFormula.includes("neocode")) return "neocode"
     return "neocode"
@@ -150,7 +150,7 @@ export namespace Installation {
         const formula = await getBrewFormula()
         if (formula.includes("/")) {
           cmd =
-            $`brew tap anomalyco/tap && cd "$(brew --repo anomalyco/tap)" && git pull --ff-only && brew upgrade ${formula}`.env(
+            $`brew tap neopilot-ai/tap && cd "$(brew --repo neopilot-ai/tap)" && git pull --ff-only && brew upgrade ${formula}`.env(
               {
                 HOMEBREW_NO_AUTO_UPDATE: "1",
                 ...process.env,
@@ -251,7 +251,7 @@ export namespace Installation {
         .then((data: any) => data.version)
     }
 
-    return fetch("https://api.github.com/repos/anomalyco/neocode/releases/latest")
+    return fetch("https://api.github.com/repos/neopilot-ai/neocode/releases/latest")
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText)
         return res.json()
