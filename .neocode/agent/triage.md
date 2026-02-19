@@ -69,10 +69,10 @@ When assigning to people here are the following rules:
 adamdotdev:
 ONLY assign adam if the issue will have the "desktop" label.
 
-fwang:
-ONLY assign fwang if the issue will have the "zen" label.
+envrs:
+ONLY assign envrs if the issue will have the "zen" label.
 
-jayair:
-ONLY assign jayair if the issue will have the "docs" label.
+envrs:
+ONLY assign envrs if the issue will have the "docs" label.
 
-In all other cases use best judgment. Avoid assigning to kommander needlessly, when in doubt assign to rekram1-node.
+In all other cases use best judgment. Avoid assigning to khulnasoft-bot needlessly, when in doubt assign to khulnasoft-bot.

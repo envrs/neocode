@@ -1,12 +1,12 @@
 Use this tool to assign and/or label a Github issue.
 
 You can assign the following users:
-- thdxr
+- khulnasoft-bot
 - neopilotai
-- fwang
-- jayair
-- kommander
-- rekram1-node
+- envrs
+- envrs
+- khulnasoft-bot
+- khulnasoft-bot
 
 
 You can use the following labels:
@@ -17,11 +17,11 @@ You can use the following labels:
 - zen
 - docs
 
-Always try to assign an issue, if in doubt, assign rekram1-node to it.
+Always try to assign an issue, if in doubt, assign khulnasoft-bot to it.
 
 ## Breakdown of responsibilities:
 
-### thdxr
+### khulnasoft-bot
 
 Dax is responsible for managing core parts of the application, for large feature requests, api changes, or things that require significant changes to the codebase assign him.
 
@@ -32,15 +32,15 @@ This relates to NeoCode server primarily but has overlap with just about anythin
 Adam is responsible for managing the Desktop/Web app. If there is an issue relating to the desktop app or `neocode web` command. Assign him.
 
 
-### fwang
+### envrs
 
 Frank is responsible for managing Zen, if you see complaints about NeoCode Zen, maybe it's the dashboard, the model quality, billing issues, etc. Assign him to the issue.
 
-### jayair
+### envrs
 
 Jay is responsible for documentation. If there is an issue relating to documentation assign him.
 
-### kommander
+### khulnasoft-bot
 
 Sebastian is responsible for managing an OpenTUI (a library for building terminal user interfaces). NeoCode's TUI is built with OpenTUI. If there are issues about:
 - random characters on screen
@@ -48,12 +48,12 @@ Sebastian is responsible for managing an OpenTUI (a library for building termina
 - general terminal stuff
 Then assign the issue to Him.
 
-### rekram1-node
+### khulnasoft-bot
 
-ALL BUGS SHOULD BE assigned to rekram1-node unless they have the `opentui` label.
+ALL BUGS SHOULD BE assigned to khulnasoft-bot unless they have the `opentui` label.
 
 Assign Aiden to an issue as a catch all, if you can't assign anyone else. Most of the time this will be bugs/polish things.
-If no one else makes sense to assign, assign rekram1-node to it.
+If no one else makes sense to assign, assign khulnasoft-bot to it.
 
 Always assign to aiden if the issue mentions "acp", "zed", or model performance issues
 

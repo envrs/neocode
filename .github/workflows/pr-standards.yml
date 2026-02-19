@@ -9,13 +9,9 @@ jobs:
     if: |
       github.event.pull_request.user.login != 'actions-user' &&
       github.event.pull_request.user.login != 'neocode' &&
-      github.event.pull_request.user.login != 'rekram1-node' &&
-      github.event.pull_request.user.login != 'thdxr' &&
-      github.event.pull_request.user.login != 'kommander' &&
-      github.event.pull_request.user.login != 'jayair' &&
-      github.event.pull_request.user.login != 'fwang' &&
+      github.event.pull_request.user.login != 'khulnasoft-bot' &&
+      github.event.pull_request.user.login != 'envrs' &&
       github.event.pull_request.user.login != 'neopilotai' &&
-      github.event.pull_request.user.login != 'iamdavidhill' &&
       github.event.pull_request.user.login != 'neocode-agent[bot]'
     runs-on: ubuntu-latest
     permissions:
