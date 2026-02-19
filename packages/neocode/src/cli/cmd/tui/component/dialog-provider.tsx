@@ -220,7 +220,7 @@ function ApiMethod(props: ApiMethodProps) {
               NeoCode Zen gives you access to all the best coding models at the cheapest prices with a single API key.
             </text>
             <text fg={theme.text}>
-              Go to <span style={{ fg: theme.primary }}>https://neocode.ai/zen</span> to get a key
+              Go to <span style={{ fg: theme.primary }}>https://neo.khulnasoft.com/zen</span> to get a key
             </text>
           </box>
         ) : undefined

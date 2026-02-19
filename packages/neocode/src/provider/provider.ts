@@ -360,7 +360,7 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://neocode.ai/",
+            "HTTP-Referer": "https://neo.khulnasoft.com/",
             "X-Title": "neocode",
           },
         },
@@ -371,7 +371,7 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "http-referer": "https://neocode.ai/",
+            "http-referer": "https://neo.khulnasoft.com/",
             "x-title": "neocode",
           },
         },
@@ -459,7 +459,7 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://neocode.ai/",
+            "HTTP-Referer": "https://neo.khulnasoft.com/",
             "X-Title": "neocode",
           },
         },
@@ -583,7 +583,7 @@ export namespace Provider {
         autoload: false,
         options: {
           headers: {
-            "HTTP-Referer": "https://neocode.ai/",
+            "HTTP-Referer": "https://neo.khulnasoft.com/",
             "X-Title": "neocode",
           },
         },

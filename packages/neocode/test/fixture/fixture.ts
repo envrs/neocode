@@ -26,7 +26,7 @@ export async function tmpdir<T>(options?: TmpDirOptions<T>) {
     await Bun.write(
       path.join(dirpath, "neocode.json"),
       JSON.stringify({
-        $schema: "https://neocode.ai/config.json",
+        $schema: "https://neo.khulnasoft.com/config.json",
         ...options.config,
       }),
     )

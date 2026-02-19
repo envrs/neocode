@@ -1210,7 +1210,7 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
       providerID: "neocode",
       api: {
         id: "neocode-test",
-        url: "https://api.neocode.ai",
+        url: "https://api.neo.khulnasoft.com",
         npm: "@ai-sdk/openai-compatible",
       },
     }
@@ -1244,7 +1244,7 @@ describe("ProviderTransform.message - strip openai metadata when store=false", (
       providerID: "neocode",
       api: {
         id: "neocode-test",
-        url: "https://api.neocode.ai",
+        url: "https://api.neo.khulnasoft.com",
         npm: "@ai-sdk/openai-compatible",
       },
     }

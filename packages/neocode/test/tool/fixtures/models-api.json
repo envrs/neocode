@@ -20977,9 +20977,9 @@
     "id": "neocode",
     "env": ["NEOCODE_API_KEY"],
     "npm": "@ai-sdk/openai-compatible",
-    "api": "https://neocode.ai/zen/v1",
+    "api": "https://neo.khulnasoft.com/zen/v1",
     "name": "NeoCode Zen",
-    "doc": "https://neocode.ai/docs/zen",
+    "doc": "https://neo.khulnasoft.com/docs/zen",
     "models": {
       "glm-4.7": {
         "id": "glm-4.7",

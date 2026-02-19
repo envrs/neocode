@@ -117,7 +117,7 @@ export namespace Server {
               )
                 return input
 
-              // *.neocode.ai (https only, adjust if needed)
+              // *.neo.khulnasoft.com (https only, adjust if needed)
               if (/^https:\/\/([a-z0-9-]+\.)*neocode\.ai$/.test(input)) {
                 return input
               }
@@ -543,11 +543,11 @@ export namespace Server {
         .all("/*", async (c) => {
           const path = c.req.path
 
-          const response = await proxy(`https://app.neocode.ai${path}`, {
+          const response = await proxy(`https://app.neo.khulnasoft.com${path}`, {
             ...c.req,
             headers: {
               ...c.req.raw.headers,
-              host: "app.neocode.ai",
+              host: "app.neo.khulnasoft.com",
             },
           })
           response.headers.set(

@@ -245,7 +245,7 @@ describe("session.llm.stream", () => {
         await Bun.write(
           path.join(dir, "neocode.json"),
           JSON.stringify({
-            $schema: "https://neocode.ai/config.json",
+            $schema: "https://neo.khulnasoft.com/config.json",
             enabled_providers: [providerID],
             provider: {
               [providerID]: {
@@ -369,7 +369,7 @@ describe("session.llm.stream", () => {
         await Bun.write(
           path.join(dir, "neocode.json"),
           JSON.stringify({
-            $schema: "https://neocode.ai/config.json",
+            $schema: "https://neo.khulnasoft.com/config.json",
             enabled_providers: ["openai"],
             provider: {
               openai: {
@@ -498,7 +498,7 @@ describe("session.llm.stream", () => {
         await Bun.write(
           path.join(dir, "neocode.json"),
           JSON.stringify({
-            $schema: "https://neocode.ai/config.json",
+            $schema: "https://neo.khulnasoft.com/config.json",
             enabled_providers: [providerID],
             provider: {
               [providerID]: {
@@ -599,7 +599,7 @@ describe("session.llm.stream", () => {
         await Bun.write(
           path.join(dir, "neocode.json"),
           JSON.stringify({
-            $schema: "https://neocode.ai/config.json",
+            $schema: "https://neo.khulnasoft.com/config.json",
             enabled_providers: [providerID],
             provider: {
               [providerID]: {

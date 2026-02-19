@@ -68,7 +68,7 @@ export namespace Config {
   export const state = Instance.state(async () => {
     const auth = await Auth.all()
 
-    // Config loading order (low -> high precedence): https://neocode.ai/docs/config#precedence-order
+    // Config loading order (low -> high precedence): https://neo.khulnasoft.com/docs/config#precedence-order
     // 1) Remote .well-known/neocode (org defaults)
     // 2) Global config (~/.config/neocode/neocode.json{,c})
     // 3) Custom config (NEOCODE_CONFIG)
@@ -88,7 +88,7 @@ export namespace Config {
         const wellknown = (await response.json()) as any
         const remoteConfig = wellknown.config ?? {}
         // Add $schema to prevent load() from trying to write back to a non-existent file
-        if (!remoteConfig.$schema) remoteConfig.$schema = "https://neocode.ai/config.json"
+        if (!remoteConfig.$schema) remoteConfig.$schema = "https://neo.khulnasoft.com/config.json"
         result = merge(result, await load(JSON.stringify(remoteConfig), `${key}/.well-known/neocode`))
         log.debug("loaded remote config from well-known", { url: key })
       }
@@ -1014,7 +1014,7 @@ export namespace Config {
       command: z
         .record(z.string(), Command)
         .optional()
-        .describe("Command configuration, see https://neocode.ai/docs/commands"),
+        .describe("Command configuration, see https://neo.khulnasoft.com/docs/commands"),
       skills: Skills.optional().describe("Additional skill folder paths"),
       watcher: z
         .object({
@@ -1081,7 +1081,7 @@ export namespace Config {
         })
         .catchall(Agent)
         .optional()
-        .describe("Agent configuration, see https://neocode.ai/docs/agents"),
+        .describe("Agent configuration, see https://neo.khulnasoft.com/docs/agents"),
       provider: z
         .record(z.string(), Provider)
         .optional()
@@ -1218,7 +1218,7 @@ export namespace Config {
         .then(async (mod) => {
           const { provider, model, ...rest } = mod.default
           if (provider && model) result.model = `${provider}/${model}`
-          result["$schema"] = "https://neocode.ai/config.json"
+          result["$schema"] = "https://neo.khulnasoft.com/config.json"
           result = mergeDeep(result, rest)
           await Filesystem.writeJson(path.join(Global.Path.config, "config.json"), result)
           await fs.unlink(legacy)
@@ -1307,9 +1307,9 @@ export namespace Config {
     const parsed = Info.safeParse(data)
     if (parsed.success) {
       if (!parsed.data.$schema) {
-        parsed.data.$schema = "https://neocode.ai/config.json"
+        parsed.data.$schema = "https://neo.khulnasoft.com/config.json"
         // Write the $schema to the original text to preserve variables like {env:VAR}
-        const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://neocode.ai/config.json",')
+        const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://neo.khulnasoft.com/config.json",')
         await Filesystem.write(configFilepath, updated).catch(() => {})
       }
       const data = parsed.data
