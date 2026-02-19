@@ -55,6 +55,7 @@ const extraArgs = (() => {
 const [serverPort, webPort] = await Promise.all([freePort(), freePort()])
 
 const sandbox = await fs.mkdtemp(path.join(os.tmpdir(), "neocode-e2e-"))
+const keepSandbox = process.env.NEOCODE_E2E_KEEP_SANDBOX === "1"
 
 const serverEnv = {
   ...process.env,
@@ -83,58 +84,95 @@ const runnerEnv = {
   PLAYWRIGHT_PORT: String(webPort),
 } satisfies Record<string, string>
 
-const seed = Bun.spawn(["bun", "script/seed-e2e.ts"], {
-  cwd: neocodeDir,
-  env: serverEnv,
-  stdout: "inherit",
-  stderr: "inherit",
-})
+let seed: ReturnType<typeof Bun.spawn> | undefined
+let runner: ReturnType<typeof Bun.spawn> | undefined
+let server: { stop: () => Promise<void> | void } | undefined
+let inst: { Instance: { disposeAll: () => Promise<void> | void } } | undefined
+let cleaned = false
 
-const seedExit = await seed.exited
-if (seedExit !== 0) {
-  process.exit(seedExit)
+const cleanup = async () => {
+  if (cleaned) return
+  cleaned = true
+
+  if (seed && seed.exitCode === null) seed.kill("SIGTERM")
+  if (runner && runner.exitCode === null) runner.kill("SIGTERM")
+
+  const jobs = [
+    inst?.Instance.disposeAll(),
+    server?.stop(),
+    keepSandbox ? undefined : fs.rm(sandbox, { recursive: true, force: true }),
+  ].filter(Boolean)
+  await Promise.allSettled(jobs)
 }
 
-Object.assign(process.env, serverEnv)
-process.env.AGENT = "1"
-process.env.NEOCODE = "1"
+const shutdown = (code: number, reason: string) => {
+  process.exitCode = code
+  void cleanup().finally(() => {
+    console.error(`e2e-local shutdown: ${reason}`)
+    process.exit(code)
+  })
+}
 
-const log = await import("../../neocode/src/util/log")
-const install = await import("../../neocode/src/installation")
-await log.Log.init({
-  print: true,
-  dev: install.Installation.isLocal(),
-  level: "WARN",
+const reportInternalError = (reason: string, error: unknown) => {
+  console.warn(`e2e-local ignored server error: ${reason}`)
+  console.warn(error)
+}
+
+process.once("SIGINT", () => shutdown(130, "SIGINT"))
+process.once("SIGTERM", () => shutdown(143, "SIGTERM"))
+process.once("SIGHUP", () => shutdown(129, "SIGHUP"))
+process.once("uncaughtException", (error) => {
+  reportInternalError("uncaughtException", error)
+})
+process.once("unhandledRejection", (error) => {
+  reportInternalError("unhandledRejection", error)
 })
 
-const servermod = await import("../../neocode/src/server/server")
-const inst = await import("../../neocode/src/project/instance")
-const server = servermod.Server.listen({ port: serverPort, hostname: "127.0.0.1" })
-console.log(`neocode server listening on http://127.0.0.1:${serverPort}`)
+let code = 1
 
-const result = await (async () => {
-  try {
+try {
+  seed = Bun.spawn(["bun", "script/seed-e2e.ts"], {
+    cwd: neocodeDir,
+    env: serverEnv,
+    stdout: "inherit",
+    stderr: "inherit",
+  })
+
+  const seedExit = await seed.exited
+  if (seedExit !== 0) {
+    code = seedExit
+  } else {
+    Object.assign(process.env, serverEnv)
+    process.env.AGENT = "1"
+    process.env.NEOCODE = "1"
+
+    const log = await import("../../neocode/src/util/log")
+    const install = await import("../../neocode/src/installation")
+    await log.Log.init({
+      print: true,
+      dev: install.Installation.isLocal(),
+      level: "WARN",
+    })
+
+    const servermod = await import("../../neocode/src/server/server")
+    inst = await import("../../neocode/src/project/instance")
+    server = servermod.Server.listen({ port: serverPort, hostname: "127.0.0.1" })
+    console.log(`neocode server listening on http://127.0.0.1:${serverPort}`)
+
     await waitForHealth(`http://127.0.0.1:${serverPort}/global/health`)
-
-    const runner = Bun.spawn(["bun", "test:e2e", ...extraArgs], {
+    runner = Bun.spawn(["bun", "test:e2e", ...extraArgs], {
       cwd: appDir,
       env: runnerEnv,
       stdout: "inherit",
       stderr: "inherit",
     })
-
-    return { code: await runner.exited }
-  } catch (error) {
-    return { error }
-  } finally {
-    await inst.Instance.disposeAll()
-    await server.stop()
+    code = await runner.exited
   }
-})()
-
-if ("error" in result) {
-  console.error(result.error)
-  process.exit(1)
+} catch (error) {
+  console.error(error)
+  code = 1
+} finally {
+  await cleanup()
 }
 
-process.exit(result.code)
+process.exit(code)
