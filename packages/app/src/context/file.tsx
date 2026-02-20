@@ -49,7 +49,35 @@ function errorMessage(error: unknown) {
   return "Unknown error"
 }
 
-export const { use: useFile, provider: FileProvider } = createSimpleContext({
+import type { FileNode } from "@neocode-ai/sdk/v2"
+
+export interface FileContext {
+  ready(): boolean
+  normalize(input: string): string
+  tab(input: string): string
+  pathFromTab(tab: string): string | undefined
+  tree: {
+    list: (dir: string, options?: { force?: boolean }) => Promise<void>
+    refresh: (input: string) => Promise<void>
+    state: (input: string) => { loading?: boolean; loaded?: boolean; error?: string; expanded?: boolean } | undefined
+    children: (input: string) => FileNode[]
+    expand: (input: string) => void
+    collapse: (input: string) => void
+    toggle: (input: string) => void
+  }
+  get(input: string): FileState | undefined
+  load(input: string, options?: { force?: boolean }): Promise<void>
+  scrollTop(input: string): number | undefined
+  scrollLeft(input: string): number | undefined
+  setScrollTop(input: string, top: number): void
+  setScrollLeft(input: string, left: number): void
+  selectedLines(input: string): SelectedLineRange | null | undefined
+  setSelectedLines(input: string, range: SelectedLineRange | null): void
+  searchFiles(query: string): Promise<string[]>
+  searchFilesAndDirectories(query: string): Promise<string[]>
+}
+
+export const { use: useFile, provider: FileProvider } = createSimpleContext<FileContext, {}>({
   name: "File",
   gate: false,
   init: () => {
@@ -200,7 +228,7 @@ export const { use: useFile, provider: FileProvider } = createSimpleContext({
         () => [],
       )
 
-    const stop = sdk.event.listen((e) => {
+    const stop = sdk.event.listen((e: any) => {
       invalidateFromWatcher(e.details, {
         normalize: path.normalize,
         hasFile: (file) => Boolean(store.file[file]),
@@ -229,7 +257,7 @@ export const { use: useFile, provider: FileProvider } = createSimpleContext({
       return state
     }
 
-    function withPath(input: string, action: (file: string) => unknown) {
+    function withPath<T>(input: string, action: (file: string) => T): T {
       return action(path.normalize(input))
     }
     const scrollTop = (input: string) => withPath(input, (file) => view().scrollTop(file))

@@ -5,7 +5,10 @@ import { retry } from "@neocode-ai/util/retry"
 import { createSimpleContext } from "@neocode-ai/ui/context"
 import { useGlobalSync } from "./global-sync"
 import { useSDK } from "./sdk"
-import type { Message, Part } from "@neocode-ai/sdk/v2/client"
+import type { State } from "./global-sync/types"
+import type { Accessor } from "solid-js"
+import type { SetStoreFunction } from "solid-js/store"
+import type { Session, Project, Message, Part } from "@neocode-ai/sdk/v2"
 
 function sortParts(parts: Part[]) {
   return parts.filter((part) => !!part?.id).sort((a, b) => cmp(a.id, b.id))
@@ -90,7 +93,42 @@ function setOptimisticRemove(setStore: (...args: unknown[]) => void, input: Opti
   })
 }
 
-export const { use: useSync, provider: SyncProvider } = createSimpleContext({
+export interface SyncContext {
+  data: State
+  set: SetStoreFunction<State>
+  status: State["status"]
+  ready: boolean
+  project: Project | undefined
+  session: {
+    get(sessionID: string): Session | undefined
+    optimistic: {
+      add(input: { directory?: string; sessionID: string; message: Message; parts: Part[] }): void
+      remove(input: { directory?: string; sessionID: string; messageID: string }): void
+    }
+    addOptimisticMessage(input: {
+      sessionID: string
+      messageID: string
+      parts: Part[]
+      agent: string
+      model: { providerID: string; modelID: string }
+    }): void
+    sync(sessionID: string): Promise<void>
+    diff(sessionID: string): Promise<void>
+    todo(sessionID: string): Promise<void>
+    history: {
+      more(sessionID: string): boolean
+      loading(sessionID: string): boolean
+      loadMore(sessionID: string, count?: number): Promise<void>
+    }
+    fetch(count?: number): Promise<void>
+    more: Accessor<boolean>
+    archive(sessionID: string): Promise<void>
+  }
+  absolute(path: string): string
+  directory: string
+}
+
+export const { use: useSync, provider: SyncProvider } = createSimpleContext<SyncContext, {}>({
   name: "Sync",
   init: () => {
     const globalSync = useGlobalSync()
@@ -244,33 +282,33 @@ export const { use: useSync, provider: SyncProvider } = createSimpleContext({
           const sessionReq = hasSession
             ? Promise.resolve()
             : retry(() => client.session.get({ sessionID })).then((session) => {
-                const data = session.data
-                if (!data) return
-                setStore(
-                  "session",
-                  produce((draft) => {
-                    const match = Binary.search(draft, sessionID, (s) => s.id)
-                    if (match.found) {
-                      draft[match.index] = data
-                      return
-                    }
-                    draft.splice(match.index, 0, data)
-                  }),
-                )
-              })
+              const data = session.data
+              if (!data) return
+              setStore(
+                "session",
+                produce((draft) => {
+                  const match = Binary.search(draft, sessionID, (s) => s.id)
+                  if (match.found) {
+                    draft[match.index] = data
+                    return
+                  }
+                  draft.splice(match.index, 0, data)
+                }),
+              )
+            })
 
           const messagesReq =
             hasMessages && hydrated
               ? Promise.resolve()
               : loadMessages({
-                  directory,
-                  client,
-                  setStore,
-                  sessionID,
-                  limit,
-                })
+                directory,
+                client,
+                setStore,
+                sessionID,
+                limit,
+              })
 
-          return runInflight(inflight, key, () => Promise.all([sessionReq, messagesReq]).then(() => {}))
+          return runInflight(inflight, key, () => Promise.all([sessionReq, messagesReq]).then(() => { }))
         },
         async diff(sessionID: string) {
           const directory = sdk.directory

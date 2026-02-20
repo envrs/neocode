@@ -249,7 +249,7 @@ function createGlobalSync() {
     return promise
   }
 
-  const unsub = globalSDK.event.listen((e) => {
+  const unsub = globalSDK.event.listen((e: any) => {
     const directory = e.name
     const event = e.details
 

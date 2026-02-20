@@ -1,4 +1,5 @@
 import { createNeocodeClient, createNeocodeServer } from "@neocode-ai/sdk"
+import { pathToFileURL } from "bun"
 
 const server = await createNeocodeServer()
 const client = createNeocodeClient({ baseUrl: server.url })
@@ -17,7 +18,7 @@ for await (const file of input) {
           {
             type: "file",
             mime: "text/plain",
-            url: `file://${file}`,
+            url: pathToFileURL(file).href,
           },
           {
             type: "text",
@@ -41,7 +42,7 @@ await Promise.all(
           {
             type: "file",
             mime: "text/plain",
-            url: `file://${file}`,
+            url: pathToFileURL(file).href,
           },
           {
             type: "text",

@@ -90,6 +90,22 @@ export type EventFileEdited = {
   }
 }
 
+export type OutputFormatText = {
+  type: "text"
+}
+
+export type JsonSchema = {
+  [key: string]: unknown
+}
+
+export type OutputFormatJsonSchema = {
+  type: "json_schema"
+  schema: JsonSchema
+  retryCount?: number
+}
+
+export type OutputFormat = OutputFormatText | OutputFormatJsonSchema
+
 export type FileDiff = {
   file: string
   before: string
@@ -106,6 +122,7 @@ export type UserMessage = {
   time: {
     created: number
   }
+  format?: OutputFormat
   summary?: {
     title?: string
     body?: string
@@ -152,6 +169,22 @@ export type MessageAbortedError = {
   }
 }
 
+export type StructuredOutputError = {
+  name: "StructuredOutputError"
+  data: {
+    message: string
+    retries: number
+  }
+}
+
+export type ContextOverflowError = {
+  name: "ContextOverflowError"
+  data: {
+    message: string
+    responseBody?: string
+  }
+}
+
 export type ApiError = {
   name: "APIError"
   data: {
@@ -176,7 +209,14 @@ export type AssistantMessage = {
     created: number
     completed?: number
   }
-  error?: ProviderAuthError | UnknownError | MessageOutputLengthError | MessageAbortedError | ApiError
+  error?:
+  | ProviderAuthError
+  | UnknownError
+  | MessageOutputLengthError
+  | MessageAbortedError
+  | StructuredOutputError
+  | ContextOverflowError
+  | ApiError
   parentID: string
   modelID: string
   providerID: string
@@ -189,6 +229,7 @@ export type AssistantMessage = {
   summary?: boolean
   cost: number
   tokens: {
+    total?: number
     input: number
     output: number
     reasoning: number
@@ -197,6 +238,8 @@ export type AssistantMessage = {
       write: number
     }
   }
+  structured?: unknown
+  variant?: string
   finish?: string
 }
 
@@ -403,6 +446,7 @@ export type StepFinishPart = {
   snapshot?: string
   cost: number
   tokens: {
+    total?: number
     input: number
     output: number
     reasoning: number
@@ -481,7 +525,17 @@ export type EventMessagePartUpdated = {
   type: "message.part.updated"
   properties: {
     part: Part
-    delta?: string
+  }
+}
+
+export type EventMessagePartDelta = {
+  type: "message.part.delta"
+  properties: {
+    sessionID: string
+    messageID: string
+    partID: string
+    field: string
+    delta: string
   }
 }
 
@@ -525,17 +579,17 @@ export type EventPermissionReplied = {
 
 export type SessionStatus =
   | {
-      type: "idle"
-    }
+    type: "idle"
+  }
   | {
-      type: "retry"
-      attempt: number
-      message: string
-      next: number
-    }
+    type: "retry"
+    attempt: number
+    message: string
+    next: number
+  }
   | {
-      type: "busy"
-    }
+    type: "busy"
+  }
 
 export type EventSessionStatus = {
   type: "session.status"
@@ -651,10 +705,6 @@ export type Todo = {
    * Priority level of the task: high, medium, low
    */
   priority: string
-  /**
-   * Unique identifier for the todo item
-   */
-  id: string
 }
 
 export type EventTodoUpdated = {
@@ -676,23 +726,23 @@ export type EventTuiCommandExecute = {
   type: "tui.command.execute"
   properties: {
     command:
-      | "session.list"
-      | "session.new"
-      | "session.share"
-      | "session.interrupt"
-      | "session.compact"
-      | "session.page.up"
-      | "session.page.down"
-      | "session.line.up"
-      | "session.line.down"
-      | "session.half.page.up"
-      | "session.half.page.down"
-      | "session.first"
-      | "session.last"
-      | "prompt.clear"
-      | "prompt.submit"
-      | "agent.cycle"
-      | string
+    | "session.list"
+    | "session.new"
+    | "session.share"
+    | "session.interrupt"
+    | "session.compact"
+    | "session.page.up"
+    | "session.page.down"
+    | "session.line.up"
+    | "session.line.down"
+    | "session.half.page.up"
+    | "session.half.page.down"
+    | "session.first"
+    | "session.last"
+    | "prompt.clear"
+    | "prompt.submit"
+    | "agent.cycle"
+    | string
   }
 }
 
@@ -819,7 +869,14 @@ export type EventSessionError = {
   type: "session.error"
   properties: {
     sessionID?: string
-    error?: ProviderAuthError | UnknownError | MessageOutputLengthError | MessageAbortedError | ApiError
+    error?:
+    | ProviderAuthError
+    | UnknownError
+    | MessageOutputLengthError
+    | MessageAbortedError
+    | StructuredOutputError
+    | ContextOverflowError
+    | ApiError
   }
 }
 
@@ -897,6 +954,7 @@ export type Event =
   | EventMessageUpdated
   | EventMessageRemoved
   | EventMessagePartUpdated
+  | EventMessagePartDelta
   | EventMessagePartRemoved
   | EventPermissionAsked
   | EventPermissionReplied
@@ -1309,6 +1367,10 @@ export type KeybindsConfig = {
    * Toggle tips on home screen
    */
   tips_toggle?: string
+  /**
+   * Toggle thinking blocks visibility
+   */
+  display_thinking?: string
 }
 
 /**
@@ -1352,26 +1414,26 @@ export type PermissionRuleConfig = PermissionActionConfig | PermissionObjectConf
 
 export type PermissionConfig =
   | {
-      __originalKeys?: Array<string>
-      read?: PermissionRuleConfig
-      edit?: PermissionRuleConfig
-      glob?: PermissionRuleConfig
-      grep?: PermissionRuleConfig
-      list?: PermissionRuleConfig
-      bash?: PermissionRuleConfig
-      task?: PermissionRuleConfig
-      external_directory?: PermissionRuleConfig
-      todowrite?: PermissionActionConfig
-      todoread?: PermissionActionConfig
-      question?: PermissionActionConfig
-      webfetch?: PermissionActionConfig
-      websearch?: PermissionActionConfig
-      codesearch?: PermissionActionConfig
-      lsp?: PermissionRuleConfig
-      doom_loop?: PermissionActionConfig
-      skill?: PermissionRuleConfig
-      [key: string]: PermissionRuleConfig | Array<string> | PermissionActionConfig | undefined
-    }
+    __originalKeys?: Array<string>
+    read?: PermissionRuleConfig
+    edit?: PermissionRuleConfig
+    glob?: PermissionRuleConfig
+    grep?: PermissionRuleConfig
+    list?: PermissionRuleConfig
+    bash?: PermissionRuleConfig
+    task?: PermissionRuleConfig
+    external_directory?: PermissionRuleConfig
+    todowrite?: PermissionActionConfig
+    todoread?: PermissionActionConfig
+    question?: PermissionActionConfig
+    webfetch?: PermissionActionConfig
+    websearch?: PermissionActionConfig
+    codesearch?: PermissionActionConfig
+    lsp?: PermissionRuleConfig
+    doom_loop?: PermissionActionConfig
+    skill?: PermissionRuleConfig
+    [key: string]: PermissionRuleConfig | Array<string> | PermissionActionConfig | undefined
+  }
   | PermissionActionConfig
 
 export type AgentConfig = {
@@ -1403,9 +1465,9 @@ export type AgentConfig = {
     [key: string]: unknown
   }
   /**
-   * Hex color code for the agent (e.g., #FF5733)
+   * Hex color code (e.g., #FF5733) or theme color (e.g., primary)
    */
-  color?: string
+  color?: string | "primary" | "secondary" | "accent" | "success" | "warning" | "error" | "info"
   /**
    * Maximum number of agentic iterations before forcing text-only response
    */
@@ -1416,23 +1478,30 @@ export type AgentConfig = {
   maxSteps?: number
   permission?: PermissionConfig
   [key: string]:
-    | unknown
-    | string
-    | number
-    | {
-        [key: string]: boolean
-      }
-    | boolean
-    | "subagent"
-    | "primary"
-    | "all"
-    | {
-        [key: string]: unknown
-      }
-    | string
-    | number
-    | PermissionConfig
-    | undefined
+  | unknown
+  | string
+  | number
+  | {
+    [key: string]: boolean
+  }
+  | boolean
+  | "subagent"
+  | "primary"
+  | "all"
+  | {
+    [key: string]: unknown
+  }
+  | string
+  | "primary"
+  | "secondary"
+  | "accent"
+  | "success"
+  | "warning"
+  | "error"
+  | "info"
+  | number
+  | PermissionConfig
+  | undefined
 }
 
 export type ProviderConfig = {
@@ -1452,10 +1521,10 @@ export type ProviderConfig = {
       temperature?: boolean
       tool_call?: boolean
       interleaved?:
-        | true
-        | {
-            field: "reasoning_content" | "reasoning_details"
-          }
+      | true
+      | {
+        field: "reasoning_content" | "reasoning_details"
+      }
       cost?: {
         input: number
         output: number
@@ -1486,7 +1555,8 @@ export type ProviderConfig = {
         [key: string]: string
       }
       provider?: {
-        npm: string
+        npm?: string
+        api?: string
       }
       /**
        * Variant-specific configuration
@@ -1651,6 +1721,10 @@ export type Config = {
      * Additional paths to skill folders
      */
     paths?: Array<string>
+    /**
+     * URLs to fetch skills from (e.g., https://example.com/.well-known/skills/)
+     */
+    urls?: Array<string>
   }
   watcher?: {
     ignore?: Array<string>
@@ -1725,43 +1799,43 @@ export type Config = {
    */
   mcp?: {
     [key: string]:
-      | McpLocalConfig
-      | McpRemoteConfig
-      | {
-          enabled: boolean
-        }
+    | McpLocalConfig
+    | McpRemoteConfig
+    | {
+      enabled: boolean
+    }
   }
   formatter?:
-    | false
-    | {
-        [key: string]: {
-          disabled?: boolean
-          command?: Array<string>
-          environment?: {
-            [key: string]: string
-          }
-          extensions?: Array<string>
-        }
+  | false
+  | {
+    [key: string]: {
+      disabled?: boolean
+      command?: Array<string>
+      environment?: {
+        [key: string]: string
       }
+      extensions?: Array<string>
+    }
+  }
   lsp?:
-    | false
+  | false
+  | {
+    [key: string]:
     | {
-        [key: string]:
-          | {
-              disabled: true
-            }
-          | {
-              command: Array<string>
-              extensions?: Array<string>
-              disabled?: boolean
-              env?: {
-                [key: string]: string
-              }
-              initialization?: {
-                [key: string]: unknown
-              }
-            }
+      disabled: true
+    }
+    | {
+      command: Array<string>
+      extensions?: Array<string>
+      disabled?: boolean
+      env?: {
+        [key: string]: string
       }
+      initialization?: {
+        [key: string]: unknown
+      }
+    }
+  }
   /**
    * Additional instruction files or patterns to include
    */
@@ -1786,6 +1860,10 @@ export type Config = {
      * Enable pruning of old tool outputs (default: true)
      */
     prune?: boolean
+    /**
+     * Token buffer for compaction. Leaves enough window to avoid overflow during compaction.
+     */
+    reserved?: number
   }
   experimental?: {
     disable_paste_summary?: boolean
@@ -1879,10 +1957,10 @@ export type Model = {
       pdf: boolean
     }
     interleaved:
-      | boolean
-      | {
-          field: "reasoning_content" | "reasoning_details"
-        }
+    | boolean
+    | {
+      field: "reasoning_content" | "reasoning_details"
+    }
   }
   cost: {
     input: number
@@ -1964,6 +2042,45 @@ export type WorktreeRemoveInput = {
 
 export type WorktreeResetInput = {
   directory: string
+}
+
+export type ProjectSummary = {
+  id: string
+  name?: string
+  worktree: string
+}
+
+export type GlobalSession = {
+  id: string
+  slug: string
+  projectID: string
+  directory: string
+  parentID?: string
+  summary?: {
+    additions: number
+    deletions: number
+    files: number
+    diffs?: Array<FileDiff>
+  }
+  share?: {
+    url: string
+  }
+  title: string
+  version: string
+  time: {
+    created: number
+    updated: number
+    compacting?: number
+    archived?: number
+  }
+  permission?: PermissionRuleset
+  revert?: {
+    messageID: string
+    partID?: string
+    snapshot?: string
+    diff?: string
+  }
+  project: ProjectSummary | null
 }
 
 export type McpResource = {
@@ -2792,6 +2909,51 @@ export type WorktreeResetResponses = {
 
 export type WorktreeResetResponse = WorktreeResetResponses[keyof WorktreeResetResponses]
 
+export type ExperimentalSessionListData = {
+  body?: never
+  path?: never
+  query?: {
+    /**
+     * Filter sessions by project directory
+     */
+    directory?: string
+    /**
+     * Only return root sessions (no parentID)
+     */
+    roots?: boolean
+    /**
+     * Filter sessions updated on or after this timestamp (milliseconds since epoch)
+     */
+    start?: number
+    /**
+     * Return sessions updated before this timestamp (milliseconds since epoch)
+     */
+    cursor?: number
+    /**
+     * Filter sessions by title (case-insensitive)
+     */
+    search?: string
+    /**
+     * Maximum number of sessions to return
+     */
+    limit?: number
+    /**
+     * Include archived sessions (default false)
+     */
+    archived?: boolean
+  }
+  url: "/experimental/session"
+}
+
+export type ExperimentalSessionListResponses = {
+  /**
+   * List of sessions
+   */
+  200: Array<GlobalSession>
+}
+
+export type ExperimentalSessionListResponse = ExperimentalSessionListResponses[keyof ExperimentalSessionListResponses]
+
 export type ExperimentalResourceListData = {
   body?: never
   path?: never
@@ -3360,6 +3522,7 @@ export type SessionPromptData = {
     tools?: {
       [key: string]: boolean
     }
+    format?: OutputFormat
     system?: string
     variant?: string
     parts: Array<TextPartInput | FilePartInput | AgentPartInput | SubtaskPartInput>
@@ -3547,6 +3710,7 @@ export type SessionPromptAsyncData = {
     tools?: {
       [key: string]: boolean
     }
+    format?: OutputFormat
     system?: string
     variant?: string
     parts: Array<TextPartInput | FilePartInput | AgentPartInput | SubtaskPartInput>
@@ -3961,10 +4125,10 @@ export type ProviderListResponses = {
           temperature: boolean
           tool_call: boolean
           interleaved?:
-            | true
-            | {
-                field: "reasoning_content" | "reasoning_details"
-              }
+          | true
+          | {
+            field: "reasoning_content" | "reasoning_details"
+          }
           cost?: {
             input: number
             output: number
@@ -3995,7 +4159,8 @@ export type ProviderListResponses = {
             [key: string]: string
           }
           provider?: {
-            npm: string
+            npm?: string
+            api?: string
           }
           variants?: {
             [key: string]: {

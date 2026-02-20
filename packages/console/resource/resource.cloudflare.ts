@@ -5,12 +5,20 @@ export const Resource = new Proxy(
   {},
   {
     get(_target, prop: string) {
-      if (prop in env) {
-        // @ts-expect-error
-        const value = env[prop]
-        return typeof value === "string" ? JSON.parse(value) : value
+      // @ts-expect-error
+      const value = env[prop] || (prop === "App" ? env.App : undefined)
+      if (value === undefined) {
+        throw new Error(`"${prop}" is not linked in your configuration`)
       }
-      throw new Error(`"${prop}" is not found in environment`)
+
+      if (typeof value === "string") {
+        try {
+          return JSON.parse(value)
+        } catch {
+          return { value }
+        }
+      }
+      return value
     },
   },
 ) as Record<string, any>

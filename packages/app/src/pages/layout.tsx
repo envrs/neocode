@@ -345,7 +345,7 @@ export default function Layout(props: ParentProps) {
         alertedAtBySession.delete(sessionKey)
       }
 
-      const unsub = globalSDK.event.listen((e) => {
+      const unsub = globalSDK.event.listen((e: any) => {
         if (e.details?.type === "worktree.ready") {
           setBusy(e.name, false)
           WorktreeState.ready(e.name)

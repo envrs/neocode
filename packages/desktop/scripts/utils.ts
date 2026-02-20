@@ -8,17 +8,17 @@ export const SIDECAR_BINARIES: Array<{ rustTarget: string; ocBinary: string; ass
   },
   {
     rustTarget: "x86_64-apple-darwin",
-    ocBinary: "neocode-darwin-x64",
+    ocBinary: "neocode-darwin-x64-baseline",
     assetExt: "zip",
   },
   {
     rustTarget: "x86_64-pc-windows-msvc",
-    ocBinary: "neocode-windows-x64",
+    ocBinary: "neocode-windows-x64-baseline",
     assetExt: "zip",
   },
   {
     rustTarget: "x86_64-unknown-linux-gnu",
-    ocBinary: "neocode-linux-x64",
+    ocBinary: "neocode-linux-x64-baseline",
     assetExt: "tar.gz",
   },
   {

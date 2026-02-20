@@ -1,10 +1,12 @@
 import "./index.css"
 import { Title } from "@solidjs/meta"
 import { onCleanup, onMount } from "solid-js"
-import { Logo } from "@neocode-ai/ui/logo"
-import { A } from "@solidjs/router"
+import logoLight from "../asset/logo-ornate-light.svg"
+import logoDark from "../asset/logo-ornate-dark.svg"
 import IMG_SPLASH from "../asset/lander/screenshot-splash.png"
 import { IconCopy, IconCheck } from "../component/icon"
+import { useI18n } from "~/context/i18n"
+import { useLanguage } from "~/context/language"
 
 function CopyStatus() {
   return (
@@ -16,6 +18,9 @@ function CopyStatus() {
 }
 
 export default function Home() {
+  const i18n = useI18n()
+  const language = useLanguage()
+
   onMount(() => {
     const commands = document.querySelectorAll("[data-copy]")
     for (const button of commands) {
@@ -38,23 +43,24 @@ export default function Home() {
 
   return (
     <main data-page="home">
-      <Title>neocode | AI coding agent built for the terminal</Title>
+      <Title>{i18n.t("temp.title")}</Title>
 
       <div data-component="content">
         <section data-component="top">
-          <Logo class="header-logo" />
-          <h1 data-slot="title">The AI coding agent built for the terminal</h1>
+          <img data-slot="logo light" src={logoLight} alt="neocode logo light" />
+          <img data-slot="logo dark" src={logoDark} alt="neocode logo dark" />
+          <h1 data-slot="title">{i18n.t("temp.hero.title")}</h1>
           <div data-slot="login">
-            <A href="/auth">neocode zen</A>
+            <a href="/auth">{i18n.t("temp.zen")}</a>
           </div>
         </section>
 
         <section data-component="cta">
           <div data-slot="left">
-            <A href="/docs">Get Started</A>
+            <a href={language.route("/docs")}>{i18n.t("temp.getStarted")}</a>
           </div>
           <div data-slot="center">
-            <A href="/auth">neocode zen</A>
+            <a href="/auth">{i18n.t("temp.zen")}</a>
           </div>
           <div data-slot="right">
             <button data-copy data-slot="command">
@@ -72,30 +78,32 @@ export default function Home() {
         <section data-component="features">
           <ul data-slot="list">
             <li>
-              <strong>Native TUI</strong> A responsive, native, themeable terminal UI
+              <strong>{i18n.t("temp.feature.native.title")}</strong> {i18n.t("temp.feature.native.body")}
             </li>
             <li>
-              <strong>LSP enabled</strong> Automatically loads the right LSPs for the LLM
+              <strong>{i18n.t("home.what.lsp.title")}</strong> {i18n.t("home.what.lsp.body")}
             </li>
             <li>
-              <strong>neocode zen</strong> A <a href="/docs/zen">curated list of models</a> provided by neocode{" "}
-              <label>New</label>
+              <strong>{i18n.t("temp.zen")}</strong> {i18n.t("temp.feature.zen.beforeLink")}{" "}
+              <a href={language.route("/docs/zen")}>{i18n.t("temp.feature.zen.link")}</a>{" "}
+              {i18n.t("temp.feature.zen.afterLink")} <label>{i18n.t("home.banner.badge")}</label>
             </li>
             <li>
-              <strong>Multi-session</strong> Start multiple agents in parallel on the same project
+              <strong>{i18n.t("home.what.multiSession.title")}</strong> {i18n.t("home.what.multiSession.body")}
             </li>
             <li>
-              <strong>Shareable links</strong> Share a link to any sessions for reference or to debug
+              <strong>{i18n.t("home.what.shareLinks.title")}</strong> {i18n.t("home.what.shareLinks.body")}
             </li>
             <li>
-              <strong>GitHub Copilot</strong> Log in with GitHub to use your Copilot account
+              <strong>{i18n.t("home.what.copilot.title")}</strong> {i18n.t("home.what.copilot.body")}
             </li>
             <li>
-              <strong>ChatGPT Plus/Pro</strong> Log in with OpenAI to use your ChatGPT Plus or Pro account
+              <strong>{i18n.t("home.what.chatgptPlus.title")}</strong> {i18n.t("home.what.chatgptPlus.body")}
             </li>
             <li>
-              <strong>Use any model</strong> Supports 75+ LLM providers through{" "}
-              <a href="https://models.dev">Models.dev</a>, including local models
+              <strong>{i18n.t("home.what.anyModel.title")}</strong> {i18n.t("temp.feature.models.beforeLink")}{" "}
+              <a href="https://models.dev">Models.dev</a>
+              {i18n.t("temp.feature.models.afterLink")}
             </li>
           </ul>
         </section>
@@ -141,22 +149,22 @@ export default function Home() {
 
         <section data-component="screenshots">
           <figure>
-            <figcaption>neocode TUI with the tokyonight theme</figcaption>
-            <a href="/docs/cli">
-              <img src={IMG_SPLASH} alt="neocode TUI with tokyonight theme" />
+            <figcaption>{i18n.t("temp.screenshot.caption")}</figcaption>
+            <a href={language.route("/docs/cli")}>
+              <img src={IMG_SPLASH} alt={i18n.t("temp.screenshot.alt")} />
             </a>
           </figure>
         </section>
 
         <footer data-component="footer">
           <div data-slot="cell">
-            <a href="https://x.com/neocode">X.com</a>
+            <a href="https://x.com/neocode">{i18n.t("footer.x")}</a>
           </div>
           <div data-slot="cell">
-            <a href="https://github.com/neopilot-ai/neocode">GitHub</a>
+            <a href="https://github.com/neopilot-ai/neocode">{i18n.t("footer.github")}</a>
           </div>
           <div data-slot="cell">
-            <a href="https://neo.khulnasoft.com/discord">Discord</a>
+            <a href="https://neo.khulnasoft.com/discord">{i18n.t("footer.discord")}</a>
           </div>
         </footer>
       </div>

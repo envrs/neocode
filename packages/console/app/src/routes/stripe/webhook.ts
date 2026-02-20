@@ -87,9 +87,9 @@ export async function POST(input: APIEvent) {
               ...(customer?.customerID
                 ? {}
                 : {
-                    reloadError: null,
-                    timeReloadError: null,
-                  }),
+                  reloadError: null,
+                  timeReloadError: null,
+                }),
             })
             .where(eq(BillingTable.workspaceID, workspaceID))
           await tx.insert(PaymentTable).values({

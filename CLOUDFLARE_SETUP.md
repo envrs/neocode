@@ -44,10 +44,10 @@ wrangler kv:namespace list
 ### Manual Deployment
 ```bash
 # Deploy to development
-SST_STAGE=dev ./script/deploy-cloudflare.ts
+STAGE=dev ./script/deploy-cloudflare.ts
 
 # Deploy to production
-SST_STAGE=production ./script/deploy-cloudflare.ts
+STAGE=production ./script/deploy-cloudflare.ts
 ```
 
 ### Automatic Deployment

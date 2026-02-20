@@ -5,7 +5,7 @@ import { Script } from "@neocode-ai/script"
 
 console.log("=== Deploying to Cloudflare Workers ===\n")
 
-const stage = process.env.SST_STAGE || "dev"
+const stage = process.env.STAGE || "dev"
 console.log(`Deploying to stage: ${stage}`)
 
 // Deploy web documentation

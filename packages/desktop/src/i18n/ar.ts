@@ -23,8 +23,4 @@ export const dict = {
   "desktop.cli.installed.message": "تم تثبيت CLI في {{path}}\n\nأعد تشغيل الطرفية لاستخدام الأمر 'neocode'.",
   "desktop.cli.failed.title": "فشل التثبيت",
   "desktop.cli.failed.message": "فشل تثبيت CLI: {{error}}",
-
-  "desktop.error.serverStartFailed.title": "فشل تشغيل NeoCode",
-  "desktop.error.serverStartFailed.description":
-    "تعذر بدء تشغيل خادم NeoCode المحلي. أعد تشغيل التطبيق، أو تحقق من إعدادات الشبكة (VPN/proxy) وحاول مرة أخرى.",
 }

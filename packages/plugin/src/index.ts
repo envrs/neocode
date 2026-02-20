@@ -39,110 +39,110 @@ export type AuthHook = {
   loader?: (auth: () => Promise<Auth>, provider: Provider) => Promise<Record<string, any>>
   methods: (
     | {
-        type: "oauth"
-        label: string
-        prompts?: Array<
-          | {
-              type: "text"
-              key: string
-              message: string
-              placeholder?: string
-              validate?: (value: string) => string | undefined
-              condition?: (inputs: Record<string, string>) => boolean
-            }
-          | {
-              type: "select"
-              key: string
-              message: string
-              options: Array<{
-                label: string
-                value: string
-                hint?: string
-              }>
-              condition?: (inputs: Record<string, string>) => boolean
-            }
-        >
-        authorize(inputs?: Record<string, string>): Promise<AuthOuathResult>
-      }
+      type: "oauth"
+      label: string
+      prompts?: Array<
+        | {
+          type: "text"
+          key: string
+          message: string
+          placeholder?: string
+          validate?: (value: string) => string | undefined
+          condition?: (inputs: Record<string, string>) => boolean
+        }
+        | {
+          type: "select"
+          key: string
+          message: string
+          options: Array<{
+            label: string
+            value: string
+            hint?: string
+          }>
+          condition?: (inputs: Record<string, string>) => boolean
+        }
+      >
+      authorize(inputs?: Record<string, string>): Promise<AuthOuathResult>
+    }
     | {
-        type: "api"
-        label: string
-        prompts?: Array<
-          | {
-              type: "text"
-              key: string
-              message: string
-              placeholder?: string
-              validate?: (value: string) => string | undefined
-              condition?: (inputs: Record<string, string>) => boolean
-            }
-          | {
-              type: "select"
-              key: string
-              message: string
-              options: Array<{
-                label: string
-                value: string
-                hint?: string
-              }>
-              condition?: (inputs: Record<string, string>) => boolean
-            }
-        >
-        authorize?(inputs?: Record<string, string>): Promise<
-          | {
-              type: "success"
-              key: string
-              provider?: string
-            }
-          | {
-              type: "failed"
-            }
-        >
-      }
+      type: "api"
+      label: string
+      prompts?: Array<
+        | {
+          type: "text"
+          key: string
+          message: string
+          placeholder?: string
+          validate?: (value: string) => string | undefined
+          condition?: (inputs: Record<string, string>) => boolean
+        }
+        | {
+          type: "select"
+          key: string
+          message: string
+          options: Array<{
+            label: string
+            value: string
+            hint?: string
+          }>
+          condition?: (inputs: Record<string, string>) => boolean
+        }
+      >
+      authorize?(inputs?: Record<string, string>): Promise<
+        | {
+          type: "success"
+          key: string
+          provider?: string
+        }
+        | {
+          type: "failed"
+        }
+      >
+    }
   )[]
 }
 
 export type AuthOuathResult = { url: string; instructions: string } & (
   | {
-      method: "auto"
-      callback(): Promise<
-        | ({
-            type: "success"
-            provider?: string
-          } & (
-            | {
-                refresh: string
-                access: string
-                expires: number
-                accountId?: string
-              }
-            | { key: string }
-          ))
-        | {
-            type: "failed"
+    method: "auto"
+    callback(): Promise<
+      | ({
+        type: "success"
+        provider?: string
+      } & (
+          | {
+            refresh: string
+            access: string
+            expires: number
+            accountId?: string
           }
-      >
-    }
+          | { key: string }
+        ))
+      | {
+        type: "failed"
+      }
+    >
+  }
   | {
-      method: "code"
-      callback(code: string): Promise<
-        | ({
-            type: "success"
-            provider?: string
-          } & (
-            | {
-                refresh: string
-                access: string
-                expires: number
-                accountId?: string
-              }
-            | { key: string }
-          ))
-        | {
-            type: "failed"
+    method: "code"
+    callback(code: string): Promise<
+      | ({
+        type: "success"
+        provider?: string
+      } & (
+          | {
+            refresh: string
+            access: string
+            expires: number
+            accountId?: string
           }
-      >
-    }
+          | { key: string }
+        ))
+      | {
+        type: "failed"
+      }
+    >
+  }
 )
 
 export interface Hooks {
@@ -222,5 +222,21 @@ export interface Hooks {
   "experimental.text.complete"?: (
     input: { sessionID: string; messageID: string; partID: string },
     output: { text: string },
+  ) => Promise<void>
+  /**
+   * Called before a shell command executes (bash tool, pty, shell runner).
+   * Allows plugins to inject additional environment variables.
+   */
+  "shell.env"?: (
+    input: { cwd: string; sessionID?: string; callID?: string },
+    output: { env: Record<string, string> },
+  ) => Promise<void>
+  /**
+   * Called when tool definitions are assembled.
+   * Allows plugins to mutate a tool's description or parameters.
+   */
+  "tool.definition"?: (
+    input: { toolID: string },
+    output: { description: string; parameters: any },
   ) => Promise<void>
 }

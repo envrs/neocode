@@ -14,15 +14,7 @@
     "windows": [
       {
         "label": "main",
-        "create": false,
-        "title": "NeoCode",
-        "url": "/",
-        "decorations": true,
-        "dragDropEnabled": false,
-        "zoomHotkeysEnabled": false,
-        "titleBarStyle": "Overlay",
-        "hiddenTitle": true,
-        "trafficLightPosition": { "x": 12.0, "y": 18.0 }
+        "create": false
       }
     ],
     "withGlobalTauri": true,
@@ -40,8 +32,23 @@
       "icons/dev/icon.ico"
     ],
     "active": true,
-    "targets": ["deb", "rpm", "dmg", "nsis", "app"],
-    "externalBin": ["sidecars/neocode-cli"],
+    "targets": [
+      "deb",
+      "rpm",
+      "dmg",
+      "nsis",
+      "app"
+    ],
+    "externalBin": [
+      "sidecars/neocode-cli"
+    ],
+    "linux": {
+      "rpm": {
+        "compression": {
+          "type": "none"
+        }
+      }
+    },
     "macOS": {
       "entitlements": "./entitlements.plist"
     },
@@ -56,7 +63,9 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": ["neocode"]
+        "schemes": [
+          "neocode"
+        ]
       }
     }
   }

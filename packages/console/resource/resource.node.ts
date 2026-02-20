@@ -9,23 +9,14 @@ export const Resource = new Proxy(
   {},
   {
     get(_target, prop: string) {
-      const value = (process.env as any)[prop]
+      const value = process.env[prop]
+      if (value === undefined) return undefined
 
-      // If the value is a string that looks like JSON, parse it
-      if (typeof value === "string" && (value.startsWith("{") || value.startsWith("["))) {
-        try {
-          return JSON.parse(value)
-        } catch {
-          return value
-        }
-      }
-
-      // Handle simple values
-      if (value !== undefined) return value
-
-      // Special handling for env vars
-      return {
-        value: (process.env as any)[prop],
+      try {
+        const parsed = JSON.parse(value)
+        return parsed
+      } catch {
+        return { value }
       }
     },
   },

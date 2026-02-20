@@ -57,7 +57,6 @@ const team = [
   "neopilotai",
   "khulnasoft-bot",
   "neocode-agent[bot]",
-  "R44VC0RP",
 ]
 
 export const Script = {
@@ -70,8 +69,8 @@ export const Script = {
   get preview() {
     return IS_PREVIEW
   },
-  get release() {
-    return env.NEOCODE_RELEASE
+  get release(): boolean {
+    return !!env.NEOCODE_RELEASE
   },
   get team() {
     return team

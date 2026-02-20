@@ -8,6 +8,8 @@ const sidecarConfig = getCurrentSidecar(RUST_TARGET)
 
 const binaryPath = windowsify(`../neocode/dist/${sidecarConfig.ocBinary}/bin/neocode`)
 
-await $`cd ../neocode && bun run build --single`
+await (sidecarConfig.ocBinary.includes("-baseline")
+  ? $`cd ../neocode && bun run build --single --baseline`
+  : $`cd ../neocode && bun run build --single`)
 
 await copyBinaryToSidecarFolder(binaryPath, RUST_TARGET)

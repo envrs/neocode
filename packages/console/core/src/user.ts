@@ -82,11 +82,11 @@ export namespace User {
             name: "",
             ...(accountID
               ? {
-                  accountID,
-                }
+                accountID,
+              }
               : {
-                  email,
-                }),
+                email,
+              }),
             workspaceID,
             role,
             monthlyLimit,

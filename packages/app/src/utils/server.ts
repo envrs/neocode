@@ -1,4 +1,4 @@
-import { createNeocodeClient } from "@neocode-ai/sdk/v2/client"
+import { createNeocodeClient, type NeocodeClient } from "@neocode-ai/sdk/v2/client"
 import type { ServerConnection } from "@/context/server"
 
 export function createSdkForServer({
@@ -6,7 +6,7 @@ export function createSdkForServer({
   ...config
 }: Omit<NonNullable<Parameters<typeof createNeocodeClient>[0]>, "baseUrl"> & {
   server: ServerConnection.HttpBase
-}) {
+}): NeocodeClient {
   const auth = (() => {
     if (!server.password) return
     return {

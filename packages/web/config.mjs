@@ -1,4 +1,4 @@
-const stage = process.env.SST_STAGE || "dev"
+const stage = process.env.STAGE || "dev"
 
 export default {
   url: stage === "production" ? "https://neo.khulnasoft.com" : `https://${stage}.neo.khulnasoft.com`,

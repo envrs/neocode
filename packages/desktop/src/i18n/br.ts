@@ -24,8 +24,4 @@ export const dict = {
   "desktop.cli.installed.message": "CLI instalada em {{path}}\n\nReinicie seu terminal para usar o comando 'neocode'.",
   "desktop.cli.failed.title": "Falha na instalação",
   "desktop.cli.failed.message": "Falha ao instalar a CLI: {{error}}",
-
-  "desktop.error.serverStartFailed.title": "Falha ao iniciar o NeoCode",
-  "desktop.error.serverStartFailed.description":
-    "Não foi possível iniciar o servidor local do NeoCode. Reinicie o aplicativo ou verifique suas configurações de rede (VPN/proxy) e tente novamente.",
 }

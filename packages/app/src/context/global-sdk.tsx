@@ -1,6 +1,6 @@
-import type { Event } from "@neocode-ai/sdk/v2/client"
+import type { Event, NeocodeClient } from "@neocode-ai/sdk/v2/client"
 import { createSimpleContext } from "@neocode-ai/ui/context"
-import { createGlobalEmitter } from "@solid-primitives/event-bus"
+import { type Emitter, createGlobalEmitter } from "@solid-primitives/event-bus"
 import { batch, onCleanup } from "solid-js"
 import z from "zod"
 import { createSdkForServer } from "@/utils/server"
@@ -11,7 +11,14 @@ const abortError = z.object({
   name: z.literal("AbortError"),
 })
 
-export const { use: useGlobalSDK, provider: GlobalSDKProvider } = createSimpleContext({
+export interface GlobalSDKContext {
+  url: string
+  client: NeocodeClient
+  event: any
+  createClient(opts: Omit<Parameters<typeof createSdkForServer>[0], "server" | "fetch">): NeocodeClient
+}
+
+export const { use: useGlobalSDK, provider: GlobalSDKProvider } = createSimpleContext<GlobalSDKContext, {}>({
   name: "GlobalSDK",
   init: () => {
     const server = useServer()

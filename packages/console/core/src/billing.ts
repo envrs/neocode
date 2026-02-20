@@ -197,16 +197,16 @@ export namespace Billing {
         ],
         ...(customer.customerID
           ? {
-              customer: customer.customerID,
-              customer_update: {
-                name: "auto",
-                address: "auto",
-              },
-            }
+            customer: customer.customerID,
+            customer_update: {
+              name: "auto",
+              address: "auto",
+            },
+          }
           : {
-              customer_email: email!,
-              customer_creation: "always",
-            }),
+            customer_email: email!,
+            customer_creation: "always",
+          }),
         currency: "usd",
         invoice_creation: {
           enabled: true,

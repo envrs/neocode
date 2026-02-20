@@ -224,13 +224,12 @@ export default function () {
                       {iife(() => {
                         const [store, setStore] = createStore({
                           messageId: undefined as string | undefined,
-                          expandedSteps: {} as Record<string, boolean>,
                         })
                         const messages = createMemo(() =>
                           data().sessionID
                             ? (data().message[data().sessionID]?.filter((m) => m.role === "user") ?? []).sort(
-                                (a, b) => a.time.created - b.time.created,
-                              )
+                              (a, b) => a.time.created - b.time.created,
+                            )
                             : [],
                         )
                         const firstUserMessage = createMemo(() => messages().at(0))
@@ -296,10 +295,7 @@ export default function () {
                                 {(message) => (
                                   <SessionTurn
                                     sessionID={data().sessionID}
-                                    sessionTitle={info().title}
                                     messageID={message.id}
-                                    stepsExpanded={store.expandedSteps[message.id] ?? false}
-                                    onStepsExpandedToggle={() => setStore("expandedSteps", message.id, (v) => !v)}
                                     classes={{
                                       root: "min-w-0 w-full relative",
                                       content: "flex flex-col justify-between !overflow-visible",
@@ -321,21 +317,21 @@ export default function () {
                           <div class="relative bg-background-stronger w-screen h-screen overflow-hidden flex flex-col">
                             <header class="h-12 px-6 py-2 flex items-center justify-between self-stretch bg-background-base border-b border-border-weak-base">
                               <div class="">
-                                <a href="https://neo.khulnasoft.com">
+                                <a href="https://neocode.ai">
                                   <Mark />
                                 </a>
                               </div>
                               <div class="flex gap-3 items-center">
                                 <IconButton
                                   as={"a"}
-                                  href="https://github.com/neopilot-ai/neocode"
+                                  href="https://github.com/anomalyco/neocode"
                                   target="_blank"
                                   icon="github"
                                   variant="ghost"
                                 />
                                 <IconButton
                                   as={"a"}
-                                  href="https://neo.khulnasoft.com/discord"
+                                  href="https://neocode.ai/discord"
                                   target="_blank"
                                   icon="discord"
                                   variant="ghost"
@@ -375,13 +371,6 @@ export default function () {
                                     <SessionTurn
                                       sessionID={data().sessionID}
                                       messageID={store.messageId ?? firstUserMessage()!.id!}
-                                      stepsExpanded={
-                                        store.expandedSteps[store.messageId ?? firstUserMessage()!.id!] ?? false
-                                      }
-                                      onStepsExpandedToggle={() => {
-                                        const id = store.messageId ?? firstUserMessage()!.id!
-                                        setStore("expandedSteps", id, (v) => !v)
-                                      }}
                                       classes={{
                                         root: "grow",
                                         content: "flex flex-col justify-between",

@@ -21,7 +21,7 @@ export function createNeocodeClient(config?: Config & { directory?: string }) {
   if (config?.directory) {
     config.headers = {
       ...config.headers,
-      "x-neocode-directory": config.directory,
+      "x-neocode-directory": encodeURIComponent(config.directory),
     }
   }
 

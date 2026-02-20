@@ -75,7 +75,7 @@ export default {
         //              Destination: {
         //                ToAddresses: [email],
         //              },
-        //              FromEmailAddress: `Console <auth@${Resource.Email.sender}>`,
+        //              FromEmailAddress: `SST <auth@${Resource.Email.sender}>`,
         //              Content: {
         //                Simple: {
         //                  Body: {
@@ -87,7 +87,7 @@ export default {
         //                    },
         //                  },
         //                  Subject: {
-        //                    Data: "Console Pin Code: " + code,
+        //                    Data: "SST Console Pin Code: " + code,
         //                  },
         //                },
         //              },

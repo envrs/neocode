@@ -25,8 +25,4 @@ export const dict = {
     "CLI を {{path}} にインストールしました\n\nターミナルを再起動して 'neocode' コマンドを使用してください。",
   "desktop.cli.failed.title": "インストールに失敗しました",
   "desktop.cli.failed.message": "CLI のインストールに失敗しました: {{error}}",
-
-  "desktop.error.serverStartFailed.title": "NeoCode の起動に失敗しました",
-  "desktop.error.serverStartFailed.description":
-    "ローカルの NeoCode サーバーを起動できませんでした。アプリを再起動するか、ネットワーク設定 (VPN/proxy) を確認して再試行してください。",
 }

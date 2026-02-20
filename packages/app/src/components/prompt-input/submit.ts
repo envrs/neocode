@@ -50,7 +50,12 @@ type CommentItem = {
   preview?: string
 }
 
-export function createPromptSubmit(input: PromptSubmitInput) {
+export interface PromptSubmitResult {
+  abort(): Promise<any>
+  handleSubmit(event: Event): Promise<void>
+}
+
+export function createPromptSubmit(input: PromptSubmitInput): PromptSubmitResult {
   const navigate = useNavigate()
   const sdk = useSDK()
   const sync = useSync()
@@ -85,7 +90,7 @@ export function createPromptSubmit(input: PromptSubmitInput) {
       .abort({
         sessionID,
       })
-      .catch(() => {})
+      .catch(() => { })
       .finally(() => {
         globalSync.todo.set(sessionID, undefined)
       })
