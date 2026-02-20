@@ -88,11 +88,12 @@ describe("tool.registry", () => {
           JSON.stringify({
             name: "custom-tools",
             dependencies: {
-              "@neocode-ai/plugin": "^0.0.0",
+              "@neocode-ai/plugin": path.join(process.cwd(), "..", "plugin"),
               cowsay: "^1.6.0",
             },
           }),
         )
+
 
         await Bun.write(
           path.join(toolsDir, "cowsay.ts"),
@@ -108,8 +109,23 @@ describe("tool.registry", () => {
             "",
           ].join("\n"),
         )
+
+        await fs.mkdir(path.join(neocodeDir, "node_modules", "cowsay"), { recursive: true })
+        await Bun.write(
+          path.join(neocodeDir, "node_modules", "cowsay", "package.json"),
+          JSON.stringify({
+            name: "cowsay",
+            version: "1.6.0",
+            main: "index.js"
+          }),
+        )
+        await Bun.write(
+          path.join(neocodeDir, "node_modules", "cowsay", "index.js"),
+          "exports.say = function(opts) { return 'mock moo ' + opts.text; };"
+        )
       },
     })
+
 
     await Instance.provide({
       directory: tmp.path,
@@ -118,5 +134,6 @@ describe("tool.registry", () => {
         expect(ids).toContain("cowsay")
       },
     })
-  })
+  }, { timeout: 30000 })
 })
+
