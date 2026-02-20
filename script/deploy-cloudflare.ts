@@ -1,22 +1,66 @@
 #!/usr/bin/env bun
 
 import { $ } from "bun"
-import { Script } from "@neocode-ai/script"
 
 console.log("=== Deploying to Cloudflare Workers ===\n")
 
 const stage = process.env.STAGE || "dev"
 console.log(`Deploying to stage: ${stage}`)
 
-// Deploy web documentation
+// ── Console app environment config ──────────────────────────────────────────
+// Nitro's cloudflare_module preset generates a redirected wrangler.json which
+// cannot include [env.X] sections. We patch the generated file after build.
+const CONSOLE_ENV: Record<string, {
+  name: string
+  routes: { pattern: string; zone_name: string }[]
+  kv_namespaces: { binding: string; id: string }[]
+}> = {
+  production: {
+    name: "neocode-console-prod",
+    routes: [{ pattern: "neo.khulnasoft.com/*", zone_name: "khulnasoft.com" }],
+    kv_namespaces: [
+      { binding: "SESSIONS", id: "d20ff02478d64d99848e7100af98f52f" },
+      { binding: "CACHE", id: "bd44a1cb139a478b9045b0ccad16e40e" },
+    ],
+  },
+  dev: {
+    name: "neocode-console-dev",
+    routes: [{ pattern: "dev.neo.khulnasoft.com/*", zone_name: "khulnasoft.com" }],
+    kv_namespaces: [
+      { binding: "SESSIONS", id: "d20ff02478d64d99848e7100af98f52f" },
+      { binding: "CACHE", id: "bd44a1cb139a478b9045b0ccad16e40e" },
+    ],
+  },
+  staging: {
+    name: "neocode-console-staging",
+    routes: [{ pattern: "staging.neo.khulnasoft.com/*", zone_name: "khulnasoft.com" }],
+    kv_namespaces: [],
+  },
+}
+
+// Deploy web documentation (plain wrangler.toml with environments — use --env)
 console.log("\n=== Deploying Web Documentation ===")
 await $`cd packages/web && bun run build`
 await $`cd packages/web && bunx wrangler deploy --env ${stage}`
 
-// Deploy console app
+// Deploy console app (Nitro redirected config — patch wrangler.json, no --env)
 console.log("\n=== Deploying Console App ===")
 await $`cd packages/console/app && bun run build`
-await $`cd packages/console/app && bunx wrangler deploy --env ${stage}`
+
+// Patch the generated wrangler.json with env-specific settings
+const wranglerJsonPath = "packages/console/app/.output/server/wrangler.json"
+const generated = JSON.parse(await Bun.file(wranglerJsonPath).text())
+const envCfg = CONSOLE_ENV[stage] ?? CONSOLE_ENV["dev"]!
+const patched = {
+  ...generated,
+  name: envCfg.name,
+  routes: envCfg.routes,
+  kv_namespaces: envCfg.kv_namespaces,
+}
+await Bun.write(wranglerJsonPath, JSON.stringify(patched, null, 2))
+console.log(`Patched ${wranglerJsonPath} for stage: ${stage}`)
+
+await $`cd packages/console/app && bunx wrangler deploy`
 
 console.log(`\n✅ Deployment complete for ${stage}.neo.khulnasoft.com`)
 
