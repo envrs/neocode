@@ -24,7 +24,7 @@ jobs:
         id: setup-git-committer
         uses: ./.github/actions/setup-git-committer
         with:
-          neocode-app-id: ${{ vars.NEOCODE_APP_ID }}
+          neocode-app-id: ${{ secrets.NEOCODE_APP_ID || vars.NEOCODE_APP_ID }}
           neocode-app-secret: ${{ secrets.NEOCODE_APP_SECRET }}
 
       - name: Sync beta branch
