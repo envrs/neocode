@@ -67,21 +67,21 @@
     }
   },
   "devDependencies": {
-    "@actions/artifact": "5.0.1",
-    "@tsconfig/bun": "catalog:",
+    "@actions/artifact": "6.1.0",
+    "@tsconfig/bun": "1.0.10",
     "@types/mime-types": "3.0.1",
-    "glob": "13.0.5",
+    "glob": "13.0.6",
     "husky": "9.1.7",
-    "prettier": "3.6.2",
-    "semver": "^7.6.0",
-    "turbo": "2.5.6"
+    "prettier": "3.8.1",
+    "semver": "7.7.4",
+    "turbo": "2.8.10"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.933.0",
+    "@aws-sdk/client-s3": "3.995.0",
     "@neocode-ai/plugin": "workspace:*",
     "@neocode-ai/script": "workspace:*",
     "@neocode-ai/sdk": "workspace:*",
-    "typescript": "catalog:"
+    "typescript": "5.9.3"
   },
   "repository": {
     "type": "git",
