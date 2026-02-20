@@ -73,4 +73,50 @@ describe("tool.registry", () => {
       },
     })
   })
+
+  test("loads tools with external dependencies without crashing", async () => {
+    await using tmp = await tmpdir({
+      init: async (dir) => {
+        const neocodeDir = path.join(dir, ".neocode")
+        await fs.mkdir(neocodeDir, { recursive: true })
+
+        const toolsDir = path.join(neocodeDir, "tools")
+        await fs.mkdir(toolsDir, { recursive: true })
+
+        await Bun.write(
+          path.join(neocodeDir, "package.json"),
+          JSON.stringify({
+            name: "custom-tools",
+            dependencies: {
+              "@neocode-ai/plugin": "^0.0.0",
+              cowsay: "^1.6.0",
+            },
+          }),
+        )
+
+        await Bun.write(
+          path.join(toolsDir, "cowsay.ts"),
+          [
+            "import { say } from 'cowsay'",
+            "export default {",
+            "  description: 'tool that imports cowsay at top level',",
+            "  args: { text: { type: 'string' } },",
+            "  execute: async ({ text }: { text: string }) => {",
+            "    return say({ text })",
+            "  },",
+            "}",
+            "",
+          ].join("\n"),
+        )
+      },
+    })
+
+    await Instance.provide({
+      directory: tmp.path,
+      fn: async () => {
+        const ids = await ToolRegistry.ids()
+        expect(ids).toContain("cowsay")
+      },
+    })
+  })
 })

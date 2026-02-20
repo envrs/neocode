@@ -52,7 +52,7 @@ export namespace Ide {
     const cmd = SUPPORTED_IDES.find((i) => i.name === ide)?.cmd
     if (!cmd) throw new Error(`Unknown IDE: ${ide}`)
 
-    const p = spawn([cmd, "--install-extension", "neopilot-ai.neocode"], {
+    const p = spawn([cmd, "--install-extension", "sst-dev.neocode"], {
       stdout: "pipe",
       stderr: "pipe",
     })

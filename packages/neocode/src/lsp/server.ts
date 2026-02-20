@@ -732,7 +732,7 @@ export namespace LSPServer {
 
   export const CSharp: Info = {
     id: "csharp",
-    root: NearestRoot([".sln", ".csproj", "global.json"]),
+    root: NearestRoot([".slnx", ".sln", ".csproj", "global.json"]),
     extensions: [".cs"],
     async spawn(root) {
       let bin = Bun.which("csharp-ls", {
@@ -772,7 +772,7 @@ export namespace LSPServer {
 
   export const FSharp: Info = {
     id: "fsharp",
-    root: NearestRoot([".sln", ".fsproj", "global.json"]),
+    root: NearestRoot([".slnx", ".sln", ".fsproj", "global.json"]),
     extensions: [".fs", ".fsi", ".fsx", ".fsscript"],
     async spawn(root) {
       let bin = Bun.which("fsautocomplete", {
@@ -2038,6 +2038,24 @@ export namespace LSPServer {
       }
       return {
         process: spawn(bin, ["--lsp"], {
+          cwd: root,
+        }),
+      }
+    },
+  }
+
+  export const JuliaLS: Info = {
+    id: "julials",
+    extensions: [".jl"],
+    root: NearestRoot(["Project.toml", "Manifest.toml", "*.jl"]),
+    async spawn(root) {
+      const julia = Bun.which("julia")
+      if (!julia) {
+        log.info("julia not found, please install julia first (https://julialang.org/downloads/)")
+        return
+      }
+      return {
+        process: spawn(julia, ["--startup-file=no", "--history-file=no", "-e", "using LanguageServer; runserver()"], {
           cwd: root,
         }),
       }
