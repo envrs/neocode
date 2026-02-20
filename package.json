@@ -101,7 +101,20 @@
   ],
   "overrides": {
     "@types/bun": "catalog:",
-    "@types/node": "catalog:"
+    "@types/node": "catalog:",
+    "fast-xml-parser": "^5.3.7",
+    "hono": "^4.11.4",
+    "seroval": "^1.4.2",
+    "@isaacs/brace-expansion": "^5.0.1",
+    "minimatch": "^10.2.1",
+    "wrangler": "^4.59.1",
+    "axios": "^1.13.5",
+    "tar": "^7.5.9",
+    "astro": "^5.13.2",
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "@astrojs/cloudflare": "^12.6.6",
+    "react-router": "^6.30.2",
+    "@remix-run/router": "^1.23.2"
   },
   "patchedDependencies": {
     "@standard-community/standard-openapi@0.2.9": "patches/@standard-community%2Fstandard-openapi@0.2.9.patch",
