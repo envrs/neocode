@@ -10,7 +10,12 @@
     "dev:desktop": "bun --cwd packages/desktop tauri dev",
     "dev:web": "bun --cwd packages/app dev",
     "typecheck": "bun turbo typecheck",
-    "prepare": "husky",
+    "prepare": "husky install",
+    "bootstrap": "bun install",
+    "build": "bun turbo build",
+    "format": "prettier --write .",
+    "clean": "rm -rf node_modules .turbo",
+    "test:workspaces": "bun turbo test",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",
     "test": "echo 'do not run tests from root' && exit 1"
