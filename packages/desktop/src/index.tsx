@@ -458,11 +458,11 @@ render(() => {
             }
             const server: ServerConnection.Any = data.is_sidecar
               ? {
-                displayName: "Local Server",
-                type: "sidecar",
-                variant: "base",
-                http,
-              }
+                  displayName: "Local Server",
+                  type: "sidecar",
+                  variant: "base",
+                  http,
+                }
               : { type: "http", http }
 
             function Inner() {

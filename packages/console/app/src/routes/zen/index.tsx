@@ -24,7 +24,7 @@ import { LocaleLinks } from "~/component/locale-links"
 
 const checkLoggedIn = query(async () => {
   "use server"
-  const workspaceID = await getLastSeenWorkspaceID().catch(() => { })
+  const workspaceID = await getLastSeenWorkspaceID().catch(() => {})
   if (workspaceID) throw redirect(`/workspace/${workspaceID}`)
 }, "checkLoggedIn.get")
 

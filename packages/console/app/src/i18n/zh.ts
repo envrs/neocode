@@ -291,8 +291,7 @@ export const dict = {
   "workspace.newUser.feature.quality.title": "最高质量",
   "workspace.newUser.feature.quality.body": "访问配置为最佳性能的模型 - 无需降级或路由到更便宜的提供商。",
   "workspace.newUser.feature.lockin.title": "无锁定",
-  "workspace.newUser.feature.lockin.body":
-    "将 Zen 与任何编程代理结合使用，并在需要时继续在 NeoCode 中使用其他提供商。",
+  "workspace.newUser.feature.lockin.body": "将 Zen 与任何编程代理结合使用，并在需要时继续在 NeoCode 中使用其他提供商。",
   "workspace.newUser.copyApiKey": "复制 API 密钥",
   "workspace.newUser.copyKey": "复制密钥",
   "workspace.newUser.copied": "已复制！",

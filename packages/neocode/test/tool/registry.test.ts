@@ -74,66 +74,67 @@ describe("tool.registry", () => {
     })
   })
 
-  test("loads tools with external dependencies without crashing", async () => {
-    await using tmp = await tmpdir({
-      init: async (dir) => {
-        const neocodeDir = path.join(dir, ".neocode")
-        await fs.mkdir(neocodeDir, { recursive: true })
+  test(
+    "loads tools with external dependencies without crashing",
+    async () => {
+      await using tmp = await tmpdir({
+        init: async (dir) => {
+          const neocodeDir = path.join(dir, ".neocode")
+          await fs.mkdir(neocodeDir, { recursive: true })
 
-        const toolsDir = path.join(neocodeDir, "tools")
-        await fs.mkdir(toolsDir, { recursive: true })
+          const toolsDir = path.join(neocodeDir, "tools")
+          await fs.mkdir(toolsDir, { recursive: true })
 
-        await Bun.write(
-          path.join(neocodeDir, "package.json"),
-          JSON.stringify({
-            name: "custom-tools",
-            dependencies: {
-              "@neocode-ai/plugin": path.join(process.cwd(), "..", "plugin"),
-              cowsay: "^1.6.0",
-            },
-          }),
-        )
+          await Bun.write(
+            path.join(neocodeDir, "package.json"),
+            JSON.stringify({
+              name: "custom-tools",
+              dependencies: {
+                "@neocode-ai/plugin": path.join(process.cwd(), "..", "plugin"),
+                cowsay: "^1.6.0",
+              },
+            }),
+          )
 
+          await Bun.write(
+            path.join(toolsDir, "cowsay.ts"),
+            [
+              "import { say } from 'cowsay'",
+              "export default {",
+              "  description: 'tool that imports cowsay at top level',",
+              "  args: { text: { type: 'string' } },",
+              "  execute: async ({ text }: { text: string }) => {",
+              "    return say({ text })",
+              "  },",
+              "}",
+              "",
+            ].join("\n"),
+          )
 
-        await Bun.write(
-          path.join(toolsDir, "cowsay.ts"),
-          [
-            "import { say } from 'cowsay'",
-            "export default {",
-            "  description: 'tool that imports cowsay at top level',",
-            "  args: { text: { type: 'string' } },",
-            "  execute: async ({ text }: { text: string }) => {",
-            "    return say({ text })",
-            "  },",
-            "}",
-            "",
-          ].join("\n"),
-        )
+          await fs.mkdir(path.join(neocodeDir, "node_modules", "cowsay"), { recursive: true })
+          await Bun.write(
+            path.join(neocodeDir, "node_modules", "cowsay", "package.json"),
+            JSON.stringify({
+              name: "cowsay",
+              version: "1.6.0",
+              main: "index.js",
+            }),
+          )
+          await Bun.write(
+            path.join(neocodeDir, "node_modules", "cowsay", "index.js"),
+            "exports.say = function(opts) { return 'mock moo ' + opts.text; };",
+          )
+        },
+      })
 
-        await fs.mkdir(path.join(neocodeDir, "node_modules", "cowsay"), { recursive: true })
-        await Bun.write(
-          path.join(neocodeDir, "node_modules", "cowsay", "package.json"),
-          JSON.stringify({
-            name: "cowsay",
-            version: "1.6.0",
-            main: "index.js"
-          }),
-        )
-        await Bun.write(
-          path.join(neocodeDir, "node_modules", "cowsay", "index.js"),
-          "exports.say = function(opts) { return 'mock moo ' + opts.text; };"
-        )
-      },
-    })
-
-
-    await Instance.provide({
-      directory: tmp.path,
-      fn: async () => {
-        const ids = await ToolRegistry.ids()
-        expect(ids).toContain("cowsay")
-      },
-    })
-  }, { timeout: 30000 })
+      await Instance.provide({
+        directory: tmp.path,
+        fn: async () => {
+          const ids = await ToolRegistry.ids()
+          expect(ids).toContain("cowsay")
+        },
+      })
+    },
+    { timeout: 30000 },
+  )
 })
-

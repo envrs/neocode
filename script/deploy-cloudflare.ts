@@ -10,11 +10,14 @@ console.log(`Deploying to stage: ${stage}`)
 // ── Console app environment config ──────────────────────────────────────────
 // Nitro's cloudflare_module preset generates a redirected wrangler.json which
 // cannot include [env.X] sections. We patch the generated file after build.
-const CONSOLE_ENV: Record<string, {
-  name: string
-  routes: { pattern: string; zone_name: string }[]
-  kv_namespaces: { binding: string; id: string }[]
-}> = {
+const CONSOLE_ENV: Record<
+  string,
+  {
+    name: string
+    routes: { pattern: string; zone_name: string }[]
+    kv_namespaces: { binding: string; id: string }[]
+  }
+> = {
   production: {
     name: "neocode-console-prod",
     routes: [{ pattern: "neo.khulnasoft.com/*", zone_name: "khulnasoft.com" }],

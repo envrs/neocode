@@ -84,35 +84,35 @@ export namespace ZenData {
   export const list = fn(z.void(), () => {
     const json = JSON.parse(
       Resource.ZEN_MODELS1.value +
-      Resource.ZEN_MODELS2.value +
-      Resource.ZEN_MODELS3.value +
-      Resource.ZEN_MODELS4.value +
-      Resource.ZEN_MODELS5.value +
-      Resource.ZEN_MODELS6.value +
-      Resource.ZEN_MODELS7.value +
-      Resource.ZEN_MODELS8.value +
-      Resource.ZEN_MODELS9.value +
-      Resource.ZEN_MODELS10.value +
-      Resource.ZEN_MODELS11.value +
-      Resource.ZEN_MODELS12.value +
-      Resource.ZEN_MODELS13.value +
-      Resource.ZEN_MODELS14.value +
-      Resource.ZEN_MODELS15.value +
-      Resource.ZEN_MODELS16.value +
-      Resource.ZEN_MODELS17.value +
-      Resource.ZEN_MODELS18.value +
-      Resource.ZEN_MODELS19.value +
-      Resource.ZEN_MODELS20.value +
-      Resource.ZEN_MODELS21.value +
-      Resource.ZEN_MODELS22.value +
-      Resource.ZEN_MODELS23.value +
-      Resource.ZEN_MODELS24.value +
-      Resource.ZEN_MODELS25.value +
-      Resource.ZEN_MODELS26.value +
-      Resource.ZEN_MODELS27.value +
-      Resource.ZEN_MODELS28.value +
-      Resource.ZEN_MODELS29.value +
-      Resource.ZEN_MODELS30.value,
+        Resource.ZEN_MODELS2.value +
+        Resource.ZEN_MODELS3.value +
+        Resource.ZEN_MODELS4.value +
+        Resource.ZEN_MODELS5.value +
+        Resource.ZEN_MODELS6.value +
+        Resource.ZEN_MODELS7.value +
+        Resource.ZEN_MODELS8.value +
+        Resource.ZEN_MODELS9.value +
+        Resource.ZEN_MODELS10.value +
+        Resource.ZEN_MODELS11.value +
+        Resource.ZEN_MODELS12.value +
+        Resource.ZEN_MODELS13.value +
+        Resource.ZEN_MODELS14.value +
+        Resource.ZEN_MODELS15.value +
+        Resource.ZEN_MODELS16.value +
+        Resource.ZEN_MODELS17.value +
+        Resource.ZEN_MODELS18.value +
+        Resource.ZEN_MODELS19.value +
+        Resource.ZEN_MODELS20.value +
+        Resource.ZEN_MODELS21.value +
+        Resource.ZEN_MODELS22.value +
+        Resource.ZEN_MODELS23.value +
+        Resource.ZEN_MODELS24.value +
+        Resource.ZEN_MODELS25.value +
+        Resource.ZEN_MODELS26.value +
+        Resource.ZEN_MODELS27.value +
+        Resource.ZEN_MODELS28.value +
+        Resource.ZEN_MODELS29.value +
+        Resource.ZEN_MODELS30.value,
     )
     const { models, providers, providerFamilies } = ModelsSchema.parse(json)
     return {

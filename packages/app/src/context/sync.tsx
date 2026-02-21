@@ -282,33 +282,33 @@ export const { use: useSync, provider: SyncProvider } = createSimpleContext<Sync
           const sessionReq = hasSession
             ? Promise.resolve()
             : retry(() => client.session.get({ sessionID })).then((session) => {
-              const data = session.data
-              if (!data) return
-              setStore(
-                "session",
-                produce((draft) => {
-                  const match = Binary.search(draft, sessionID, (s) => s.id)
-                  if (match.found) {
-                    draft[match.index] = data
-                    return
-                  }
-                  draft.splice(match.index, 0, data)
-                }),
-              )
-            })
+                const data = session.data
+                if (!data) return
+                setStore(
+                  "session",
+                  produce((draft) => {
+                    const match = Binary.search(draft, sessionID, (s) => s.id)
+                    if (match.found) {
+                      draft[match.index] = data
+                      return
+                    }
+                    draft.splice(match.index, 0, data)
+                  }),
+                )
+              })
 
           const messagesReq =
             hasMessages && hydrated
               ? Promise.resolve()
               : loadMessages({
-                directory,
-                client,
-                setStore,
-                sessionID,
-                limit,
-              })
+                  directory,
+                  client,
+                  setStore,
+                  sessionID,
+                  limit,
+                })
 
-          return runInflight(inflight, key, () => Promise.all([sessionReq, messagesReq]).then(() => { }))
+          return runInflight(inflight, key, () => Promise.all([sessionReq, messagesReq]).then(() => {}))
         },
         async diff(sessionID: string) {
           const directory = sdk.directory

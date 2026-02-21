@@ -241,8 +241,7 @@ export const dict = {
   "zen.privacy.exceptionsLink": "seguenti eccezioni",
 
   "black.meta.title": "NeoCode Black | Accedi ai migliori modelli di coding al mondo",
-  "black.meta.description":
-    "Ottieni l'accesso a Claude, GPT, Gemini e altri con i piani di abbonamento NeoCode Black.",
+  "black.meta.description": "Ottieni l'accesso a Claude, GPT, Gemini e altri con i piani di abbonamento NeoCode Black.",
   "black.hero.title": "Accedi ai migliori modelli di coding al mondo",
   "black.hero.subtitle": "Inclusi Claude, GPT, Gemini e altri",
   "black.title": "NeoCode Black | Prezzi",

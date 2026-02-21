@@ -126,12 +126,12 @@ export namespace Config {
       // Only scan project .neocode/ directories when project discovery is enabled
       ...(!Flag.NEOCODE_DISABLE_PROJECT_CONFIG
         ? await Array.fromAsync(
-          Filesystem.up({
-            targets: [".neocode"],
-            start: Instance.directory,
-            stop: Instance.worktree,
-          }),
-        )
+            Filesystem.up({
+              targets: [".neocode"],
+              start: Instance.directory,
+              stop: Instance.worktree,
+            }),
+          )
         : []),
       // Always scan ~/.neocode/ (user home directory)
       ...(await Array.fromAsync(
@@ -284,7 +284,7 @@ export namespace Config {
         ...(proxied() ? ["--no-cache"] : []),
       ],
       { cwd: dir },
-    ).catch(() => { })
+    ).catch(() => {})
   }
 
   async function isWritable(dir: string) {
@@ -1228,7 +1228,7 @@ export namespace Config {
           await Filesystem.writeJson(path.join(Global.Path.config, "config.json"), result)
           await fs.unlink(legacy)
         })
-        .catch(() => { })
+        .catch(() => {})
     }
 
     return result
@@ -1315,7 +1315,7 @@ export namespace Config {
         parsed.data.$schema = "https://neo.khulnasoft.com/config.json"
         // Write the $schema to the original text to preserve variables like {env:VAR}
         const updated = original.replace(/^\s*\{/, '{\n  "$schema": "https://neo.khulnasoft.com/config.json",')
-        await Filesystem.write(configFilepath, updated).catch(() => { })
+        await Filesystem.write(configFilepath, updated).catch(() => {})
       }
       const data = parsed.data
       if (data.plugin) {
@@ -1323,7 +1323,7 @@ export namespace Config {
           const plugin = data.plugin[i]
           try {
             data.plugin[i] = import.meta.resolve!(plugin, configFilepath)
-          } catch (err) { }
+          } catch (err) {}
         }
       }
       return data

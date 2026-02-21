@@ -1,37 +1,21 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": [
-    "CI",
-    "NEOCODE_DISABLE_SHARE"
-  ],
-  "globalPassThroughEnv": [
-    "CI",
-    "NEOCODE_DISABLE_SHARE"
-  ],
+  "globalEnv": ["CI", "NEOCODE_DISABLE_SHARE"],
+  "globalPassThroughEnv": ["CI", "NEOCODE_DISABLE_SHARE"],
   "tasks": {
     "typecheck": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
     },
     "neocode#test": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "outputs": []
     },
     "@neocode-ai/app#test": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "outputs": []
     }
   }

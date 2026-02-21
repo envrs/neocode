@@ -44,10 +44,10 @@ export function Header(props: { zen?: boolean; hideGetStarted?: boolean }) {
   const starCount = createMemo(() =>
     githubData()?.stars
       ? new Intl.NumberFormat("en-US", {
-        notation: "compact",
-        compactDisplay: "short",
-        maximumFractionDigits: 0,
-      }).format(githubData()?.stars!)
+          notation: "compact",
+          compactDisplay: "short",
+          maximumFractionDigits: 0,
+        }).format(githubData()?.stars!)
       : config.github.starsFormatted.compact,
   )
 

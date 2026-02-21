@@ -13,10 +13,12 @@ This document outlines the Cloudflare Workers configuration for hosting NeoCode.
 Create the following KV namespaces in your Cloudflare dashboard:
 
 ### Production Environment
+
 - `CACHE`: For caching responses and assets
 - `SESSIONS`: For user session management (console app)
 
-### Development Environment  
+### Development Environment
+
 - `CACHE`: Development cache namespace
 - `SESSIONS`: Development sessions namespace
 
@@ -32,16 +34,19 @@ wrangler kv:namespace list
 ## Domain Configuration
 
 ### Main Domain (neo.khulnasoft.com)
+
 - Console app: `neo.khulnasoft.com/*`
 - Documentation: `neo.khulnasoft.com/docs/*`
 
 ### Staging Domains
+
 - Dev: `dev.neo.khulnasoft.com/*`
 - Staging: `staging.neo.khulnasoft.com/*`
 
 ## Deployment
 
 ### Manual Deployment
+
 ```bash
 # Deploy to development
 STAGE=dev ./script/deploy-cloudflare.ts
@@ -51,6 +56,7 @@ STAGE=production ./script/deploy-cloudflare.ts
 ```
 
 ### Automatic Deployment
+
 - Push to `dev` branch → deploys to `dev.neo.khulnasoft.com`
 - Push to `production` branch → deploys to `neo.khulnasoft.com`
 
@@ -64,12 +70,14 @@ Add these secrets to your GitHub repository:
 ## Architecture
 
 ### Web Documentation (`packages/web`)
+
 - **Framework**: Astro with Starlight
 - **Adapter**: Cloudflare Workers
 - **Route**: `/docs/*`
 - **Build Output**: Server-side rendered
 
 ### Console Application (`packages/console/app`)
+
 - **Framework**: SolidJS with Nitro
 - **Adapter**: Cloudflare Module Workers
 - **Route**: `/*` (catch-all)
@@ -95,6 +103,7 @@ A    staging.neo.khulnasoft.com -> Cloudflare proxy
 ## Monitoring
 
 Monitor your deployments through:
+
 - Cloudflare Analytics
 - Workers Logs
 - GitHub Actions deployment logs

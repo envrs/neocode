@@ -90,7 +90,7 @@ export function createPromptSubmit(input: PromptSubmitInput): PromptSubmitResult
       .abort({
         sessionID,
       })
-      .catch(() => { })
+      .catch(() => {})
       .finally(() => {
         globalSync.todo.set(sessionID, undefined)
       })

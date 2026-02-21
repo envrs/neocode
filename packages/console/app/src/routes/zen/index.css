@@ -122,7 +122,8 @@ body {
     }
   }
 
-  [data-component="content"] {}
+  [data-component="content"] {
+  }
 
   [data-component="top"] {
     padding: 24px var(--padding);
@@ -201,7 +202,7 @@ body {
     }
 
     [data-component="nav-mobile"] {
-      button>svg {
+      button > svg {
         color: var(--color-icon);
       }
     }
@@ -492,7 +493,8 @@ body {
         gap: 12px;
       }
 
-      p {}
+      p {
+      }
 
       span {
         color: var(--color-icon);
@@ -842,7 +844,7 @@ body {
       }
     }
 
-    [data-slot="cell"]+[data-slot="cell"] {
+    [data-slot="cell"] + [data-slot="cell"] {
       border-left: 1px solid var(--color-border-weak);
 
       @media (max-width: 40rem) {

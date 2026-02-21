@@ -47,9 +47,9 @@ const setReload = action(async (form: FormData) => {
           ...(reloadTrigger !== null ? { reloadTrigger } : {}),
           ...(reloadValue
             ? {
-              reloadError: null,
-              timeReloadError: null,
-            }
+                reloadError: null,
+                timeReloadError: null,
+              }
             : {}),
         })
         .where(eq(BillingTable.workspaceID, workspaceID)),

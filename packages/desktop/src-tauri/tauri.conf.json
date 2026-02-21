@@ -32,16 +32,8 @@
       "icons/dev/icon.ico"
     ],
     "active": true,
-    "targets": [
-      "deb",
-      "rpm",
-      "dmg",
-      "nsis",
-      "app"
-    ],
-    "externalBin": [
-      "sidecars/neocode-cli"
-    ],
+    "targets": ["deb", "rpm", "dmg", "nsis", "app"],
+    "externalBin": ["sidecars/neocode-cli"],
     "linux": {
       "rpm": {
         "compression": {
@@ -63,9 +55,7 @@
   "plugins": {
     "deep-link": {
       "desktop": {
-        "schemes": [
-          "neocode"
-        ]
+        "schemes": ["neocode"]
       }
     }
   }

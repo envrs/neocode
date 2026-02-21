@@ -18,10 +18,7 @@ export interface SDKContext {
   createClient(opts: Parameters<GlobalSDKContext["createClient"]>[0]): NeocodeClient
 }
 
-export const { use: useSDK, provider: SDKProvider } = createSimpleContext<
-  SDKContext,
-  { directory: Accessor<string> }
->({
+export const { use: useSDK, provider: SDKProvider } = createSimpleContext<SDKContext, { directory: Accessor<string> }>({
   name: "SDK",
   init: (props: { directory: Accessor<string> }) => {
     const globalSDK = useGlobalSDK()

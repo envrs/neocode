@@ -18,25 +18,11 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "lib": [
-      "es2023",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2023", "dom", "dom.iterable"],
     // Type Checking & Safety
     "strict": true,
-    "types": [
-      "vite/client",
-      "bun"
-    ]
+    "types": ["vite/client", "bun"]
   },
-  "include": [
-    "src",
-    "src/**/*.json"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "ts-dist"
-  ]
+  "include": ["src", "src/**/*.json"],
+  "exclude": ["node_modules", "dist", "ts-dist"]
 }

@@ -17,9 +17,9 @@ export default function BlackLayout(props: RouteSectionProps) {
   const starCount = createMemo(() =>
     githubData()?.stars
       ? new Intl.NumberFormat(language.tag(language.locale()), {
-        notation: "compact",
-        compactDisplay: "short",
-      }).format(githubData()!.stars!)
+          notation: "compact",
+          compactDisplay: "short",
+        }).format(githubData()!.stars!)
       : config.github.starsFormatted.compact,
   )
 
