@@ -44,12 +44,12 @@ export namespace UI {
     const result: string[] = []
     const reset = "\x1b[0m"
     const left = {
-      fg: Bun.color("gray", "ansi") ?? "",
-      shadow: "\x1b[38;5;235m",
+      fg: "\x1b[38;5;81m",
+      shadow: "\x1b[38;5;23m",
       bg: "\x1b[48;5;235m",
     }
     const right = {
-      fg: reset,
+      fg: "\x1b[38;5;255m",
       shadow: "\x1b[38;5;238m",
       bg: "\x1b[48;5;238m",
     }

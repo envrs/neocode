@@ -20,7 +20,7 @@ export const LOCALES = [
 
 export type Locale = (typeof LOCALES)[number]
 
-export const LOCALE_COOKIE = "oc_locale" as const
+export const LOCALE_COOKIE = "neocode_locale" as const
 export const LOCALE_HEADER = "x-neocode-locale" as const
 
 function fix(pathname: string) {

@@ -19,12 +19,12 @@ pub struct SessionEnv {
     pub xdg_current_desktop: Option<String>,
     pub xdg_session_desktop: Option<String>,
     pub desktop_session: Option<String>,
-    pub oc_allow_wayland: Option<String>,
-    pub oc_force_x11: Option<String>,
-    pub oc_force_wayland: Option<String>,
-    pub oc_linux_decorations: Option<String>,
-    pub oc_force_decorations: Option<String>,
-    pub oc_no_decorations: Option<String>,
+    pub neocode_allow_wayland: Option<String>,
+    pub neocode_force_x11: Option<String>,
+    pub neocode_force_wayland: Option<String>,
+    pub neocode_linux_decorations: Option<String>,
+    pub neocode_force_decorations: Option<String>,
+    pub neocode_no_decorations: Option<String>,
     pub i3_sock: bool,
 }
 
@@ -37,29 +37,29 @@ impl SessionEnv {
             xdg_current_desktop: std::env::var("XDG_CURRENT_DESKTOP").ok(),
             xdg_session_desktop: std::env::var("XDG_SESSION_DESKTOP").ok(),
             desktop_session: std::env::var("DESKTOP_SESSION").ok(),
-            oc_allow_wayland: std::env::var("OC_ALLOW_WAYLAND").ok(),
-            oc_force_x11: std::env::var("OC_FORCE_X11").ok(),
-            oc_force_wayland: std::env::var("OC_FORCE_WAYLAND").ok(),
-            oc_linux_decorations: std::env::var("OC_LINUX_DECORATIONS").ok(),
-            oc_force_decorations: std::env::var("OC_FORCE_DECORATIONS").ok(),
-            oc_no_decorations: std::env::var("OC_NO_DECORATIONS").ok(),
+            neocode_allow_wayland: std::env::var("NEOCODE_ALLOW_WAYLAND").ok(),
+            neocode_force_x11: std::env::var("NEOCODE_FORCE_X11").ok(),
+            neocode_force_wayland: std::env::var("NEOCODE_FORCE_WAYLAND").ok(),
+            neocode_linux_decorations: std::env::var("NEOCODE_LINUX_DECORATIONS").ok(),
+            neocode_force_decorations: std::env::var("NEOCODE_FORCE_DECORATIONS").ok(),
+            neocode_no_decorations: std::env::var("NEOCODE_NO_DECORATIONS").ok(),
             i3_sock: std::env::var_os("I3SOCK").is_some(),
         }
     }
 }
 
 pub fn select_backend(env: &SessionEnv, prefer_wayland: bool) -> Option<BackendDecision> {
-    if is_truthy(env.oc_force_x11.as_deref()) {
+    if is_truthy(env.neocode_force_x11.as_deref()) {
         return Some(BackendDecision {
             backend: Backend::X11,
-            note: "Forcing X11 due to OC_FORCE_X11=1".into(),
+            note: "Forcing X11 due to NEOCODE_FORCE_X11=1".into(),
         });
     }
 
-    if is_truthy(env.oc_force_wayland.as_deref()) {
+    if is_truthy(env.neocode_force_wayland.as_deref()) {
         return Some(BackendDecision {
             backend: Backend::Wayland,
-            note: "Forcing native Wayland due to OC_FORCE_WAYLAND=1".into(),
+            note: "Forcing native Wayland due to NEOCODE_FORCE_WAYLAND=1".into(),
         });
     }
 
@@ -74,23 +74,23 @@ pub fn select_backend(env: &SessionEnv, prefer_wayland: bool) -> Option<BackendD
         });
     }
 
-    if is_truthy(env.oc_allow_wayland.as_deref()) {
+    if is_truthy(env.neocode_allow_wayland.as_deref()) {
         return Some(BackendDecision {
             backend: Backend::Wayland,
-            note: "Wayland session detected; forcing native Wayland due to OC_ALLOW_WAYLAND=1"
+            note: "Wayland session detected; forcing native Wayland due to NEOCODE_ALLOW_WAYLAND=1"
                 .into(),
         });
     }
 
     Some(BackendDecision {
         backend: Backend::Auto,
-        note: "Wayland session detected; using native Wayland first with X11 fallback (auto backend). Set OC_FORCE_X11=1 to force X11."
+        note: "Wayland session detected; using native Wayland first with X11 fallback (auto backend). Set NEOCODE_FORCE_X11=1 to force X11."
             .into(),
     })
 }
 
 pub fn use_decorations(env: &SessionEnv) -> bool {
-    if let Some(mode) = decoration_override(env.oc_linux_decorations.as_deref()) {
+    if let Some(mode) = decoration_override(env.neocode_linux_decorations.as_deref()) {
         return match mode {
             DecorationOverride::Native => true,
             DecorationOverride::None => false,
@@ -98,10 +98,10 @@ pub fn use_decorations(env: &SessionEnv) -> bool {
         };
     }
 
-    if is_truthy(env.oc_force_decorations.as_deref()) {
+    if is_truthy(env.neocode_force_decorations.as_deref()) {
         return true;
     }
-    if is_truthy(env.oc_no_decorations.as_deref()) {
+    if is_truthy(env.neocode_no_decorations.as_deref()) {
         return false;
     }
 
@@ -245,9 +245,9 @@ mod tests {
         let env = SessionEnv {
             wayland_display: true,
             display: true,
-            oc_force_x11: Some("1".into()),
-            oc_allow_wayland: Some("1".into()),
-            oc_force_wayland: Some("1".into()),
+            neocode_force_x11: Some("1".into()),
+            neocode_allow_wayland: Some("1".into()),
+            neocode_force_wayland: Some("1".into()),
             ..Default::default()
         };
 
@@ -271,7 +271,7 @@ mod tests {
     fn force_wayland_override_works_outside_wayland_session() {
         let env = SessionEnv {
             display: true,
-            oc_force_wayland: Some("1".into()),
+            neocode_force_wayland: Some("1".into()),
             ..Default::default()
         };
 
@@ -284,7 +284,7 @@ mod tests {
         let env = SessionEnv {
             wayland_display: true,
             display: true,
-            oc_allow_wayland: Some("1".into()),
+            neocode_allow_wayland: Some("1".into()),
             ..Default::default()
         };
 
@@ -417,7 +417,7 @@ mod tests {
     fn no_decorations_override_wins() {
         let env = SessionEnv {
             xdg_current_desktop: Some("GNOME".into()),
-            oc_no_decorations: Some("1".into()),
+            neocode_no_decorations: Some("1".into()),
             ..Default::default()
         };
 
@@ -429,7 +429,7 @@ mod tests {
         let env = SessionEnv {
             xdg_current_desktop: Some("niri".into()),
             wayland_display: true,
-            oc_linux_decorations: Some("native".into()),
+            neocode_linux_decorations: Some("native".into()),
             ..Default::default()
         };
 
@@ -441,7 +441,7 @@ mod tests {
         let env = SessionEnv {
             xdg_current_desktop: Some("GNOME".into()),
             wayland_display: true,
-            oc_linux_decorations: Some("none".into()),
+            neocode_linux_decorations: Some("none".into()),
             ..Default::default()
         };
 
@@ -453,7 +453,7 @@ mod tests {
         let env = SessionEnv {
             xdg_current_desktop: Some("sway".into()),
             wayland_display: true,
-            oc_linux_decorations: Some("auto".into()),
+            neocode_linux_decorations: Some("auto".into()),
             ..Default::default()
         };
 
@@ -465,8 +465,8 @@ mod tests {
         let env = SessionEnv {
             xdg_current_desktop: Some("GNOME".into()),
             wayland_display: true,
-            oc_linux_decorations: Some("none".into()),
-            oc_force_decorations: Some("1".into()),
+            neocode_linux_decorations: Some("none".into()),
+            neocode_force_decorations: Some("1".into()),
             ..Default::default()
         };
 
