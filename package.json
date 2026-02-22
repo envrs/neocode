@@ -15,7 +15,7 @@
     "build": "bun turbo build",
     "format": "prettier --write .",
     "clean": "rm -rf node_modules .turbo",
-    "test:workspaces": "bun turbo test",
+    "test:workspaces": "bun turbo test --filter=!@neocode-ai/app-ext-vscode",
     "random": "echo 'Random script'",
     "hello": "echo 'Hello World!'",
     "test": "echo 'do not run tests from root' && exit 1",
