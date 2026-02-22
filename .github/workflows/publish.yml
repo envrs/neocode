@@ -47,7 +47,7 @@ jobs:
 
       - id: version
         run: |
-          ./script/version.ts
+          ./tooling/scripts/version.ts
         env:
           GH_TOKEN: ${{ github.token }}
           NEOCODE_BUMP: ${{ inputs.bump }}
@@ -262,7 +262,7 @@ jobs:
           git config --global user.name "neocode"
           ssh-keyscan -H aur.archlinux.org >> ~/.ssh/known_hosts || true
 
-      - run: ./script/publish.ts
+      - run: ./tooling/scripts/publish.ts
         env:
           NEOCODE_VERSION: ${{ needs.version.outputs.version }}
           NEOCODE_RELEASE: ${{ needs.version.outputs.release }}

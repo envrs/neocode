@@ -6,17 +6,17 @@ on:
     paths:
       - "flake.nix"
       - "flake.lock"
-      - "nix/**"
-      - "packages/app/**"
-      - "packages/desktop/**"
+      - "platform/nix/**"
+      - "apps/app/**"
+      - "apps/desktop/**"
       - ".github/workflows/nix-desktop.yml"
   pull_request:
     paths:
       - "flake.nix"
       - "flake.lock"
-      - "nix/**"
-      - "packages/app/**"
-      - "packages/desktop/**"
+      - "platform/nix/**"
+      - "apps/app/**"
+      - "apps/desktop/**"
       - ".github/workflows/nix-desktop.yml"
   workflow_dispatch:
 

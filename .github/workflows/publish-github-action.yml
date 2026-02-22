@@ -27,4 +27,4 @@ jobs:
           git config --global user.email "neocode@khulnasoft.com"
           git config --global user.name "neocode"
           ./script/publish
-        working-directory: ./github
+        working-directory: ./platform/ci

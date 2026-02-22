@@ -64,7 +64,7 @@ jobs:
       - name: Seed neocode data
         if: matrix.settings.name != 'windows'
         working-directory: services/core/main
-        run: bun tooling/scripts/seed-e2e.ts
+        run: bun script/seed-e2e.ts
         env:
           NEOCODE_DISABLE_SHARE: "true"
           NEOCODE_DISABLE_LSP_DOWNLOAD: "true"
