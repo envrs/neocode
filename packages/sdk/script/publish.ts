@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 
-import { Script } from "@neocode-ai/script"
+import { Script } from "@neocode-ai/tool-cli"
 import { $ } from "bun"
 
 const dir = new URL("..", import.meta.url).pathname

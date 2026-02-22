@@ -32,8 +32,11 @@
   "devDependencies": {
     "@hey-api/openapi-ts": "0.90.10",
     "@tsconfig/node22": "catalog:",
+    "@neocode-ai/tool-tsconfig": "workspace:*",
+    "@neocode-ai/tool-cli": "workspace:*",
     "@types/node": "catalog:",
     "typescript": "catalog:",
+    "@types/bun": "catalog:",
     "@typescript/native-preview": "catalog:"
   },
   "dependencies": {},

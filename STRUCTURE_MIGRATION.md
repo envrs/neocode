@@ -9,7 +9,7 @@ This document tracks the ongoing migration of the NeoCode monorepo to a Layered 
 - [x] Update package names in `package.json` for moved items
 - [x] Standardize prefix: `app-ext-*` for extensions and `infra-*` for platform items.
 
-## 🏃 Phase 2: App & Service Consolidation (IN PROGRESS)
+## 🏃 Phase 2: App & Service Consolidation (COMPLETED)
 - [x] Rename `apps/app` to `apps/web-app` (`@neocode-ai/app-web`)
 - [x] Rename `apps/web` to `apps/marketing` (`@neocode-ai/app-marketing`)
 - [x] Rename `apps/console` to `apps/admin-console` (`@neocode-ai/app-admin`)
@@ -17,7 +17,7 @@ This document tracks the ongoing migration of the NeoCode monorepo to a Layered 
 - [x] Flatten `services/core/main` to `services/core` (`@neocode-ai/svc-core`)
 - [x] Relocate `services/*/console` to sibling services (e.g., `services/api-console`)
 
-## 🏗️ Phase 3: Logic Extraction
+## 🏗️ Phase 3: Logic Extraction (COMPLETED)
 - [x] Extract Database schema/migrations to `packages/db` (`@neocode-ai/pkg-db`)
 - [x] Extract Shared Auth logic to `packages/auth` (`@neocode-ai/pkg-auth`)
 - [x] Standardize `packages/util` to `packages/utils` (`@neocode-ai/pkg-utils`)

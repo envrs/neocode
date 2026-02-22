@@ -7,7 +7,7 @@
     "typecheck": "tsgo --noEmit",
     "dev": "vite dev --host 0.0.0.0",
     "dev:remote": "VITE_AUTH_URL=https://auth.dev.neo.khulnasoft.com VITE_STRIPE_PUBLISHABLE_KEY=pk_test_51RtuLNE7fOCwHSD4mewwzFejyytjdGoSDK7CAvhbffwaZnPbNb2rwJICw6LTOXCmWO320fSNXvb5NzI08RZVkAxd00syfqrW7t bun dev",
-    "build": "./script/generate-sitemap.ts && bun --bun vite build && ../../services/core/main/script/schema.ts ./.output/public/config.json",
+    "build": "./script/generate-sitemap.ts && bun --bun vite build && ../../services/core/script/schema.ts ./.output/public/config.json",
     "start": "vite start"
   },
   "dependencies": {
@@ -37,6 +37,7 @@
   },
   "devDependencies": {
     "@typescript/native-preview": "catalog:",
+    "@neocode-ai/tool-tsconfig": "workspace:*",
     "@webgpu/types": "0.1.54",
     "typescript": "catalog:",
     "wrangler": "4.50.0"

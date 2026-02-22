@@ -75,7 +75,7 @@ if (Script.release) {
 }
 
 console.log("\n=== cli ===\n")
-await import(`../../services/core/main/script/publish.ts`)
+await import(`../../services/core/script/publish.ts`)
 
 console.log("\n=== sdk ===\n")
 await import(`../../packages/sdk-js/script/publish.ts`)

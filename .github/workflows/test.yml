@@ -63,7 +63,7 @@ jobs:
 
       - name: Seed neocode data
         if: matrix.settings.name != 'windows'
-        working-directory: services/core/main
+        working-directory: services/core
         run: bun script/seed-e2e.ts
         env:
           NEOCODE_DISABLE_SHARE: "true"
@@ -82,7 +82,7 @@ jobs:
 
       - name: Run neocode server
         if: matrix.settings.name != 'windows'
-        working-directory: services/core/main
+        working-directory: services/core
         run: bun dev -- --print-logs --log-level WARN serve --port 4096 --hostname 127.0.0.1 &
         env:
           NEOCODE_DISABLE_SHARE: "true"

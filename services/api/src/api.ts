@@ -16,8 +16,8 @@ async function getFeishuTenantToken(): Promise<string> {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      app_id: (process.env as any).FEISHU_APP_ID,
-      app_secret: (process.env as any).FEISHU_APP_SECRET,
+      app_id: (globalThis as any).FEISHU_APP_ID,
+      app_secret: (globalThis as any).FEISHU_APP_SECRET,
     }),
   })
   const data = (await response.json()) as { tenant_access_token?: string }
@@ -48,9 +48,8 @@ export class SyncServer extends DurableObject<Env> {
     })
   }
 
-  async webSocketMessage(ws, message) {}
-
-  async webSocketClose(ws, code, reason, wasClean) {
+  async webSocketMessage(_ws: WebSocket, _message: string | ArrayBuffer) { }
+  async webSocketClose(ws: WebSocket, code: number, _reason: string, _wasClean: boolean) {
     ws.close(code, "Durable Object is closing WebSocket")
   }
 
@@ -153,7 +152,7 @@ export default new Hono<{ Bindings: Env }>()
     const body = await c.req.json<{ sessionShortName: string; adminSecret: string }>()
     const sessionShortName = body.sessionShortName
     const adminSecret = body.adminSecret
-    if (adminSecret !== (process.env as any).ADMIN_SECRET) throw new Error("Invalid admin secret")
+    if (adminSecret !== (c.env as any).ADMIN_SECRET) throw new Error("Invalid admin secret")
     const id = c.env.SYNC_SERVER.idFromName(sessionShortName)
     const stub = c.env.SYNC_SERVER.get(id)
     await stub.clear()
@@ -191,10 +190,10 @@ export default new Hono<{ Bindings: Env }>()
     const stub = c.env.SYNC_SERVER.get(c.env.SYNC_SERVER.idFromName(id))
     const data = await stub.getData()
 
-    let info
+    let info: any
     const messages: Record<string, any> = {}
-    data.forEach((d) => {
-      const [root, type, ...splits] = d.key.split("/")
+    data.forEach((d: { key: string; content: any }) => {
+      const [root, type] = d.key.split("/")
       if (root !== "session") return
       if (type === "info") {
         info = d.content
@@ -234,8 +233,8 @@ export default new Hono<{ Bindings: Env }>()
     const parsed =
       typeof content === "string" && content.trim().startsWith("{")
         ? (JSON.parse(content) as {
-            text?: string
-          })
+          text?: string
+        })
         : undefined
     const text = typeof parsed?.text === "string" ? parsed.text : typeof content === "string" ? content : ""
 
@@ -247,12 +246,12 @@ export default new Hono<{ Bindings: Env }>()
     if (threadId) message = `${message} [${threadId}]`
 
     const response = await fetch(
-      `https://discord.com/api/v10/channels/${(process.env as any).DISCORD_SUPPORT_CHANNEL_ID}/messages`,
+      `https://discord.com/api/v10/channels/${(c.env as any).DISCORD_SUPPORT_CHANNEL_ID}/messages`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bot ${(process.env as any).DISCORD_SUPPORT_BOT_TOKEN}`,
+          Authorization: `Bot ${(c.env as any).DISCORD_SUPPORT_BOT_TOKEN}`,
         },
         body: JSON.stringify({
           content: `${message}`,
@@ -288,6 +287,7 @@ export default new Hono<{ Bindings: Env }>()
         audience: EXPECTED_AUDIENCE,
       })
       const sub = payload.sub // e.g. 'repo:my-org/my-repo:ref:refs/heads/main'
+      if (!sub) throw new Error("Missing 'sub' in token payload")
       const parts = sub.split(":")[1].split("/")
       owner = parts[0]
       repo = parts[1]
@@ -298,13 +298,14 @@ export default new Hono<{ Bindings: Env }>()
 
     // Create app JWT token
     const auth = createAppAuth({
-      appId: (process.env as any).GITHUB_APP_ID,
-      privateKey: (process.env as any).GITHUB_APP_PRIVATE_KEY,
+      appId: (c.env as any).GITHUB_APP_ID,
+      privateKey: (c.env as any).GITHUB_APP_PRIVATE_KEY,
     })
     const appAuth = await auth({ type: "app" })
 
     // Lookup installation
     const octokit = new Octokit({ auth: appAuth.token })
+    if (!owner || !repo) return c.json({ error: "Owner and Repo are required" }, { status: 400 })
     const { data: installation } = await octokit.apps.getRepoInstallation({
       owner,
       repo,
@@ -335,13 +336,13 @@ export default new Hono<{ Bindings: Env }>()
       // Verify permissions
       const userClient = new Octokit({ auth: token })
       const { data: repoData } = await userClient.repos.get({ owner, repo })
-      if (!repoData.permissions.admin && !repoData.permissions.push && !repoData.permissions.maintain)
+      if (!repoData.permissions || (!repoData.permissions.admin && !repoData.permissions.push && !repoData.permissions.maintain))
         throw new Error("User does not have write permissions")
 
       // Get installation token
       const auth = createAppAuth({
-        appId: Resource.GITHUB_APP_ID.value,
-        privateKey: Resource.GITHUB_APP_PRIVATE_KEY.value,
+        appId: (c.env as any).GITHUB_APP_ID,
+        privateKey: (c.env as any).GITHUB_APP_PRIVATE_KEY,
       })
       const appAuth = await auth({ type: "app" })
 
@@ -376,13 +377,14 @@ export default new Hono<{ Bindings: Env }>()
     const repo = c.req.query("repo")
 
     const auth = createAppAuth({
-      appId: (process.env as any).GITHUB_APP_ID,
-      privateKey: (process.env as any).GITHUB_APP_PRIVATE_KEY,
+      appId: (c.env as any).GITHUB_APP_ID,
+      privateKey: (c.env as any).GITHUB_APP_PRIVATE_KEY,
     })
     const appAuth = await auth({ type: "app" })
 
     // Lookup installation
     const octokit = new Octokit({ auth: appAuth.token })
+    if (!owner || !repo) return c.json({ error: "Owner and Repo are required" }, { status: 400 })
     let installation
     try {
       const ret = await octokit.apps.getRepoInstallation({ owner, repo })

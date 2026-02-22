@@ -72,7 +72,7 @@ jobs:
       - name: Build
         id: build
         run: |
-          ./services/core/main/script/build.ts
+          ./services/core/script/build.ts
         env:
           NEOCODE_VERSION: ${{ needs.version.outputs.version }}
           NEOCODE_RELEASE: ${{ needs.version.outputs.release }}
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: neocode-cli
-          path: services/core/main/dist
+          path: services/core/dist
 
     outputs:
       version: ${{ needs.version.outputs.version }}
@@ -241,7 +241,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: neocode-cli
-          path: services/core/main/dist
+          path: services/core/dist
 
       - name: Cache apt packages (AUR)
         uses: actions/cache@v4

@@ -10,6 +10,7 @@
       },
       "devDependencies": {
         "@actions/artifact": "6.1.0",
+        "@jridgewell/resolve-uri": "3.1.2",
         "@tsconfig/bun": "1.0.10",
         "@types/mime-types": "3.0.1",
         "glob": "13.0.6",
@@ -48,6 +49,7 @@
         "zod": "catalog:",
       },
       "devDependencies": {
+        "@neocode-ai/tool-tsconfig": "workspace:*",
         "@typescript/native-preview": "catalog:",
         "@webgpu/types": "0.1.54",
         "typescript": "catalog:",
@@ -109,6 +111,7 @@
       },
       "devDependencies": {
         "@cloudflare/workers-types": "catalog:",
+        "@neocode-ai/tool-tsconfig": "workspace:*",
         "@tailwindcss/vite": "catalog:",
         "@types/luxon": "catalog:",
         "@typescript/native-preview": "catalog:",
@@ -319,7 +322,10 @@
       "version": "1.2.10",
       "devDependencies": {
         "@hey-api/openapi-ts": "0.90.10",
+        "@neocode-ai/tool-cli": "workspace:*",
+        "@neocode-ai/tool-tsconfig": "workspace:*",
         "@tsconfig/node22": "catalog:",
+        "@types/bun": "catalog:",
         "@types/node": "catalog:",
         "@typescript/native-preview": "catalog:",
         "typescript": "catalog:",
@@ -415,7 +421,7 @@
       },
       "devDependencies": {
         "@cloudflare/workers-types": "catalog:",
-        "@tsconfig/node22": "22.0.2",
+        "@neocode-ai/tool-tsconfig": "workspace:*",
         "@types/node": "catalog:",
         "typescript": "catalog:",
       },
@@ -532,7 +538,9 @@
       },
       "devDependencies": {
         "@babel/core": "7.28.4",
+        "@jridgewell/resolve-uri": "3.1.2",
         "@neocode-ai/tool-cli": "workspace:*",
+        "@neocode-ai/tool-tsconfig": "workspace:*",
         "@octokit/webhooks-types": "7.6.1",
         "@parcel/watcher-darwin-arm64": "2.5.1",
         "@parcel/watcher-darwin-x64": "2.5.1",

@@ -138,7 +138,7 @@ function configSchema() {
     hooks: {
       "astro:build:done": async () => {
         console.log("generating config schema")
-        spawnSync("../../services/core/main/script/schema.ts", ["./dist/config.json"])
+        spawnSync("../../services/core/script/schema.ts", ["./dist/config.json"])
       },
     },
   }

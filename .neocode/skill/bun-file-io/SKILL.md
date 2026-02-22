@@ -5,7 +5,7 @@ description: Use this when you are working on file operations like reading, writ
 
 ## Use this when
 
-- Editing file I/O or scans in `services/core/main`
+- Editing file I/O or scans in `services/core`
 - Handling directory operations or external tools
 
 ## Bun file APIs (from Bun docs)

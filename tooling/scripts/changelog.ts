@@ -57,7 +57,7 @@ export async function getCommits(from: string, to: string): Promise<Commit[]> {
 
   // Get commits that touch the relevant packages
   const log =
-    await $`git log ${fromRef}..${toRef} --oneline --format="%H" -- services/core/main packages/sdk-js packages/plugin apps/desktop apps/web-app apps/ext-vscode apps/ext-zed infrastructure/ci`.text()
+    await $`git log ${fromRef}..${toRef} --oneline --format="%H" -- services/core packages/sdk-js packages/plugin apps/desktop apps/web-app apps/ext-vscode apps/ext-zed infrastructure/ci`.text()
   const hashes = log.split("\n").filter(Boolean)
 
   const commits: Commit[] = []
@@ -72,8 +72,8 @@ export async function getCommits(from: string, to: string): Promise<Commit[]> {
     const areas = new Set<string>()
 
     for (const file of files.split("\n").filter(Boolean)) {
-      if (file.startsWith("services/core/main/src/cli/cmd/")) areas.add("tui")
-      else if (file.startsWith("services/core/main/")) areas.add("core")
+      if (file.startsWith("services/core/src/cli/cmd/")) areas.add("tui")
+      else if (file.startsWith("services/core/")) areas.add("core")
       else if (file.startsWith("apps/desktop/src-tauri/")) areas.add("tauri")
       else if (file.startsWith("apps/desktop/")) areas.add("app")
       else if (file.startsWith("apps/web-app/")) areas.add("app")

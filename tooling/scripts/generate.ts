@@ -8,7 +8,7 @@ process.chdir(rootDir)
 
 await $`bun packages/sdk-js/script/build.ts`
 
-const openapi = await $`bun dev generate`.cwd("services/core/main").text()
+const openapi = await $`bun dev generate`.cwd("services/core").text()
 await Bun.write("specs/openapi.json", openapi)
 
 await $`./tooling/scripts/format.ts`
