@@ -140,6 +140,7 @@
       "name": "@neocode-ai/enterprise",
       "version": "1.1.1",
       "dependencies": {
+        "@neocode-ai/sdk": "workspace:*",
         "@neocode-ai/ui": "workspace:*",
         "@neocode-ai/util": "workspace:*",
         "@pierre/diffs": "catalog:",

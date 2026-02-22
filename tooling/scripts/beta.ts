@@ -76,13 +76,13 @@ async function main() {
       console.log("  Failed to merge (conflicts)")
       try {
         await $`git merge --abort`
-      } catch { }
+      } catch {}
       try {
         await $`git checkout -- .`
-      } catch { }
+      } catch {}
       try {
         await $`git clean -fd`
-      } catch { }
+      } catch {}
       failed.push({ number: pr.number, title: pr.title, reason: "Merge conflicts" })
       await commentOnPR(pr.number, "Merge conflicts with dev branch")
       continue

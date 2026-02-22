@@ -82,4 +82,3 @@ await import(`../../packages/sdk-js/script/publish.ts`)
 
 console.log("\n=== plugin ===\n")
 await import(`../../packages/plugin/script/publish.ts`)
-
