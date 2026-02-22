@@ -35,3 +35,12 @@ This document tracks the ongoing migration of the NeoCode monorepo to a Layered 
 - [x] Migrate packages to extend `@neocode-ai/tool-tsconfig/*` instead of direct `@tsconfig/bun`
 - [x] Add `@neocode-ai/tool-testing` preset (bun test config, test utilities)
 - [x] Add CI pipeline validation via `bun run typecheck && bun run test:workspaces`
+
+## 🚀 Phase 6: Platform Features & Ecosystem Expansion (UP NEXT)
+- [ ] Dependency Intelligence Layer (`packages/pkg-deps`) - ProtoNexus dependency resolution/SBOM
+- [ ] AI Automation Hooks (`packages/pkg-ai-ops`) - Arcanum integration, LLM remediation
+- [ ] Security Control Plane (`services/svc-security`) - SAST/DAST, policy-as-code
+- [ ] Observability Core (`packages/pkg-observability`) - OpenTelemetry tracing & metrics
+- [ ] Plugin/Extension SDK (`packages/pkg-sdk`) - Lifecycle hooks, sandbox, permissions
+- [ ] Release Engineering (`infrastructure/release`) - versioning, signing, SLSA
+- [ ] Scaffolding CLI (`tools/create-neocode`) - Internal codebase generator
