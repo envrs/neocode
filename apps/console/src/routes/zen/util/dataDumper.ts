@@ -1,4 +1,4 @@
-import { Resource, waitUntil } from "@neocode-ai/console-resource"
+import { Resource, waitUntil } from "@neocode-ai/worker"
 
 export function createDataDumper(sessionId: string, requestId: string, projectId: string) {
   if (Resource.App.stage !== "production") return

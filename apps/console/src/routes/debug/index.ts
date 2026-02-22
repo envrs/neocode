@@ -1,7 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server"
 import { json } from "@solidjs/router"
-import { Database } from "@neocode-ai/console-core/drizzle/index.js"
-import { UserTable } from "@neocode-ai/console-core/schema/user.sql.js"
+import { Database } from "@neocode-ai/core-console/drizzle/index.js"
+import { UserTable } from "@neocode-ai/core-console/schema/user.sql.js"
 
 export async function GET(evt: APIEvent) {
   return json({

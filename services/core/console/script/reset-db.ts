@@ -1,4 +1,4 @@
-import { Resource } from "@neocode-ai/console-resource"
+import { Resource } from "@neocode-ai/worker"
 import { Database } from "../src/drizzle/index.js"
 import { UserTable } from "../src/schema/user.sql.js"
 import { AccountTable } from "../src/schema/account.sql.js"

@@ -1,4 +1,4 @@
-import { ZenData } from "@neocode-ai/console-core/model.js"
+import { ZenData } from "@neocode-ai/core-console/model.js"
 import {
   fromAnthropicChunk,
   fromAnthropicRequest,

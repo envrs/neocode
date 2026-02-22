@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { Resource } from "@neocode-ai/console-resource"
+import { Resource } from "@neocode-ai/worker"
 import { AwsClient } from "aws4fetch"
 import { fn } from "./util/fn"
 

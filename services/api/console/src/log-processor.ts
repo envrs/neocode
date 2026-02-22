@@ -1,4 +1,4 @@
-import { Resource } from "@neocode-ai/console-resource"
+import { Resource } from "@neocode-ai/worker"
 import type { TraceItem } from "@cloudflare/workers-types"
 
 export default {

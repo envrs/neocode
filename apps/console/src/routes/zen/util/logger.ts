@@ -1,4 +1,4 @@
-import { Resource } from "@neocode-ai/console-resource"
+import { Resource } from "@neocode-ai/worker"
 
 export const logger = {
   metric: (values: Record<string, any>) => {

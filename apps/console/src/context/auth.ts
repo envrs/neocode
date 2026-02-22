@@ -1,8 +1,8 @@
 import { getRequestEvent } from "solid-js/web"
-import { and, Database, eq, inArray, isNull, sql } from "@neocode-ai/console-core/drizzle/index.js"
-import { UserTable } from "@neocode-ai/console-core/schema/user.sql.js"
+import { and, Database, eq, inArray, isNull, sql } from "@neocode-ai/core-console/drizzle/index.js"
+import { UserTable } from "@neocode-ai/core-console/schema/user.sql.js"
 import { redirect } from "@solidjs/router"
-import { Actor } from "@neocode-ai/console-core/actor.js"
+import { Actor } from "@neocode-ai/core-console/actor.js"
 
 import { createClient } from "@openauthjs/openauth/client"
 
@@ -12,7 +12,7 @@ export const AuthClient = createClient({
 })
 
 import { useSession } from "@solidjs/start/http"
-import { Resource } from "@neocode-ai/console-resource"
+import { Resource } from "@neocode-ai/worker"
 
 export interface AuthSession {
   account?: Record<

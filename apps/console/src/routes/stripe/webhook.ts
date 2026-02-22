@@ -1,13 +1,13 @@
-import { Billing } from "@neocode-ai/console-core/billing.js"
+import { Billing } from "@neocode-ai/core-console/billing.js"
 import type { APIEvent } from "@solidjs/start/server"
-import { and, Database, eq, isNull, sql } from "@neocode-ai/console-core/drizzle/index.js"
-import { BillingTable, PaymentTable, SubscriptionTable } from "@neocode-ai/console-core/schema/billing.sql.js"
-import { Identifier } from "@neocode-ai/console-core/identifier.js"
-import { centsToMicroCents } from "@neocode-ai/console-core/util/price.js"
-import { Actor } from "@neocode-ai/console-core/actor.js"
-import { Resource } from "@neocode-ai/console-resource"
-import { UserTable } from "@neocode-ai/console-core/schema/user.sql.js"
-import { AuthTable } from "@neocode-ai/console-core/schema/auth.sql.js"
+import { and, Database, eq, isNull, sql } from "@neocode-ai/core-console/drizzle/index.js"
+import { BillingTable, PaymentTable, SubscriptionTable } from "@neocode-ai/core-console/schema/billing.sql.js"
+import { Identifier } from "@neocode-ai/core-console/identifier.js"
+import { centsToMicroCents } from "@neocode-ai/core-console/util/price.js"
+import { Actor } from "@neocode-ai/core-console/actor.js"
+import { Resource } from "@neocode-ai/worker"
+import { UserTable } from "@neocode-ai/core-console/schema/user.sql.js"
+import { AuthTable } from "@neocode-ai/core-console/schema/auth.sql.js"
 
 export async function POST(input: APIEvent) {
   const body = await Billing.stripe().webhooks.constructEventAsync(

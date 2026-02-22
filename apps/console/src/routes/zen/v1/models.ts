@@ -1,9 +1,9 @@
 import type { APIEvent } from "@solidjs/start/server"
-import { and, Database, eq, isNull } from "@neocode-ai/console-core/drizzle/index.js"
-import { KeyTable } from "@neocode-ai/console-core/schema/key.sql.js"
-import { WorkspaceTable } from "@neocode-ai/console-core/schema/workspace.sql.js"
-import { ModelTable } from "@neocode-ai/console-core/schema/model.sql.js"
-import { ZenData } from "@neocode-ai/console-core/model.js"
+import { and, Database, eq, isNull } from "@neocode-ai/core-console/drizzle/index.js"
+import { KeyTable } from "@neocode-ai/core-console/schema/key.sql.js"
+import { WorkspaceTable } from "@neocode-ai/core-console/schema/workspace.sql.js"
+import { ModelTable } from "@neocode-ai/core-console/schema/model.sql.js"
+import { ZenData } from "@neocode-ai/core-console/model.js"
 
 export async function OPTIONS(input: APIEvent) {
   return new Response(null, {

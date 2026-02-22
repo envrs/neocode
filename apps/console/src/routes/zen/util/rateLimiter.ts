@@ -1,8 +1,8 @@
-import { Database, eq, and, sql, inArray } from "@neocode-ai/console-core/drizzle/index.js"
-import { IpRateLimitTable } from "@neocode-ai/console-core/schema/ip.sql.js"
+import { Database, eq, and, sql, inArray } from "@neocode-ai/core-console/drizzle/index.js"
+import { IpRateLimitTable } from "@neocode-ai/core-console/schema/ip.sql.js"
 import { FreeUsageLimitError } from "./error"
 import { logger } from "./logger"
-import { ZenData } from "@neocode-ai/console-core/model.js"
+import { ZenData } from "@neocode-ai/core-console/model.js"
 
 export function createRateLimiter(limit: ZenData.RateLimit | undefined, rawIp: string, headers: Headers) {
   if (!limit) return

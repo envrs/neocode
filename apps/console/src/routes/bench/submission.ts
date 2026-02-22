@@ -1,7 +1,7 @@
 import type { APIEvent } from "@solidjs/start/server"
-import { Database } from "@neocode-ai/console-core/drizzle/index.js"
-import { BenchmarkTable } from "@neocode-ai/console-core/schema/benchmark.sql.js"
-import { Identifier } from "@neocode-ai/console-core/identifier.js"
+import { Database } from "@neocode-ai/core-console/drizzle/index.js"
+import { BenchmarkTable } from "@neocode-ai/core-console/schema/benchmark.sql.js"
+import { Identifier } from "@neocode-ai/core-console/identifier.js"
 
 interface SubmissionBody {
   model: string

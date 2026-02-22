@@ -1,6 +1,6 @@
 import { z } from "zod"
 import { fn } from "./util/fn"
-import { Resource } from "@neocode-ai/console-resource"
+import { Resource } from "@neocode-ai/worker"
 import { centsToMicroCents } from "./util/price"
 import { getWeekBounds } from "./util/date"
 import { SubscriptionPlan } from "./schema/billing.sql"
