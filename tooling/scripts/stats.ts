@@ -65,7 +65,7 @@ async function fetchNpmDownloads(packageName: string): Promise<number> {
       console.warn(`Failed to fetch npm downloads for ${packageName}: ${response.status}`)
       return 0
     }
-    const data: NpmDownloadsRange = await response.json()
+    const data = (await response.json()) as NpmDownloadsRange
     return data.downloads.reduce((total, day) => total + day.downloads, 0)
   } catch (error) {
     console.warn(`Error fetching npm downloads for ${packageName}:`, error)
@@ -86,7 +86,7 @@ async function fetchReleases(): Promise<Release[]> {
       throw new Error(`GitHub API error: ${response.status} ${response.statusText}`)
     }
 
-    const batch: Release[] = await response.json()
+    const batch = (await response.json()) as Release[]
     if (batch.length === 0) break
 
     releases.push(...batch)
@@ -149,9 +149,9 @@ async function save(githubTotal: number, npmDownloads: number) {
           /\|\s*[\d-]+\s*\|\s*([\d,]+)\s*(?:\([^)]*\))?\s*\|\s*([\d,]+)\s*(?:\([^)]*\))?\s*\|\s*([\d,]+)\s*(?:\([^)]*\))?\s*\|/,
         )
         if (match) {
-          previousGithub = parseInt(match[1].replace(/,/g, ""))
-          previousNpm = parseInt(match[2].replace(/,/g, ""))
-          previousTotal = parseInt(match[3].replace(/,/g, ""))
+          previousGithub = parseInt(match[1]!.replace(/,/g, ""))
+          previousNpm = parseInt(match[2]!.replace(/,/g, ""))
+          previousTotal = parseInt(match[3]!.replace(/,/g, ""))
           break
         }
       }
