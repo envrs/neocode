@@ -5,7 +5,7 @@ on:
     branches:
       - dev
     paths:
-      - "platform/ci/**"
+      - "infrastructure/ci/**"
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -26,4 +26,4 @@ jobs:
         run: |
           git config --global user.email "neocode@khulnasoft.com"
           git config --global user.name "neocode"
-          ./platform/ci/script/release
+          ./infrastructure/ci/script/release
