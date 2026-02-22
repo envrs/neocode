@@ -34,7 +34,7 @@ import { iife } from "@/util/iife"
 import { Control } from "@/control"
 
 export namespace Config {
-  const ModelId = z.string().meta({ $ref: "https://models.dev/model-schema.json#/$defs/Model" })
+  const ModelId = z.string().meta({ $ref: "https://neomodels.vercel.app/model-schema.json#/$defs/Model" })
 
   const log = Log.create({ service: "config" })
 

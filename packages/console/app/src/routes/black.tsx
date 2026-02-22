@@ -17,9 +17,9 @@ export default function BlackLayout(props: RouteSectionProps) {
   const starCount = createMemo(() =>
     githubData()?.stars
       ? new Intl.NumberFormat(language.tag(language.locale()), {
-          notation: "compact",
-          compactDisplay: "short",
-        }).format(githubData()!.stars!)
+        notation: "compact",
+        compactDisplay: "short",
+      }).format(githubData()!.stars!)
       : config.github.starsFormatted.compact,
   )
 
@@ -259,8 +259,8 @@ export default function BlackLayout(props: RouteSectionProps) {
       </main>
       <footer data-component="footer">
         <div data-slot="footer-content">
-          <span data-slot="anomaly">
-            ©{new Date().getFullYear()} <a href="https://anoma.ly">Anomaly</a>
+          <span data-slot="khulnasoft">
+            ©{new Date().getFullYear()} <a href="https://khulnasoft.com">KhulnaSoft</a>
           </span>
           <a href={config.github.repoUrl} target="_blank">
             {i18n.t("nav.github")} <span data-slot="github-stars">[{starCount()}]</span>
@@ -274,8 +274,8 @@ export default function BlackLayout(props: RouteSectionProps) {
             <A href={language.route("/legal/terms-of-service")}>{i18n.t("legal.terms")}</A>
           </span>
         </div>
-        <span data-slot="anomaly-alt">
-          ©{new Date().getFullYear()} <a href="https://anoma.ly">Anomaly</a>
+        <span data-slot="khulnasoft-alt">
+          ©{new Date().getFullYear()} <a href="https://khulnasoft.com">KhulnaSoft</a>
         </span>
       </footer>
     </div>

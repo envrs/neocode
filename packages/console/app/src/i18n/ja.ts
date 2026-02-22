@@ -118,7 +118,7 @@ export const dict = {
   "home.what.chatgptPlus.title": "ChatGPT Plus/Pro",
   "home.what.chatgptPlus.body": "OpenAIでログインしてChatGPT PlusまたはProアカウントを利用できます",
   "home.what.anyModel.title": "あらゆるモデル",
-  "home.what.anyModel.body": "Models.dev経由で75以上のLLMプロバイダーに対応（ローカルモデル含む）",
+  "home.what.anyModel.body": "neomodels.vercel.app経由で75以上のLLMプロバイダーに対応（ローカルモデル含む）",
   "home.what.anyEditor.title": "あらゆるエディタ",
   "home.what.anyEditor.body": "ターミナルインターフェース、デスクトップアプリ、IDE拡張機能として利用できます",
   "home.what.readDocs": "ドキュメントを読む",

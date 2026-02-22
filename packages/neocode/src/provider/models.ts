@@ -11,7 +11,7 @@ import { lazy } from "@/util/lazy"
 /* @ts-ignore */
 
 export namespace ModelsDev {
-  const log = Log.create({ service: "models.dev" })
+  const log = Log.create({ service: "neomodels.vercel.app" })
   const filepath = path.join(Global.Path.cache, "models.json")
 
   export const Model = z.object({
@@ -81,7 +81,7 @@ export namespace ModelsDev {
   export type Provider = z.infer<typeof Provider>
 
   function url() {
-    return Flag.NEOCODE_MODELS_URL || "https://models.dev"
+    return Flag.NEOCODE_MODELS_URL || "https://neomodels.vercel.app"
   }
 
   export const Data = lazy(async () => {
@@ -111,7 +111,7 @@ export namespace ModelsDev {
       },
       signal: AbortSignal.timeout(10 * 1000),
     }).catch((e) => {
-      log.error("Failed to fetch models.dev", {
+      log.error("Failed to fetch neomodels.vercel.app", {
         error: e,
       })
     })

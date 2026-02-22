@@ -41,7 +41,7 @@ export async function CopilotAuthPlugin(input: PluginInput): Promise<Hooks> {
             }
 
             // TODO: re-enable once messages api has higher rate limits
-            // TODO: move some of this hacky-ness to models.dev presets once we have better grasp of things here...
+            // TODO: move some of this hacky-ness to neomodels.vercel.app presets once we have better grasp of things here...
             // const base = baseURL ?? model.api.url
             // const claude = model.id.includes("claude")
             // const url = iife(() => {

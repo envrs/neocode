@@ -228,8 +228,8 @@ export default function () {
                         const messages = createMemo(() =>
                           data().sessionID
                             ? (data().message[data().sessionID]?.filter((m) => m.role === "user") ?? []).sort(
-                                (a, b) => a.time.created - b.time.created,
-                              )
+                              (a, b) => a.time.created - b.time.created,
+                            )
                             : [],
                         )
                         const firstUserMessage = createMemo(() => messages().at(0))
@@ -324,7 +324,7 @@ export default function () {
                               <div class="flex gap-3 items-center">
                                 <IconButton
                                   as={"a"}
-                                  href="https://github.com/anomalyco/neocode"
+                                  href="https://github.com/khulnasoftco/neocode"
                                   target="_blank"
                                   icon="github"
                                   variant="ghost"

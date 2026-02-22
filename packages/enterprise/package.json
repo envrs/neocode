@@ -7,8 +7,8 @@
   "scripts": {
     "typecheck": "tsgo --noEmit",
     "dev": "vite dev",
-    "build": "vite build",
-    "build:cloudflare": "NEOCODE_DEPLOYMENT_TARGET=cloudflare vite build",
+    "build": "bun --bun vite build",
+    "build:cloudflare": "NEOCODE_DEPLOYMENT_TARGET=cloudflare bun --bun vite build",
     "start": "vite start"
   },
   "dependencies": {

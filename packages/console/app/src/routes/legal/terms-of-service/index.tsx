@@ -35,7 +35,7 @@ export default function TermsOfService() {
 
               <p>
                 These Terms of Use (the "Terms") are a binding contract between you and{" "}
-                <strong>ANOMALY INNOVATIONS, INC.</strong> ("NeoCode," "we" and "us"). Your use of the Services in any
+                <strong>KHULNASOFT, INC.</strong> ("NeoCode," "we" and "us"). Your use of the Services in any
                 way means that you agree to all of these Terms, and these Terms will remain in effect while you use the
                 Services. These Terms include the provisions in this document as well as those in the Privacy Policy{" "}
                 <a href={language.route("/legal/privacy-policy")}>https://neo.khulnasoft.com/legal/privacy-policy</a>.{" "}

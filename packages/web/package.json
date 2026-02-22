@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "dev:remote": "VITE_API_URL=https://api.neo.khulnasoft.com astro dev",
     "start": "astro dev",
-    "build": "astro build",
+    "build": "bun --bun astro build",
     "preview": "astro preview",
     "astro": "astro"
   },

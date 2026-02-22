@@ -118,7 +118,7 @@ export const dict = {
   "home.what.chatgptPlus.title": "ChatGPT Plus/Pro",
   "home.what.chatgptPlus.body": "Inicia sesión con OpenAI para usar tu cuenta de ChatGPT Plus o Pro",
   "home.what.anyModel.title": "Cualquier modelo",
-  "home.what.anyModel.body": "Más de 75 proveedores de LLM a través de Models.dev, incluyendo modelos locales",
+  "home.what.anyModel.body": "Más de 75 proveedores de LLM a través de neomodels.vercel.app, incluyendo modelos locales",
   "home.what.anyEditor.title": "Cualquier editor",
   "home.what.anyEditor.body": "Disponible como interfaz de terminal, aplicación de escritorio y extensión de IDE",
   "home.what.readDocs": "Leer documentación",

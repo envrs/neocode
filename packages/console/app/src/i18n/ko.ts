@@ -118,7 +118,7 @@ export const dict = {
   "home.what.chatgptPlus.title": "ChatGPT Plus/Pro",
   "home.what.chatgptPlus.body": "OpenAI로 로그인하여 ChatGPT Plus 또는 Pro 계정을 사용하세요",
   "home.what.anyModel.title": "모든 모델",
-  "home.what.anyModel.body": "Models.dev를 통해 로컬 모델 포함 75개 이상의 LLM 제공자 지원",
+  "home.what.anyModel.body": "neomodels.vercel.app를 통해 로컬 모델 포함 75개 이상의 LLM 제공자 지원",
   "home.what.anyEditor.title": "모든 에디터",
   "home.what.anyEditor.body": "터미널 인터페이스, 데스크톱 앱, IDE 확장 프로그램으로 사용 가능",
   "home.what.readDocs": "문서 읽기",

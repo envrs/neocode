@@ -792,7 +792,7 @@
         line-height: normal;
       }
 
-      [data-slot="anomaly"] {
+      [data-slot="khulnasoft"] {
         display: none;
 
         @media (min-width: 768px) {
@@ -800,7 +800,7 @@
         }
       }
     }
-    [data-slot="anomaly-alt"] {
+    [data-slot="khulnasoft-alt"] {
       color: rgba(255, 255, 255, 0.39);
       font-family: "JetBrains Mono Nerd Font";
       font-size: 16px;

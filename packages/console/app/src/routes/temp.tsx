@@ -102,7 +102,7 @@ export default function Home() {
             </li>
             <li>
               <strong>{i18n.t("home.what.anyModel.title")}</strong> {i18n.t("temp.feature.models.beforeLink")}{" "}
-              <a href="https://models.dev">Models.dev</a>
+              <a href="https://neomodels.vercel.app">neomodels.vercel.app</a>
               {i18n.t("temp.feature.models.afterLink")}
             </li>
           </ul>
@@ -171,7 +171,7 @@ export default function Home() {
 
       <div data-component="legal">
         <span>
-          ©2025 <a href="https://anoma.ly">Anomaly</a>
+          ©2025 <a href="https://khulnasoft.com">KhulnaSoft</a>
         </span>
       </div>
     </main>

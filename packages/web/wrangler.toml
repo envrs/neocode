@@ -28,3 +28,7 @@ id = "d20ff02478d64d99848e7100af98f52f"
 [[env.dev.kv_namespaces]]
 binding = "CACHE"
 id = "d20ff02478d64d99848e7100af98f52f"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"

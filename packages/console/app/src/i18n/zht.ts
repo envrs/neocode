@@ -117,7 +117,7 @@ export const dict = {
   "home.what.chatgptPlus.title": "ChatGPT Plus/Pro",
   "home.what.chatgptPlus.body": "使用 OpenAI 登入以使用你的 ChatGPT Plus 或 Pro 帳號",
   "home.what.anyModel.title": "任意模型",
-  "home.what.anyModel.body": "透過 Models.dev 連接 75+ 家 LLM 供應商，包括本地模型",
+  "home.what.anyModel.body": "透過 neomodels.vercel.app 連接 75+ 家 LLM 供應商，包括本地模型",
   "home.what.anyEditor.title": "任意編輯器",
   "home.what.anyEditor.body": "可作為終端介面、桌面應用程式與 IDE 擴充功能使用",
   "home.what.readDocs": "閱讀文件",

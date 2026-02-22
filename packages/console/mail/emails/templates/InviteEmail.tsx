@@ -26,7 +26,7 @@ interface InviteEmailProps {
 export const InviteEmail = ({
   inviter = "test@anoma.ly",
   workspaceID = "wrk_01K6XFY7V53T8XN0A7X8G9BTN3",
-  workspaceName = "anomaly",
+  workspaceName = "khulnasoft",
   assetsUrl = `${CONSOLE_URL}email`,
 }: InviteEmailProps) => {
   const messagePlain = `${inviter} invited you to join the ${workspaceName} workspace.`
