@@ -24,7 +24,7 @@ jobs:
           - name: windows
             host: windows-latest
             playwright: bunx playwright install
-            workdir: apps/app
+            workdir: apps/web-app
             command: bun test:e2e:local
     runs-on: ${{ matrix.settings.host }}
     defaults:
@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/setup-bun
 
       - name: Install Playwright browsers
-        working-directory: apps/app
+        working-directory: apps/web-app
         run: ${{ matrix.settings.playwright }}
 
       - name: Set OS-specific paths
@@ -134,5 +134,5 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
           path: |
-            apps/app/e2e/test-results
-            apps/app/e2e/playwright-report
+            apps/web-app/e2e/test-results
+            apps/web-app/e2e/playwright-report
