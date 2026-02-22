@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "node_modules/.ts-dist",
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -7,7 +12,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "allowJs": true,
-    "noEmit": true,
     "strict": true,
     "isolatedModules": true
   }

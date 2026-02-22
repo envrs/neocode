@@ -3,20 +3,13 @@
   "globalEnv": ["CI", "NEOCODE_DISABLE_SHARE"],
   "globalPassThroughEnv": ["CI", "NEOCODE_DISABLE_SHARE"],
   "tasks": {
-    "typecheck": {
-      "dependsOn": ["^build"]
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".output/**", "out/**"]
     },
-    "neocode#test": {
-      "dependsOn": ["^build"],
-      "outputs": []
-    },
-    "@neocode-ai/app#test": {
-      "dependsOn": ["^build"],
-      "outputs": []
-    }
+    "dev": {},
+    "test": {},
+    "lint": {},
+    "typecheck": {}
   }
 }

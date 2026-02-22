@@ -30,4 +30,4 @@ jobs:
       - name: Sync beta branch
         env:
           GH_TOKEN: ${{ steps.setup-git-committer.outputs.token }}
-        run: bun script/beta.ts
+        run: bun tooling/scripts/beta.ts

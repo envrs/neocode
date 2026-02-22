@@ -1,4 +1,4 @@
-- To regenerate the JavaScript SDK, run `./packages/sdk/js/script/build.ts`.
+- To regenerate the JavaScript SDK, run `bun tooling/scripts/generate.ts`.
 - ALWAYS USE PARALLEL TOOLS WHEN APPLICABLE.
 - The default branch in this repo is `dev`.
 - Prefer automation: execute requested actions without confirmation unless blocked by missing info or safety/irreversibility.

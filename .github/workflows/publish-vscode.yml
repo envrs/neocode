@@ -26,12 +26,12 @@ jobs:
 
       - name: Install extension dependencies
         run: bun install
-        working-directory: ./sdks/vscode
+        working-directory: ./extensions/vscode
 
       - name: Publish
         run: |
           ./script/publish
-        working-directory: ./sdks/vscode
+        working-directory: ./extensions/vscode
         env:
           VSCE_PAT: ${{ secrets.VSCE_PAT }}
           OPENVSX_TOKEN: ${{ secrets.OPENVSX_TOKEN }}

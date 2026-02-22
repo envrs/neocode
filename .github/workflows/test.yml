@@ -24,7 +24,7 @@ jobs:
           - name: windows
             host: windows-latest
             playwright: bunx playwright install
-            workdir: packages/app
+            workdir: apps/app
             command: bun test:e2e:local
     runs-on: ${{ matrix.settings.host }}
     defaults:
@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/setup-bun
 
       - name: Install Playwright browsers
-        working-directory: packages/app
+        working-directory: apps/app
         run: ${{ matrix.settings.playwright }}
 
       - name: Set OS-specific paths
@@ -63,8 +63,8 @@ jobs:
 
       - name: Seed neocode data
         if: matrix.settings.name != 'windows'
-        working-directory: packages/neocode
-        run: bun script/seed-e2e.ts
+        working-directory: services/core/main
+        run: bun tooling/scripts/seed-e2e.ts
         env:
           NEOCODE_DISABLE_SHARE: "true"
           NEOCODE_DISABLE_LSP_DOWNLOAD: "true"
@@ -82,7 +82,7 @@ jobs:
 
       - name: Run neocode server
         if: matrix.settings.name != 'windows'
-        working-directory: packages/neocode
+        working-directory: services/core/main
         run: bun dev -- --print-logs --log-level WARN serve --port 4096 --hostname 127.0.0.1 &
         env:
           NEOCODE_DISABLE_SHARE: "true"
@@ -134,5 +134,5 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
           path: |
-            packages/app/e2e/test-results
-            packages/app/e2e/playwright-report
+            apps/app/e2e/test-results
+            apps/app/e2e/playwright-report
