@@ -1,7 +1,12 @@
 #!/usr/bin/env bun
 
-import { Script } from "@neocode-ai/tool-cli"
 import { $ } from "bun"
+import { fileURLToPath } from "url"
+
+const rootDir = fileURLToPath(new URL("../..", import.meta.url))
+process.chdir(rootDir)
+
+import { Script } from "@neocode-ai/tool-cli"
 import { buildNotes, getLatestRelease } from "./changelog"
 
 const output = [`version=${Script.version}`]

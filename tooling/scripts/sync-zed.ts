@@ -3,12 +3,16 @@
 import { $ } from "bun"
 import { tmpdir } from "os"
 import { join } from "path"
+import { fileURLToPath } from "url"
+
+const rootDir = fileURLToPath(new URL("../..", import.meta.url))
 
 const FORK_REPO = "neopilot-ai/zed-extensions"
 const UPSTREAM_REPO = "zed-industries/extensions"
 const EXTENSION_NAME = "neocode"
 
 async function main() {
+  process.chdir(rootDir)
   const version = process.argv[2]
   if (!version) throw new Error("Version argument required, ex: bun script/sync-zed.ts v1.0.52")
 

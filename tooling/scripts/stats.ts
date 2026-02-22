@@ -1,5 +1,11 @@
 #!/usr/bin/env bun
 
+import { $ } from "bun"
+import { fileURLToPath } from "url"
+
+const rootDir = fileURLToPath(new URL("../..", import.meta.url))
+process.chdir(rootDir)
+
 async function sendToPostHog(event: string, properties: Record<string, any>) {
   const key = process.env["POSTHOG_KEY"]
 

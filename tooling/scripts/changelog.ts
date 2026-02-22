@@ -1,6 +1,10 @@
 #!/usr/bin/env bun
 
 import { $ } from "bun"
+import { fileURLToPath } from "url"
+
+const rootDir = fileURLToPath(new URL("../..", import.meta.url))
+process.chdir(rootDir)
 import { createNeocode } from "@neocode-ai/sdk/v2"
 import { parseArgs } from "util"
 import { Script } from "@neocode-ai/tool-cli"

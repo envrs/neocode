@@ -1,9 +1,13 @@
 #!/usr/bin/env bun
 
 import { $ } from "bun"
+import { fileURLToPath } from "url"
 
-await $`bun ../../packages/sdk-js/script/build.ts`
+const rootDir = fileURLToPath(new URL("../..", import.meta.url))
+process.chdir(rootDir)
 
-await $`bun dev generate > ../../specs/openapi.json`.cwd("../../services/core/main")
+await $`bun packages/sdk-js/script/build.ts`
 
-await $`./format.ts`
+await $`bun dev generate > specs/openapi.json`.cwd("services/core/main")
+
+await $`./tooling/scripts/format.ts`
