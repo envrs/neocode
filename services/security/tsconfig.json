@@ -1,0 +1,7 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "extends": "@neocode-ai/tool-tsconfig/bun",
+    "include": [
+        "src/**/*"
+    ]
+}
