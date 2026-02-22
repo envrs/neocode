@@ -16,7 +16,7 @@ export type { SBOMFormat } from "./sbom"
  * Analyzes and resolves workspace dependencies
  */
 export const ProtoNexus = {
-    resolveGraph,
-    detectConflicts,
-    generateSBOM,
+  resolveGraph,
+  detectConflicts,
+  generateSBOM,
 }

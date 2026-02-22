@@ -1,31 +1,17 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalEnv": [
-    "CI",
-    "NEOCODE_DISABLE_SHARE"
-  ],
-  "globalPassThroughEnv": [
-    "CI",
-    "NEOCODE_DISABLE_SHARE"
-  ],
+  "globalEnv": ["CI", "NEOCODE_DISABLE_SHARE"],
+  "globalPassThroughEnv": ["CI", "NEOCODE_DISABLE_SHARE"],
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**",
-        ".output/**",
-        "out/**"
-      ]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".output/**", "out/**"]
     },
     "dev": {},
     "test": {},
     "lint": {},
     "typecheck": {
-      "dependsOn": [
-        "^typecheck"
-      ]
+      "dependsOn": ["^typecheck"]
     }
   }
 }

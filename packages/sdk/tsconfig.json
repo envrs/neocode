@@ -6,18 +6,10 @@
     "module": "nodenext",
     "declaration": true,
     "moduleResolution": "nodenext",
-    "lib": [
-      "es2022",
-      "dom",
-      "dom.iterable"
-    ],
+    "lib": ["es2022", "dom", "dom.iterable"],
     "composite": true,
     "noEmit": false,
     "emitDeclarationOnly": true
   },
-  "include": [
-    "src",
-    "script",
-    "package.json"
-  ]
+  "include": ["src", "script", "package.json"]
 }

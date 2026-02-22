@@ -6,7 +6,7 @@ import { fileURLToPath } from "url"
 const rootDir = fileURLToPath(new URL("../..", import.meta.url))
 process.chdir(rootDir)
 
-await $`bun packages/sdk-js/script/build.ts`
+await $`bun packages/sdk/script/build.ts`
 
 const openapi = await $`bun dev generate`.cwd("services/core").text()
 await Bun.write("specs/openapi.json", openapi)

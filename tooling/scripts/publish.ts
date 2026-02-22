@@ -59,7 +59,7 @@ console.log("updated:", extensionToml)
 await Bun.file(extensionToml).write(toml)
 
 await $`bun install`
-await import(`../../packages/sdk-js/script/build.ts`)
+await import(`../../packages/sdk/script/build.ts`)
 
 if (Script.release) {
   if (!Script.preview) {
@@ -78,7 +78,7 @@ console.log("\n=== cli ===\n")
 await import(`../../services/core/script/publish.ts`)
 
 console.log("\n=== sdk ===\n")
-await import(`../../packages/sdk-js/script/publish.ts`)
+await import(`../../packages/sdk/script/publish.ts`)
 
 console.log("\n=== plugin ===\n")
 await import(`../../packages/plugin/script/publish.ts`)

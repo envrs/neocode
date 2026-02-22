@@ -7,5 +7,5 @@ export * from "./remediation"
  * Manages automation, incident responses, and LLM-driven pipelines
  */
 export const Arcanum = {
-    version: "1.0.0",
+  version: "1.0.0",
 }

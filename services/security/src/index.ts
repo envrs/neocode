@@ -6,5 +6,5 @@ export * from "./policy"
  * SAST/DAST running, policy-as-code
  */
 export const SecurityControlPlane = {
-    version: "1.0.0",
+  version: "1.0.0",
 }

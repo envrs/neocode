@@ -48,7 +48,7 @@ export class SyncServer extends DurableObject<Env> {
     })
   }
 
-  async webSocketMessage(_ws: WebSocket, _message: string | ArrayBuffer) { }
+  async webSocketMessage(_ws: WebSocket, _message: string | ArrayBuffer) {}
   async webSocketClose(ws: WebSocket, code: number, _reason: string, _wasClean: boolean) {
     ws.close(code, "Durable Object is closing WebSocket")
   }
@@ -233,8 +233,8 @@ export default new Hono<{ Bindings: Env }>()
     const parsed =
       typeof content === "string" && content.trim().startsWith("{")
         ? (JSON.parse(content) as {
-          text?: string
-        })
+            text?: string
+          })
         : undefined
     const text = typeof parsed?.text === "string" ? parsed.text : typeof content === "string" ? content : ""
 
@@ -336,7 +336,10 @@ export default new Hono<{ Bindings: Env }>()
       // Verify permissions
       const userClient = new Octokit({ auth: token })
       const { data: repoData } = await userClient.repos.get({ owner, repo })
-      if (!repoData.permissions || (!repoData.permissions.admin && !repoData.permissions.push && !repoData.permissions.maintain))
+      if (
+        !repoData.permissions ||
+        (!repoData.permissions.admin && !repoData.permissions.push && !repoData.permissions.maintain)
+      )
         throw new Error("User does not have write permissions")
 
       // Get installation token

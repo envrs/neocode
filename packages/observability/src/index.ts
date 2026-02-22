@@ -7,5 +7,5 @@ export * from "./metrics"
  * Structured logging, OpenTelemetry tracing, and metrics interfaces
  */
 export const Telemetry = {
-    version: "1.0.0",
+  version: "1.0.0",
 }

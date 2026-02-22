@@ -3,9 +3,7 @@
   "extends": "@neocode-ai/tool-tsconfig/bun",
   "compilerOptions": {
     "paths": {
-      "@neocode-ai/*": [
-        "./*"
-      ]
+      "@neocode-ai/*": ["./*"]
     }
   }
 }
