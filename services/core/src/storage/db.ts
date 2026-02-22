@@ -63,7 +63,7 @@ export namespace Database {
     const journal =
       typeof NEOCODE_MIGRATIONS !== "undefined"
         ? NEOCODE_MIGRATIONS
-        : migrations(path.join(import.meta.dirname, "../../../packages/db/migrations"))
+        : migrations(path.join(import.meta.dirname, "../../../../packages/db/migrations"))
 
     return PkgDatabase.create({
       path: path.join(Global.Path.data, "neocode.db"),
