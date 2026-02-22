@@ -8,11 +8,12 @@
     "typecheck": "tsgo --noEmit"
   },
   "dependencies": {
-    "@neocode-ai/sdk": "workspace:*",
+    "@neocode-ai/pkg-sdk": "workspace:*",
     "@slack/bolt": "^3.17.1"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@neocode-ai/tool-tsconfig": "workspace:*",
     "typescript": "catalog:",
     "@typescript/native-preview": "catalog:"
   }

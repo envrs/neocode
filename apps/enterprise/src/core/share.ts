@@ -1,10 +1,10 @@
-import { FileDiff, Message, Model, Part, Session } from "@neocode-ai/sdk/v2"
-import { fn } from "@neocode-ai/util/fn"
-import { iife } from "@neocode-ai/util/iife"
-import { Identifier } from "@neocode-ai/util/identifier"
+import { FileDiff, Message, Model, Part, Session } from "@neocode-ai/pkg-sdk/v2"
+import { fn } from "@neocode-ai/pkg-utils/fn"
+import { iife } from "@neocode-ai/pkg-utils/iife"
+import { Identifier } from "@neocode-ai/pkg-utils/identifier"
 import z from "zod"
 import { Storage } from "./storage"
-import { Binary } from "@neocode-ai/util/binary"
+import { Binary } from "@neocode-ai/pkg-utils/binary"
 
 export namespace Share {
   export const Info = z.object({

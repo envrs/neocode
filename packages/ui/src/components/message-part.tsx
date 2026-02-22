@@ -26,7 +26,7 @@ import {
   QuestionRequest,
   QuestionAnswer,
   QuestionInfo,
-} from "@neocode-ai/sdk/v2"
+} from "@neocode-ai/pkg-sdk/v2"
 import { createStore } from "solid-js/store"
 import { useData } from "../context"
 import { useDiffComponent } from "../context/diff"
@@ -45,8 +45,8 @@ import { Checkbox } from "./checkbox"
 import { DiffChanges } from "./diff-changes"
 import { Markdown } from "./markdown"
 import { ImagePreview } from "./image-preview"
-import { getDirectory as _getDirectory, getFilename } from "@neocode-ai/util/path"
-import { checksum } from "@neocode-ai/util/encode"
+import { getDirectory as _getDirectory, getFilename } from "@neocode-ai/pkg-utils/path"
+import { checksum } from "@neocode-ai/pkg-utils/encode"
 import { Tooltip } from "./tooltip"
 import { IconButton } from "./icon-button"
 import { TextShimmer } from "./text-shimmer"

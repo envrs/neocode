@@ -6,9 +6,9 @@
   "type": "module",
   "packageManager": "bun@1.3.9",
   "scripts": {
-    "dev": "bun run --cwd services/core --conditions=browser src/index.ts",
+    "dev": "bun run --cwd services/core dev",
     "dev:desktop": "bun --cwd apps/desktop tauri dev",
-    "dev:web": "bun --cwd apps/app dev",
+    "dev:web": "bun --cwd apps/web-app dev",
     "typecheck": "bun turbo typecheck",
     "prepare": "husky install",
     "bootstrap": "bun install",
@@ -25,11 +25,9 @@
     "packages": [
       "apps/*",
       "services/*",
-      "services/*/*",
       "packages/*",
       "tooling/*",
-      "extensions/*",
-      "platform/*"
+      "infrastructure/*"
     ],
     "catalog": {
       "@types/bun": "1.3.9",

@@ -5,7 +5,7 @@ import { fileURLToPath } from "url"
 
 const rootDir = fileURLToPath(new URL("../..", import.meta.url))
 process.chdir(rootDir)
-import { createNeocode } from "@neocode-ai/sdk/v2"
+import { createNeocode } from "@neocode-ai/pkg-sdk/v2"
 import { parseArgs } from "util"
 import { Script } from "@neocode-ai/tool-cli"
 
@@ -57,7 +57,7 @@ export async function getCommits(from: string, to: string): Promise<Commit[]> {
 
   // Get commits that touch the relevant packages
   const log =
-    await $`git log ${fromRef}..${toRef} --oneline --format="%H" -- services/core/main packages/sdk-js packages/plugin apps/desktop apps/app extensions/vscode extensions/zed platform/ci`.text()
+    await $`git log ${fromRef}..${toRef} --oneline --format="%H" -- services/core/main packages/sdk-js packages/plugin apps/desktop apps/web-app apps/ext-vscode apps/ext-zed infrastructure/ci`.text()
   const hashes = log.split("\n").filter(Boolean)
 
   const commits: Commit[] = []
@@ -76,7 +76,7 @@ export async function getCommits(from: string, to: string): Promise<Commit[]> {
       else if (file.startsWith("services/core/main/")) areas.add("core")
       else if (file.startsWith("apps/desktop/src-tauri/")) areas.add("tauri")
       else if (file.startsWith("apps/desktop/")) areas.add("app")
-      else if (file.startsWith("apps/app/")) areas.add("app")
+      else if (file.startsWith("apps/web-app/")) areas.add("app")
       else if (file.startsWith("packages/sdk-js/")) areas.add("sdk")
       else if (file.startsWith("packages/plugin/")) areas.add("plugin")
       else if (file.startsWith("extensions/zed/")) areas.add("extensions/zed")

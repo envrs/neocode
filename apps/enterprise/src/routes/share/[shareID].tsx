@@ -1,37 +1,37 @@
-import { FileDiff, Message, Model, Part, Session, SessionStatus, UserMessage } from "@neocode-ai/sdk/v2"
-import { SessionTurn } from "@neocode-ai/ui/session-turn"
-import { SessionReview } from "@neocode-ai/ui/session-review"
-import { DataProvider } from "@neocode-ai/ui/context"
-import { DiffComponentProvider } from "@neocode-ai/ui/context/diff"
-import { CodeComponentProvider } from "@neocode-ai/ui/context/code"
-import { WorkerPoolProvider } from "@neocode-ai/ui/context/worker-pool"
+import { FileDiff, Message, Model, Part, Session, SessionStatus, UserMessage } from "@neocode-ai/pkg-sdk/v2"
+import { SessionTurn } from "@neocode-ai/pkg-ui/session-turn"
+import { SessionReview } from "@neocode-ai/pkg-ui/session-review"
+import { DataProvider } from "@neocode-ai/pkg-ui/context"
+import { DiffComponentProvider } from "@neocode-ai/pkg-ui/context/diff"
+import { CodeComponentProvider } from "@neocode-ai/pkg-ui/context/code"
+import { WorkerPoolProvider } from "@neocode-ai/pkg-ui/context/worker-pool"
 import { createAsync, query, useParams } from "@solidjs/router"
 import { createEffect, createMemo, ErrorBoundary, For, Match, Show, Switch } from "solid-js"
 import { Share } from "~/core/share"
-import { Logo, Mark } from "@neocode-ai/ui/logo"
-import { IconButton } from "@neocode-ai/ui/icon-button"
-import { ProviderIcon } from "@neocode-ai/ui/provider-icon"
-import { createDefaultOptions } from "@neocode-ai/ui/pierre"
-import { iife } from "@neocode-ai/util/iife"
-import { Binary } from "@neocode-ai/util/binary"
-import { NamedError } from "@neocode-ai/util/error"
+import { Logo, Mark } from "@neocode-ai/pkg-ui/logo"
+import { IconButton } from "@neocode-ai/pkg-ui/icon-button"
+import { ProviderIcon } from "@neocode-ai/pkg-ui/provider-icon"
+import { createDefaultOptions } from "@neocode-ai/pkg-ui/pierre"
+import { iife } from "@neocode-ai/pkg-utils/iife"
+import { Binary } from "@neocode-ai/pkg-utils/binary"
+import { NamedError } from "@neocode-ai/pkg-utils/error"
 import { DateTime } from "luxon"
 import { createStore } from "solid-js/store"
 import z from "zod"
 import NotFound from "../[...404]"
-import { Tabs } from "@neocode-ai/ui/tabs"
-import { MessageNav } from "@neocode-ai/ui/message-nav"
+import { Tabs } from "@neocode-ai/pkg-ui/tabs"
+import { MessageNav } from "@neocode-ai/pkg-ui/message-nav"
 import { preloadMultiFileDiff, PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
-import { Diff as SSRDiff } from "@neocode-ai/ui/diff-ssr"
+import { Diff as SSRDiff } from "@neocode-ai/pkg-ui/diff-ssr"
 import { clientOnly } from "@solidjs/start"
-import { type IconName } from "@neocode-ai/ui/icons/provider"
+import { type IconName } from "@neocode-ai/pkg-ui/icons/provider"
 import { Meta, Title } from "@solidjs/meta"
 import { Base64 } from "js-base64"
 
-const ClientOnlyDiff = clientOnly(() => import("@neocode-ai/ui/diff").then((m) => ({ default: m.Diff })))
-const ClientOnlyCode = clientOnly(() => import("@neocode-ai/ui/code").then((m) => ({ default: m.Code })))
+const ClientOnlyDiff = clientOnly(() => import("@neocode-ai/pkg-ui/diff").then((m) => ({ default: m.Diff })))
+const ClientOnlyCode = clientOnly(() => import("@neocode-ai/pkg-ui/code").then((m) => ({ default: m.Code })))
 const ClientOnlyWorkerPoolProvider = clientOnly(() =>
-  import("@neocode-ai/ui/pierre/worker").then((m) => ({
+  import("@neocode-ai/pkg-ui/pierre/worker").then((m) => ({
     default: (props: { children: any }) => (
       <WorkerPoolProvider pools={m.getWorkerPools()}>{props.children}</WorkerPoolProvider>
     ),

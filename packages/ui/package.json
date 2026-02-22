@@ -1,5 +1,5 @@
 {
-  "name": "@neocode-ai/ui",
+  "name": "@neocode-ai/pkg-ui",
   "version": "1.2.6",
   "type": "module",
   "license": "MIT",
@@ -41,8 +41,8 @@
   },
   "dependencies": {
     "@kobalte/core": "catalog:",
-    "@neocode-ai/sdk": "workspace:*",
-    "@neocode-ai/util": "workspace:*",
+    "@neocode-ai/pkg-sdk": "workspace:*",
+    "@neocode-ai/pkg-utils": "workspace:*",
     "@pierre/diffs": "catalog:",
     "@shikijs/transformers": "3.9.2",
     "@solid-primitives/bounds": "0.1.3",

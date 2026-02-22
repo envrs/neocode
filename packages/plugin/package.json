@@ -16,7 +16,7 @@
     "dist"
   ],
   "dependencies": {
-    "@neocode-ai/sdk": "workspace:*",
+    "@neocode-ai/pkg-sdk": "workspace:*",
     "zod": "catalog:"
   },
   "devDependencies": {

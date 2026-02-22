@@ -47,27 +47,24 @@ const CONSOLE_ENV: Record<
 
 // Deploy web documentation (plain wrangler.toml with environments — use --env)
 console.log("\n=== Deploying Web Documentation ===")
-await $`cd apps/web && bun run build`
-await $`cd apps/web && bunx wrangler deploy --env ${stage}`
+await $`cd apps/marketing && bun run build`
+await $`cd apps/marketing && bunx wrangler deploy --env ${stage}`
 
 // Deploy console app (Nitro redirected config — patch wrangler.json, no --env)
 console.log("\n=== Deploying Console App ===")
-await $`cd apps/console && bun run build`
+await $`cd apps/admin-console && bun run build`
 
-// Patch the generated wrangler.json with env-specific settings
-const wranglerJsonPath = "apps/console/.output/server/wrangler.json"
-const generated = JSON.parse(await Bun.file(wranglerJsonPath).text())
-const envCfg = CONSOLE_ENV[stage] ?? CONSOLE_ENV["dev"]!
-const patched = {
-  ...generated,
-  name: envCfg.name,
-  routes: envCfg.routes,
-  kv_namespaces: envCfg.kv_namespaces,
-}
-await Bun.write(wranglerJsonPath, JSON.stringify(patched, null, 2))
+// For the console, we need a special dance since Astro doesn't support custom output names for wrangler.json
+const wranglerJsonPath = "apps/admin-console/.output/server/wrangler.json"
+const originalWranglerJson = await fs.readFile(wranglerJsonPath, "utf-8")
+const wranglerConfig = JSON.parse(originalWranglerJson)
+wranglerConfig.name = CONSOLE_ENV[stage]?.name || CONSOLE_ENV["dev"]!.name // Use env-specific name
+wranglerConfig.routes = CONSOLE_ENV[stage]?.routes || CONSOLE_ENV["dev"]!.routes // Use env-specific routes
+wranglerConfig.kv_namespaces = CONSOLE_ENV[stage]?.kv_namespaces || CONSOLE_ENV["dev"]!.kv_namespaces // Use env-specific kv_namespaces
+await fs.writeFile(wranglerJsonPath, JSON.stringify(wranglerConfig, null, 2))
 console.log(`Patched ${wranglerJsonPath} for stage: ${stage}`)
 
-await $`cd apps/console && bunx wrangler deploy`
+await $`cd apps/admin-console && bunx wrangler deploy`
 
 console.log(`\n✅ Deployment complete for ${stage}.neo.khulnasoft.com`)
 

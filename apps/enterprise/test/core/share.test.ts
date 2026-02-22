@@ -1,7 +1,7 @@
 import { describe, expect, test, afterAll, beforeEach, mock } from "bun:test"
 import { Share } from "../../src/core/share"
 import { Storage } from "../../src/core/storage"
-import { Identifier } from "@neocode-ai/util/identifier"
+import { Identifier } from "@neocode-ai/pkg-utils/identifier"
 
 // Mock the storage adapter for tests
 const mockStorage = new Map<string, string>()

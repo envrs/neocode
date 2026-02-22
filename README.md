@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://neo.khulnasoft.com">
     <picture>
-      <source srcset="apps/console/src/asset/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="apps/console/src/asset/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
-      <img src="apps/console/src/asset/logo-ornate-light.svg" alt="NeoCode logo" width="400">
+      <source srcset="apps/admin-console/src/asset/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
+      <source srcset="apps/admin-console/src/asset/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
+      <img src="apps/admin-console/src/asset/logo-ornate-light.svg" alt="NeoCode logo" width="400">
     </picture>
   </a>
 </p>

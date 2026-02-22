@@ -1,5 +1,5 @@
 import { App } from "@slack/bolt"
-import { createNeocode, type ToolPart } from "@neocode-ai/sdk"
+import { createNeocode, type ToolPart } from "@neocode-ai/pkg-sdk"
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,

@@ -8,7 +8,7 @@ import type {
   QuestionRequest,
   QuestionAnswer,
   ProviderListResponse,
-} from "@neocode-ai/sdk/v2"
+} from "@neocode-ai/pkg-sdk/v2"
 import { createSimpleContext } from "./helper"
 import { PreloadMultiFileDiffResult } from "@pierre/diffs/ssr"
 

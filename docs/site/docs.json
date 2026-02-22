@@ -46,7 +46,7 @@
   "footer": {
     "socials": {
       "x": "https://x.com/mintlify",
-      "@neocode-ai/platform-ci": "https://github.com/mintlify",
+      "@neocode-ai/infra-ci": "https://github.com/mintlify",
       "linkedin": "https://linkedin.com/company/mintlify"
     }
   }

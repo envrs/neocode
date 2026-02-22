@@ -12,9 +12,9 @@
     "start": "vite start"
   },
   "dependencies": {
-    "@neocode-ai/util": "workspace:*",
-    "@neocode-ai/ui": "workspace:*",
-    "@neocode-ai/sdk": "workspace:*",
+    "@neocode-ai/pkg-utils": "workspace:*",
+    "@neocode-ai/pkg-ui": "workspace:*",
+    "@neocode-ai/pkg-sdk": "workspace:*",
     "aws4fetch": "^1.0.20",
     "@pierre/diffs": "catalog:",
     "@solidjs/router": "catalog:",

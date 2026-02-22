@@ -1,4 +1,4 @@
-import { sampledChecksum } from "@neocode-ai/util/encode"
+import { sampledChecksum } from "@neocode-ai/pkg-utils/encode"
 import { FileDiff, type FileDiffOptions, type SelectedLineRange, VirtualizedFileDiff } from "@pierre/diffs"
 import { createMediaQuery } from "@solid-primitives/media"
 import { createEffect, createMemo, createSignal, onCleanup, splitProps } from "solid-js"

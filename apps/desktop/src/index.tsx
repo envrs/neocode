@@ -8,8 +8,8 @@ import {
   PlatformProvider,
   ServerConnection,
   useCommand,
-} from "@neocode-ai/app"
-import { Splash } from "@neocode-ai/ui/logo"
+} from "@neocode-ai/app-web"
+import { Splash } from "@neocode-ai/pkg-ui/logo"
 import type { AsyncStorage } from "@solid-primitives/storage"
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { readImage } from "@tauri-apps/plugin-clipboard-manager"
@@ -458,11 +458,11 @@ render(() => {
             }
             const server: ServerConnection.Any = data.is_sidecar
               ? {
-                  displayName: "Local Server",
-                  type: "sidecar",
-                  variant: "base",
-                  http,
-                }
+                displayName: "Local Server",
+                type: "sidecar",
+                variant: "base",
+                http,
+              }
               : { type: "http", http }
 
             function Inner() {

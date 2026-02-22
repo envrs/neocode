@@ -10,7 +10,7 @@ import type {
   Part,
   Auth,
   Config,
-} from "@neocode-ai/sdk"
+} from "@neocode-ai/pkg-sdk"
 
 import type { BunShell } from "./shell"
 import { type ToolDefinition } from "./tool"

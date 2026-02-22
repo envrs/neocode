@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
 import path from "path"
-import { createNeocode } from "@neocode-ai/sdk"
+import { createNeocode } from "@neocode-ai/pkg-sdk"
 import { parseArgs } from "util"
 
 async function main() {

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
-  "name": "@neocode-ai/worker",
+  "name": "@neocode-ai/svc-worker",
   "license": "MIT",
   "dependencies": {
     "@cloudflare/workers-types": "catalog:"

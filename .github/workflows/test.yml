@@ -20,7 +20,7 @@ jobs:
             command: |
               git config --global user.email "bot@neo.khulnasoft.com"
               git config --global user.name "neocode"
-              bun turbo test
+              bun run typecheck && bun run test:workspaces
           - name: windows
             host: windows-latest
             playwright: bunx playwright install

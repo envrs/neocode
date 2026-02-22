@@ -1,9 +1,9 @@
-import { AssistantMessage, type FileDiff, Message as MessageType, Part as PartType } from "@neocode-ai/sdk/v2/client"
+import { AssistantMessage, type FileDiff, Message as MessageType, Part as PartType } from "@neocode-ai/pkg-sdk/v2/client"
 import { useData } from "../context"
 import { useDiffComponent } from "../context/diff"
 
-import { Binary } from "@neocode-ai/util/binary"
-import { getDirectory, getFilename } from "@neocode-ai/util/path"
+import { Binary } from "@neocode-ai/pkg-utils/binary"
+import { getDirectory, getFilename } from "@neocode-ai/pkg-utils/path"
 import { createEffect, createMemo, createSignal, For, on, ParentProps, Show } from "solid-js"
 import { Dynamic } from "solid-js/web"
 import { AssistantParts, Message } from "./message-part"
