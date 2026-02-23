@@ -2,6 +2,7 @@
 
 import { $ } from "bun"
 import { fileURLToPath } from "url"
+import fs from "node:fs/promises"
 
 const rootDir = fileURLToPath(new URL("../..", import.meta.url))
 process.chdir(rootDir)
