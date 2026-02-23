@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "dev:remote": "VITE_API_URL=https://api.neo.khulnasoft.com astro dev",
     "start": "astro dev",
-    "build": "bun --bun astro build",
+    "build": "bun --bun astro build && echo '_worker.js' > dist/.assetsignore",
     "preview": "astro preview",
     "astro": "astro"
   },
