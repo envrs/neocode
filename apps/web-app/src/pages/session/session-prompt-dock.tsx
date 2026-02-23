@@ -272,9 +272,25 @@ export function SessionPromptDock(props: {
           <Show
             when={prompt.ready()}
             fallback={
-              <div class="w-full min-h-32 md:min-h-40 rounded-md border border-border-weak-base bg-background-base/50 px-4 py-3 text-text-weak whitespace-pre-wrap pointer-events-none">
-                {handoffPrompt() || language.t("prompt.loading")}
-              </div>
+              <>
+                <div class="w-full min-h-32 md:min-h-40 rounded-md border border-border-weak-base bg-background-base/50 px-4 py-3 text-text-weak whitespace-pre-wrap pointer-events-none">
+                  {handoffPrompt() || language.t("prompt.loading")}
+                </div>
+                <div
+                  classList={{
+                    "relative z-10": true,
+                    "transition-[margin] duration-[400ms] ease-out": true,
+                    "mt-0": true,
+                  }}
+                >
+                  <PromptInput
+                    ref={props.inputRef}
+                    newSessionWorktree={props.newSessionWorktree}
+                    onNewSessionWorktreeReset={props.onNewSessionWorktreeReset}
+                    onSubmit={props.onSubmit}
+                  />
+                </div>
+              </>
             }
           >
             <Show when={dock()}>
