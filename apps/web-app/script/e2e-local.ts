@@ -44,7 +44,7 @@ async function waitForHealth(url: string) {
 
 const appDir = process.cwd()
 const repoDir = path.resolve(appDir, "../..")
-const neocodeDir = path.join(repoDir, "packages", "neocode")
+const coreDir = path.join(repoDir, "services", "core")
 
 const extraArgs = (() => {
   const args = process.argv.slice(2)
@@ -131,8 +131,8 @@ process.once("unhandledRejection", (error) => {
 let code = 1
 
 try {
-  seed = Bun.spawn(["bun", "script/seed-e2e.ts"], {
-    cwd: neocodeDir,
+  seed = Bun.spawn([process.execPath, "script/seed-e2e.ts"], {
+    cwd: coreDir,
     env: serverEnv,
     stdout: "inherit",
     stderr: "inherit",
@@ -146,21 +146,21 @@ try {
     process.env.AGENT = "1"
     process.env.NEOCODE = "1"
 
-    const log = await import("../../neocode/src/util/log")
-    const install = await import("../../neocode/src/installation")
+    const log = await import("../../../services/core/src/util/log")
+    const install = await import("../../../services/core/src/installation")
     await log.Log.init({
       print: true,
       dev: install.Installation.isLocal(),
       level: "WARN",
     })
 
-    const servermod = await import("../../neocode/src/server/server")
-    inst = await import("../../neocode/src/project/instance")
+    const servermod = await import("../../../services/core/src/server/server")
+    inst = await import("../../../services/core/src/project/instance")
     server = servermod.Server.listen({ port: serverPort, hostname: "127.0.0.1" })
     console.log(`neocode server listening on http://127.0.0.1:${serverPort}`)
 
     await waitForHealth(`http://127.0.0.1:${serverPort}/global/health`)
-    runner = Bun.spawn(["bun", "test:e2e", ...extraArgs], {
+    runner = Bun.spawn([process.execPath, "run", "test:e2e", ...extraArgs], {
       cwd: appDir,
       env: runnerEnv,
       stdout: "inherit",
