@@ -2,8 +2,15 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "extends": "@neocode-ai/tool-tsconfig/bun",
   "compilerOptions": {
-    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ESNext",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "noUncheckedIndexedAccess": false
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "script/**/*"
+  ]
 }
