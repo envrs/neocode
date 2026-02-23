@@ -11,6 +11,8 @@
       "devDependencies": {
         "@actions/artifact": "6.1.0",
         "@jridgewell/resolve-uri": "3.1.2",
+        "@neocode-ai/pkg-sdk": "workspace:*",
+        "@neocode-ai/tool-cli": "workspace:*",
         "@tsconfig/bun": "1.0.10",
         "@types/mime-types": "3.0.1",
         "glob": "13.0.6",
