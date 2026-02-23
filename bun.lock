@@ -662,10 +662,6 @@
         "globals": "^16.0.0",
       },
     },
-    "tooling/scripts": {
-      "name": "@neocode-ai/tool-scripts",
-      "version": "1.0.0",
-    },
     "tooling/testing": {
       "name": "@neocode-ai/tool-testing",
       "version": "1.0.0",
@@ -1473,8 +1469,6 @@
     "@neocode-ai/tool-cli": ["@neocode-ai/tool-cli@workspace:tooling/cli"],
 
     "@neocode-ai/tool-lint": ["@neocode-ai/tool-lint@workspace:tooling/lint"],
-
-    "@neocode-ai/tool-scripts": ["@neocode-ai/tool-scripts@workspace:tooling/scripts"],
 
     "@neocode-ai/tool-testing": ["@neocode-ai/tool-testing@workspace:tooling/testing"],
 
