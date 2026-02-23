@@ -77,7 +77,7 @@ function createTestDb() {
   sqlite.exec("PRAGMA foreign_keys = ON")
 
   // Apply schema migrations using drizzle migrate
-  const dir = path.join(import.meta.dirname, "../../migration")
+  const dir = path.join(import.meta.dirname, "../../../../packages/db/migrations")
   const entries = readdirSync(dir, { withFileTypes: true })
   const migrations = entries
     .filter((entry) => entry.isDirectory())
